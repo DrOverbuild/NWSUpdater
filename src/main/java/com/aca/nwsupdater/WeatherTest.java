@@ -1,7 +1,7 @@
-package com.aca.NWSUpdater;
+package com.aca.nwsupdater;
 
-import com.aca.NWSUpdaterModel.WeatherData;
-import com.aca.NWSUpdaterService.WeatherService;
+import com.aca.nwsupdater.model.WeatherData;
+import com.aca.nwsupdater.service.WeatherService;
 
 public class WeatherTest {
 	

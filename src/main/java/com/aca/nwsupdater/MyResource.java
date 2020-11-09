@@ -1,4 +1,4 @@
-package com.aca.NWSUpdater;
+package com.aca.nwsupdater;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

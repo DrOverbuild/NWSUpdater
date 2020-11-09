@@ -1,4 +1,4 @@
-package com.aca.NWSUpdaterModel;
+package com.aca.nwsupdater.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
