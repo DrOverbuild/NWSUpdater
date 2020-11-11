@@ -177,8 +177,8 @@ The server will respond with this body:
     "name": "Miami, FL",
     "lat": -80.0000,
     "lon": 26.0000,
-    "sms_enabled": true,
-    "email_enabled": true,
+    "smsEnabled": true,
+    "emailEnabled": true,
     "alerts": [
       {
         "id": 1,
@@ -190,11 +190,11 @@ The server will respond with this body:
       },
       ...
     ],
-    "owner_id": 1
+    "ownerID": 1
   }
 }
 ```
-Note that the server will need to validate that the `logged_in_user_id` matches the location's `owner_id`.
+Note that the server will need to validate that the `logged_in_user_id` matches the location's `ownerID`.
 
 After hitting save, the browser will send this request:
 ```
@@ -208,8 +208,8 @@ With this body:
     "name": "Miami, FL",
     "lat": -80.0000,
     "lon": 26.0000,
-    "sms_enabled": true,
-    "email_enabled": true,
+    "smsEnabled": true,
+    "emailEnabled": true,
     "alerts": [
       {
         "id": 1,
@@ -221,7 +221,7 @@ With this body:
       },
       ...
     ],
-    "owner_id": 1
+    "ownerID": 1
   }
 }
 ```
@@ -268,8 +268,8 @@ With this body:
     "name": "Miami, FL",
     "lat": -80.0000,
     "lon": 26.0000,
-    "sms_enabled": true,
-    "email_enabled": true,
+    "smsEnabled": true,
+    "emailEnabled": true,
     "alerts": [
       {
         "id": 1,
