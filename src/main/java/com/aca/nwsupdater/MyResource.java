@@ -1,9 +1,12 @@
 package com.aca.nwsupdater;
 
+import com.aca.nwsupdater.dao.NWSUpdaterDB;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -20,6 +23,10 @@ public class MyResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
-        return "Got it!";
+        if (NWSUpdaterDB.getConnection() != null) {
+            return "Connection established!";
+        } else {
+            return "Something went wrong";
+        }
     }
 }

@@ -1,6 +1,8 @@
 package com.aca.nwsupdater.dao;
 
 
+import com.aca.nwsupdater.model.webapp.User;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -34,4 +36,18 @@ public class NWSUpdaterDB {
 		return null;
 	}
 
+	public static void main(String[] args) {
+		NWSUpdaterDAOImpl impl = new NWSUpdaterDAOImpl();
+
+		User u = new User();
+		u.setEmail("jreddin1@cub.uca.edu");
+		u.setPassword("reallygoodpass!");
+
+		User loggedin = impl.authenticate(u);
+		if (loggedin != null) {
+			System.out.println("Success");
+		} else {
+			System.out.println("Uh oh");
+		}
+	}
 }
