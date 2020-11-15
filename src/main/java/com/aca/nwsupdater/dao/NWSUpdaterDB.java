@@ -12,11 +12,15 @@ import java.util.Properties;
 
 public class NWSUpdaterDB {
 
+	private static Properties props = null;
+
 	public static Connection getConnection() {
 		try {
-			InputStream is = NWSUpdaterDB.class.getClassLoader().getResourceAsStream("db.properties");
-			Properties props = new Properties();
-			props.load(is);
+			if (props == null) {
+				InputStream is = NWSUpdaterDB.class.getClassLoader().getResourceAsStream("db.properties");
+				props = new Properties();
+				props.load(is);
+			}
 
 			Class.forName("org.mariadb.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(props.getProperty("url"));
