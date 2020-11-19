@@ -58,6 +58,20 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	private static final String deleteLocationAlerts =
 			"DELETE FROM location_alerts WHERE location_id = ?";
 
+	private static final String selectAllAlertsQuery =
+			"SELECT (id, name) FROM alert";
+
+	private static final String insertLocationAlertQuery =
+			"INSERT INTO location_alerts (location_id, alert_id) VALUES (?, ?)";
+
+	private static final String selectLocationAlertsQuery =
+			"SELECT alert_id, name FROM location_alerts " +
+					"INNER JOIN alert a on location_alerts.alert_id = a.id " +
+					"WHERE location_id = ?";
+
+	private static final String deleteSingleLocationAlertQuery =
+			"DELETE FROM location_alerts WHERE location_id = ? AND alert_id = ?";
+
 	private static String selectIdQuery =
 			"SELECT LAST_INSERT_ID() AS 'id'";
 
@@ -310,6 +324,22 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			closeResourses(null, stmt, conn);
 		}
 
+		// Check for alert differences
+		List<Alert> oldAlerts = getAlertsForLocation(location);
+		for (Alert a: oldAlerts) {
+			if (!location.getAlerts().contains(a)) {
+				deleteSingleLocationAlert(location, a);
+			}
+		}
+
+		for (Alert a: location.getAlerts()) {
+			if (!oldAlerts.contains(a)) {
+				addLocationAlert(location, a);
+			}
+		}
+
+		updated.setAlerts(location.getAlerts());
+
 		return updated;
 	}
 
@@ -341,7 +371,91 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 	@Override
 	public List<Alert> getAlerts() {
-		return null;
+		List<Alert> alerts = new ArrayList<>();
+
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.prepareStatement(selectAllAlertsQuery);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Alert alert = new Alert();
+				alert.setId(rs.getInt("id"));
+				alert.setName(rs.getString("name"));
+				alerts.add(alert);
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(rs, stmt, conn);
+		}
+
+		return alerts;
+	}
+
+	private void addLocationAlert(Location location, Alert alert) {
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+
+		try {
+			stmt = conn.prepareStatement(insertLocationAlertQuery);
+			stmt.setInt(1, location.getId());
+			stmt.setInt(2, alert.getId());
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(null, stmt, conn);
+		}
+	}
+
+	private List<Alert> getAlertsForLocation(Location location) {
+		List<Alert> alerts = new ArrayList<>();
+
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.prepareStatement(selectLocationAlertsQuery);
+			stmt.setInt(1, location.getId());
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Alert alert = new Alert();
+				alert.setId(rs.getInt("alert_id"));
+				alert.setName(rs.getString("name"));
+				alerts.add(alert);
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(rs, stmt, conn);
+		}
+
+		return alerts;
+	}
+
+	private void deleteSingleLocationAlert(Location location, Alert alert) {
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+
+		try {
+			stmt = conn.prepareStatement(deleteSingleLocationAlertQuery);
+			stmt.setInt(1, location.getId());
+			stmt.setInt(2, alert.getId());
+
+			stmt.executeUpdate();
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(null, stmt, conn);
+		}
+
 	}
 
 	private int getLastInsertedID(Connection conn) {

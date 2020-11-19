@@ -1,5 +1,7 @@
 package com.aca.nwsupdater.model.webapp;
 
+import java.util.Objects;
+
 public class Alert {
 	private Integer id;
 	private String name;
@@ -18,5 +20,14 @@ public class Alert {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Alert alert = (Alert) o;
+		return Objects.equals(id, alert.id) &&
+				Objects.equals(name, alert.name);
 	}
 }

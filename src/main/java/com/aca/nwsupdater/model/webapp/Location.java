@@ -1,7 +1,5 @@
 package com.aca.nwsupdater.model.webapp;
 
-import javafx.scene.control.Alert;
-
 import java.util.List;
 
 public class Location {
