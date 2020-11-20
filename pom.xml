@@ -48,16 +48,26 @@
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
         </dependency>
-        <!-- uncomment this to get JSON support
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-binding</artifactId>
         </dependency>
-        -->
-        <dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.2.3</version>
+		 <dependency>
+  			<groupId>com.fasterxml.jackson.core</groupId>
+  			<artifactId>jackson-core</artifactId>
+  			<version>2.5.3</version>
+		</dependency>
+
+		<dependency>
+  			<groupId>com.fasterxml.jackson.core</groupId>
+  			<artifactId>jackson-annotations</artifactId>
+  			<version>2.5.3</version>
+		</dependency>
+
+		<dependency>
+  			<groupId>com.fasterxml.jackson.core</groupId>
+  			<artifactId>jackson-databind</artifactId>
+ 	 		<version>2.5.3</version>
 		</dependency>
 		<dependency>
 			 <groupId>com.amazonaws</groupId>
