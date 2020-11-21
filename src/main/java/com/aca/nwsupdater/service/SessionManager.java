@@ -24,13 +24,17 @@ public class SessionManager extends TimerTask {
 	 * @return the user associated with the session, or null if there is no session
 	 */
 	public int getSession(String uuid) {
-		UUID id = UUID.fromString(uuid);
+		try {
+			UUID id = UUID.fromString(uuid);
 
-		for (Session session: sessions) {
-			if (session.getUuid().equals(id)) {
-				session.setLastRequest(System.currentTimeMillis());
-				return session.getUserId();
+			for (Session session : sessions) {
+				if (session.getUuid().equals(id)) {
+					session.setLastRequest(System.currentTimeMillis());
+					return session.getUserId();
+				}
 			}
+		} catch (IllegalArgumentException ignored) {
+
 		}
 
 		return -1;
