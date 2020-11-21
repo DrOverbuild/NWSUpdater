@@ -1,4 +1,4 @@
-package com.aca.NWSUpdaterService;
+package com.aca.nwsupdater.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.aca.NWSUpdaterModel.WeatherData;
+import com.aca.nwsupdater.model.WeatherData;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

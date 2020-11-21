@@ -1,7 +1,4 @@
-package com.aca.NWSUpdaterModel;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.aca.nwsupdater.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
