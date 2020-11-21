@@ -95,11 +95,13 @@ If something went wrong, send an error message, otherwise, respond with the newl
 ```
 
 ## After log in complete
-Any request below will respond with a 'user not logged in' error if there is no `logged_in_user_id` session attribute.
+Sessions will be manually implemented, hoping the client keeps track of the "token" we send it (which in this case
+is simply a UUID generated at time of log in), and will return it to the server when logged in operations take
+place through the `Authorization: Bearer` HTTP header.
 
-Use [this StackOverflow page](https://stackoverflow.com/questions/909185/jersey-security-and-session-management) as
-a reference for keeping up with sessions. Once logged in, store user ID in the session attributes as `logged_in_user_id`.
-When `https://nwsupdater.com/` loads with an attached session and provided user ID, respond with this JSON payload, 
+Any request below will respond with a 'user not logged in' error if there is no valid authorization header.
+
+Once the authorization checks, save this current session, and respond with this JSON payload, 
 containing a list of the user's locations, and the user itself:
 
 ```json
@@ -118,7 +120,8 @@ containing a list of the user's locations, and the user itself:
   "user": {
     "id": 1,
     "email": "jreddin1@cub.uca.edu"
-  }
+  },
+  "sessionToken": "00000-0000000-00000"
 }
 ```
 
