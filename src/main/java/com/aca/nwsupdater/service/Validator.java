@@ -1,0 +1,80 @@
+package com.aca.nwsupdater.service;
+
+import java.util.regex.Pattern;
+
+public class Validator {
+	NWSUpdaterService service;
+
+	public Validator(NWSUpdaterService service) {
+		this.service = service;
+	}
+
+	public String validateAuth(String auth) {
+		if (auth == null) {
+			ServiceUtil.sendError(1, "Not Logged In");
+		}
+
+		String[] components = auth.split(" ");
+
+		if (components.length != 2) {
+			ServiceUtil.sendError(1, "Not Logged In");
+		}
+
+		if (!components[0].equals("Bearer")) {
+			ServiceUtil.sendError(1, "Not Logged In");
+		}
+
+		return components[1];
+	}
+
+	public int validateToken(String token) {
+		int userId = service.getSessionManager().getSession(token);
+
+		if (userId == -1) {
+			ServiceUtil.sendError(1, "Not Logged In");
+		}
+
+		return userId;
+	}
+
+	public void validateUserId(int id) {
+		if (id < 0) {
+			ServiceUtil.sendError(2, "Invalid User Id: " + id);
+		}
+
+		if (service.getDao().getUser(id) == null) {
+			ServiceUtil.sendError(2, "User ID does not exist: " + id);
+		}
+	}
+
+	public void validateUserEmail(String email) {
+		String patterns
+				= "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}$";
+
+
+		Pattern pattern = Pattern.compile(patterns, Pattern.CASE_INSENSITIVE);
+
+		if (email == null || !pattern.matcher(email).matches()) {
+			ServiceUtil.sendError(3, "Invalid email: " + email);
+		}
+	}
+
+	public void validateUserPhone(String phone) {
+		String patterns
+				= "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+				+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+				+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+
+		Pattern pattern = Pattern.compile(patterns);
+
+		if (phone == null || !pattern.matcher(phone).matches()) {
+			ServiceUtil.sendError(4, "Invalid phone number: " + phone);
+		}
+	}
+
+	public void validateUserPassword(String password) {
+		if (password == null || password.length() < 6) {
+			ServiceUtil.sendError(5, "Invalid password");
+		}
+	}
+}

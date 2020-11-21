@@ -9,40 +9,68 @@ import com.aca.nwsupdater.model.webapp.User;
 import java.util.List;
 
 public class NWSUpdaterService {
+	public static final NWSUpdaterService instance = new NWSUpdaterService();
+
 	private SessionManager sessionManager;
 	private NWSUpdaterDAO dao;
+	private Validator validator;
 
 	public NWSUpdaterService() {
 		dao = new NWSUpdaterDAOImpl();
 		sessionManager = new SessionManager();
+		validator = new Validator(this);
 		sessionManager.start();
 	}
 
-	private String validateAuth(String auth) {
-		if (auth == null) {
-			ServiceUtil.sendError(1, "Not Logged In");
-		}
+	public SessionManager getSessionManager() {
+		return sessionManager;
+	}
 
-		String[] components = auth.split(" ");
+	public NWSUpdaterDAO getDao() {
+		return dao;
+	}
 
-		if (components.length != 2) {
-			ServiceUtil.sendError(1, "Not Logged In");
-		}
-
-		return components[1];
+	public Validator getValidator() {
+		return validator;
 	}
 
 	public HomePageModel homePage(String auth) {
-		String token = validateAuth(auth);
-		int userId = sessionManager.getSession(token);
+		String token = validator.validateAuth(auth);
 
-		if (userId == -1) {
-			ServiceUtil.sendError(1, "Not Logged In");
-		}
-
-		User user = dao.getUser(userId);
-		List<Location> locations = dao.getLocations(userId);
+		User user = dao.getUser(validator.validateToken(token));
+		List<Location> locations = dao.getLocations(user.getId());
 
 		return new HomePageModel(locations, user, token);
+	}
+
+	public User getUser(String auth) {
+		User user;
+
+		int id = validator.validateToken(validator.validateAuth(auth));
+		user = dao.getUser(id);
+
+		return user;
+	}
+
+	public User updateUser(String auth, User user) {
+		int userId = validator.validateToken(validator.validateAuth(auth));
+		validator.validateUserId(userId);
+
+		validator.validateUserEmail(user.getEmail());
+		validator.validateUserPhone(user.getPhone());
+
+		if (user.getPassword() != null) {
+			validator.validateUserPassword(user.getPassword());
+		}
+
+		return dao.updateUser(user);
+	}
+
+	public User createUser(User user) {
+		validator.validateUserEmail(user.getEmail());
+		validator.validateUserPhone(user.getPhone());
+		validator.validateUserPassword(user.getPassword());
+
+		return dao.createAccount(user);
 	}
 }
