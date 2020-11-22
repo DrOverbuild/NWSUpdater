@@ -93,4 +93,35 @@ public class NWSUpdaterService {
 		String token = validator.validateAuth(auth);
 		sessionManager.removeSession(token);
 	}
+
+	public Location getLocation(String auth, Integer locationId) {
+		validator.validateToken(validator.validateAuth(auth));
+
+		return dao.locationById(locationId);
+	}
+
+	public Location updateLocation(String auth, Location location) {
+		validator.validateToken(validator.validateAuth(auth));
+
+		return dao.updateLocation(location);
+	}
+
+
+	public Location newLocation(String auth, Location location) {
+		validator.validateToken(validator.validateAuth(auth));
+
+		return dao.addLocation(location);
+	}
+
+	public List<Location> deleteLocation(String auth, Integer locationId) {
+		validator.validateToken(validator.validateAuth(auth));
+
+		Location loc = dao.locationById(locationId);
+
+		if (loc == null) {
+			ServiceUtil.sendError(6, "Location does not exist.");
+		}
+
+		return dao.deleteLocation(loc);
+	}
 }
