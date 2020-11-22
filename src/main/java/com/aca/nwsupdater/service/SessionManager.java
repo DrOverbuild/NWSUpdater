@@ -42,8 +42,13 @@ public class SessionManager extends TimerTask {
 	}
 
 	public void removeSession(String uuid) {
-		Session session = new Session(UUID.fromString(uuid), 0, 0);
-		sessions.remove(session);
+		try {
+			UUID id = UUID.fromString(uuid);
+			Session session = new Session(id, 0, 0);
+			sessions.remove(session);
+		}  catch (IllegalArgumentException ignored) {
+
+		}
 	}
 
 	public void start() {

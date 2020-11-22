@@ -88,4 +88,9 @@ public class NWSUpdaterService {
 
 		return null;
 	}
+
+	public void logout(String auth) {
+		String token = validator.validateAuth(auth);
+		sessionManager.removeSession(token);
+	}
 }
