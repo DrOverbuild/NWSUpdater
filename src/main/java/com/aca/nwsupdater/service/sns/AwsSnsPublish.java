@@ -1,4 +1,4 @@
-package com.aca.NWSUpdaterService;
+package com.aca.nwsupdater.service.sns;
 
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.PublishRequest;

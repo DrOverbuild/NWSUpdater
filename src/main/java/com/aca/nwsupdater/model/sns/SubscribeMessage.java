@@ -1,4 +1,4 @@
-package com.aca.NWSUpdaterModel;
+package com.aca.nwsupdater.model.sns;
 
 public class SubscribeMessage {
 	private String endpoint;

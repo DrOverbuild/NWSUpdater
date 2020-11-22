@@ -1,4 +1,4 @@
-package com.aca.NWSUpdaterService;
+package com.aca.nwsupdater.service.sns;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
