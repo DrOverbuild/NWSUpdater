@@ -73,4 +73,19 @@ public class NWSUpdaterService {
 
 		return dao.createAccount(user);
 	}
+
+	public Session authenticate(User loginInfo) {
+		validator.validateUserEmail(loginInfo.getEmail());
+		validator.validateUserPassword(loginInfo.getPassword());
+
+		User user = dao.authenticate(loginInfo);
+
+		if (user != null) {
+			return sessionManager.newSession(user.getId());
+		} else {
+			ServiceUtil.sendError(5, "Username or password incorrect.");
+		}
+
+		return null;
+	}
 }

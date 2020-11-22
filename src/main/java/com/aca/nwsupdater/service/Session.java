@@ -1,29 +1,27 @@
 package com.aca.nwsupdater.service;
 
-import com.aca.nwsupdater.model.webapp.User;
-
 import java.util.UUID;
 
 public class Session {
-	UUID uuid;
+	UUID sessionID;
 	int userId;
 	long lastRequest;
 
 	public Session() {
 	}
 
-	public Session(UUID uuid, int userId, long lastRequest) {
-		this.uuid = uuid;
+	public Session(UUID sessionID, int userId, long lastRequest) {
+		this.sessionID = sessionID;
 		this.userId = userId;
 		this.lastRequest = lastRequest;
 	}
 
-	public UUID getUuid() {
-		return uuid;
+	public UUID getSessionID() {
+		return sessionID;
 	}
 
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
+	public void setSessionID(UUID sessionID) {
+		this.sessionID = sessionID;
 	}
 
 	public long getLastRequest() {
@@ -53,6 +51,6 @@ public class Session {
 
 		Session session = (Session) o;
 
-		return session.getUuid().equals(this.getUuid());
+		return session.getSessionID().equals(this.getSessionID());
 	}
 }

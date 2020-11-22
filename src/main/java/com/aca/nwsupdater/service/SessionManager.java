@@ -1,7 +1,5 @@
 package com.aca.nwsupdater.service;
 
-import com.aca.nwsupdater.model.webapp.User;
-
 import java.util.*;
 
 public class SessionManager extends TimerTask {
@@ -10,11 +8,14 @@ public class SessionManager extends TimerTask {
 
 	private List<Session> sessions = new ArrayList<>();
 
-	public String newSession(int userId) {
+	public Session newSession(int userId) {
 		UUID id = UUID.randomUUID();
 		Session session = new Session(id, userId, System.currentTimeMillis());
 		sessions.add(session);
-		return id.toString();
+
+		Session returnedSession = new Session();
+		returnedSession.setSessionID(session.getSessionID());
+		return returnedSession;
 	}
 
 	/**
@@ -28,7 +29,7 @@ public class SessionManager extends TimerTask {
 			UUID id = UUID.fromString(uuid);
 
 			for (Session session : sessions) {
-				if (session.getUuid().equals(id)) {
+				if (session.getSessionID().equals(id)) {
 					session.setLastRequest(System.currentTimeMillis());
 					return session.getUserId();
 				}
