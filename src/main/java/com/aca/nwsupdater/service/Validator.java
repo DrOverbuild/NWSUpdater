@@ -48,13 +48,12 @@ public class Validator {
 	}
 
 	public void validateUserEmail(String email) {
-		String patterns
-				= "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}$";
+		boolean invalid =
+				email == null ||
+				email.isEmpty() ||
+				!email.contains("@");
 
-
-		Pattern pattern = Pattern.compile(patterns, Pattern.CASE_INSENSITIVE);
-
-		if (email == null || !pattern.matcher(email).matches()) {
+		if (invalid) {
 			ServiceUtil.sendError(3, "Invalid email: " + email);
 		}
 	}

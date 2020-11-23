@@ -146,6 +146,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		try {
 			stmt = conn.prepareStatement(selectUserByIdQuery);
+			stmt.setInt(1, userID);
 
 			rs = stmt.executeQuery();
 
@@ -216,7 +217,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		try {
 			stmt = conn.prepareStatement(getAllLocationsByOwnerIDQuery);
-
+			stmt.setInt(1, userID);
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -508,11 +509,11 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	private void closeResourses(ResultSet rs, PreparedStatement stmt, Connection conn) {
 		try {
 			if (stmt != null && !stmt.isClosed()) {
-				rs.close();
+				stmt.close();
 			}
 
 			if (rs != null && !rs.isClosed()) {
-				stmt.close();
+				rs.close();
 			}
 
 			if (conn != null && !conn.isClosed()) {

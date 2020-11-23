@@ -4,13 +4,13 @@ import java.util.UUID;
 
 public class Session {
 	UUID sessionID;
-	int userId;
-	long lastRequest;
+	Integer userId;
+	Long lastRequest;
 
 	public Session() {
 	}
 
-	public Session(UUID sessionID, int userId, long lastRequest) {
+	public Session(UUID sessionID, Integer userId, Long lastRequest) {
 		this.sessionID = sessionID;
 		this.userId = userId;
 		this.lastRequest = lastRequest;
@@ -24,19 +24,19 @@ public class Session {
 		this.sessionID = sessionID;
 	}
 
-	public long getLastRequest() {
+	public Long getLastRequest() {
 		return lastRequest;
 	}
 
-	public void setLastRequest(long lastRequest) {
+	public void setLastRequest(Long lastRequest) {
 		this.lastRequest = lastRequest;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

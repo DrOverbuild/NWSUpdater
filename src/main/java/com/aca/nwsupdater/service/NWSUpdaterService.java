@@ -39,6 +39,11 @@ public class NWSUpdaterService {
 		String token = validator.validateAuth(auth);
 
 		User user = dao.getUser(validator.validateToken(token));
+
+		if (user == null) {
+			return null;
+		}
+
 		List<Location> locations = dao.getLocations(user.getId());
 
 		return new HomePageModel(locations, user, token);
@@ -76,6 +81,10 @@ public class NWSUpdaterService {
 	}
 
 	public Session authenticate(User loginInfo) {
+		if (loginInfo == null) {
+			ServiceUtil.sendError(7, "Login information not provided.");
+		}
+
 		validator.validateUserEmail(loginInfo.getEmail());
 		validator.validateUserPassword(loginInfo.getPassword());
 
