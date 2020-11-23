@@ -11,17 +11,17 @@ public class Validator {
 
 	public String validateAuth(String auth) {
 		if (auth == null) {
-			ServiceUtil.sendError(1, "Not Logged In");
+			ServiceUtil.sendError(1, "Not logged in: session token required");
 		}
 
 		String[] components = auth.split(" ");
 
 		if (components.length != 2) {
-			ServiceUtil.sendError(1, "Not Logged In");
+			ServiceUtil.sendError(1, "Not logged in: invalid session token");
 		}
 
 		if (!components[0].equals("Bearer")) {
-			ServiceUtil.sendError(1, "Not Logged In");
+			ServiceUtil.sendError(1, "Not logged in: session token must be in form of Bearer Token");
 		}
 
 		return components[1];
@@ -31,7 +31,7 @@ public class Validator {
 		int userId = service.getSessionManager().getSession(token);
 
 		if (userId == -1) {
-			ServiceUtil.sendError(1, "Not Logged In");
+			ServiceUtil.sendError(1, "Not logged in: no session for given token");
 		}
 
 		return userId;
@@ -72,7 +72,7 @@ public class Validator {
 	}
 
 	public void validateUserPassword(String password) {
-		if (password == null || password.length() < 6) {
+		if (password == null || password.length() < 6 || password.length() > 16) {
 			ServiceUtil.sendError(5, "Invalid password");
 		}
 	}

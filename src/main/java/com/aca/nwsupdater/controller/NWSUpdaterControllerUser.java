@@ -9,14 +9,14 @@ import jakarta.ws.rs.core.MediaType;
 public class NWSUpdaterControllerUser {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getUser(@HeaderParam("Authentication") String auth) {
+	public User getUser(@HeaderParam("Authorization") String auth) {
 		return NWSUpdaterService.instance.getUser(auth);
 	}
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User updateUser(@HeaderParam("Authentication") String auth, User user) {
+	public User updateUser(@HeaderParam("Authorization") String auth, User user) {
 		return NWSUpdaterService.instance.updateUser(auth, user);
 	}
 

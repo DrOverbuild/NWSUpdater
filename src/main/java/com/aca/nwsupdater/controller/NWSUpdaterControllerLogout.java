@@ -8,7 +8,7 @@ import jakarta.ws.rs.Path;
 @Path("/logout")
 public class NWSUpdaterControllerLogout {
 	@GET
-	public String logout(@HeaderParam("Authentication") String auth) {
+	public String logout(@HeaderParam("Authorization") String auth) {
 		NWSUpdaterService.instance.logout(auth);
 		return "Success";
 	}

@@ -62,6 +62,8 @@ public class NWSUpdaterService {
 		int userId = validator.validateToken(validator.validateAuth(auth));
 		validator.validateUserId(userId);
 
+		user.setId(userId); // prevent request from updating user with a different user ID
+
 		validator.validateUserEmail(user.getEmail());
 		validator.validateUserPhone(user.getPhone());
 
@@ -77,7 +79,13 @@ public class NWSUpdaterService {
 		validator.validateUserPhone(user.getPhone());
 		validator.validateUserPassword(user.getPassword());
 
-		return dao.createAccount(user);
+		User newUser = dao.createAccount(user);
+
+		if (newUser == null) {
+			ServiceUtil.sendError(8, "Email already exists.");
+		}
+
+		return newUser;
 	}
 
 	public Session authenticate(User loginInfo) {
@@ -105,28 +113,39 @@ public class NWSUpdaterService {
 	}
 
 	public Location getLocation(String auth, Integer locationId) {
-		validator.validateToken(validator.validateAuth(auth));
+		int userId = validator.validateToken(validator.validateAuth(auth));
 
-		return dao.locationById(locationId);
+		return dao.locationById(locationId, userId);
 	}
 
 	public Location updateLocation(String auth, Location location) {
-		validator.validateToken(validator.validateAuth(auth));
+		int userId = validator.validateToken(validator.validateAuth(auth));
+
+		if (location == null) {
+			ServiceUtil.sendError(10, "Location could not be read from JSON data.");
+		}
+
+		location.setOwnerID(userId);
 
 		return dao.updateLocation(location);
 	}
 
 
 	public Location newLocation(String auth, Location location) {
-		validator.validateToken(validator.validateAuth(auth));
+		int userId = validator.validateToken(validator.validateAuth(auth));
 
+		if (location == null) {
+			ServiceUtil.sendError(10, "Location could not be read from JSON data.");
+		}
+
+		location.setOwnerID(userId);
 		return dao.addLocation(location);
 	}
 
 	public List<Location> deleteLocation(String auth, Integer locationId) {
-		validator.validateToken(validator.validateAuth(auth));
+		int userId = validator.validateToken(validator.validateAuth(auth));
 
-		Location loc = dao.locationById(locationId);
+		Location loc = dao.locationById(locationId, userId);
 
 		if (loc == null) {
 			ServiceUtil.sendError(6, "Location does not exist.");

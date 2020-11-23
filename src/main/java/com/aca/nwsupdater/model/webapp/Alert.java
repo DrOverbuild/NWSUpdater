@@ -27,7 +27,6 @@ public class Alert {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Alert alert = (Alert) o;
-		return Objects.equals(id, alert.id) &&
-				Objects.equals(name, alert.name);
+		return Objects.equals(id, alert.id);
 	}
 }
