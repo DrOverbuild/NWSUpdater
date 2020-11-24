@@ -40,7 +40,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	private static final String selectLocationsByIDQuery =
 			"SELECT id, name, lat, lon, gridpoint_office, gridpoint_x, " +
 					"        gridpoint_y, sms_enabled, email_enabled, owner_id " +
-					"FROM location WHERE id = ?";
+					"FROM location WHERE id = ? AND owner_id = ?";
 
 	private static final String insertLocationQuery =
 			"INSERT INTO location (name, lat, lon, gridpoint_office, gridpoint_x, " +
@@ -59,7 +59,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			"DELETE FROM location_alerts WHERE location_id = ?";
 
 	private static final String selectAllAlertsQuery =
-			"SELECT (id, name) FROM alert";
+			"SELECT id, name FROM alert";
 
 	private static final String insertLocationAlertQuery =
 			"INSERT INTO location_alerts (location_id, alert_id) VALUES (?, ?)";
@@ -146,6 +146,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		try {
 			stmt = conn.prepareStatement(selectUserByIdQuery);
+			stmt.setInt(1, userID);
 
 			rs = stmt.executeQuery();
 
@@ -216,7 +217,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		try {
 			stmt = conn.prepareStatement(getAllLocationsByOwnerIDQuery);
-
+			stmt.setInt(1, userID);
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -232,7 +233,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	}
 
 	@Override
-	public Location locationById(int locationID) {
+	public Location locationById(int locationID, int userId) {
 		Location location = null;
 
 		Connection conn = NWSUpdaterDB.getConnection();
@@ -241,7 +242,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		try {
 			stmt = conn.prepareStatement(selectLocationsByIDQuery);
-
+			stmt.setInt(1, locationID);
+			stmt.setInt(2, userId);
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -251,6 +253,10 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			throwables.printStackTrace();
 		} finally {
 			closeResourses(rs, stmt, conn);
+		}
+
+		if (location != null) {
+			location.setAlerts(getAlertsForLocation(location));
 		}
 
 		return location;
@@ -281,12 +287,19 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 			if (rowsUpdated == 1) {
 				int id = getLastInsertedID(conn);
-				newLoc = locationById(id);
+				newLoc = locationById(id, location.getOwnerID());
 			}
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		} finally {
 			closeResourses(null, stmt, conn);
+		}
+
+		if (newLoc != null && location.getAlerts() != null) {
+			for (Alert a: location.getAlerts()) {
+				addLocationAlert(newLoc, a);
+				newLoc.setAlerts(getAlertsForLocation(newLoc));
+			}
 		}
 
 		return newLoc;
@@ -316,7 +329,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			int rowsUpdated = stmt.executeUpdate();
 
 			if (rowsUpdated == 1) {
-				updated = locationById(location.getId());
+				updated = locationById(location.getId(), location.getOwnerID());
 			}
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
@@ -326,19 +339,23 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		// Check for alert differences
 		List<Alert> oldAlerts = getAlertsForLocation(location);
-		for (Alert a: oldAlerts) {
+		for (Alert a : oldAlerts) {
 			if (!location.getAlerts().contains(a)) {
 				deleteSingleLocationAlert(location, a);
 			}
 		}
 
-		for (Alert a: location.getAlerts()) {
-			if (!oldAlerts.contains(a)) {
-				addLocationAlert(location, a);
+		if (location.getAlerts() != null) {
+			for (Alert a : location.getAlerts()) {
+				if (!oldAlerts.contains(a)) {
+					addLocationAlert(location, a);
+				}
 			}
 		}
 
-		updated.setAlerts(location.getAlerts());
+		if (updated != null) {
+			updated.setAlerts(getAlertsForLocation(location));
+		}
 
 		return updated;
 	}
@@ -405,6 +422,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			stmt = conn.prepareStatement(insertLocationAlertQuery);
 			stmt.setInt(1, location.getId());
 			stmt.setInt(2, alert.getId());
+
+			stmt.executeUpdate();
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		} finally {
@@ -508,11 +527,11 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	private void closeResourses(ResultSet rs, PreparedStatement stmt, Connection conn) {
 		try {
 			if (stmt != null && !stmt.isClosed()) {
-				rs.close();
+				stmt.close();
 			}
 
 			if (rs != null && !rs.isClosed()) {
-				stmt.close();
+				rs.close();
 			}
 
 			if (conn != null && !conn.isClosed()) {
