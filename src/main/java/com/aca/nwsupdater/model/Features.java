@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Features {
 	
 	@JsonProperty("properties")
-	private Properties properties;
+	private AlertProperties properties;
 
-	public Properties getProperties() {
+	public AlertProperties getProperties() {
 		return properties;
 	}
 
-	public void setProperties(Properties properties) {
+	public void setProperties(AlertProperties properties) {
 		this.properties = properties;
 	}
 
