@@ -1,15 +1,16 @@
 package com.aca.nwsupdater;
 
 import com.aca.nwsupdater.model.WeatherAlertData;
-import com.aca.nwsupdater.model.WeatherForcastData;
+import com.aca.nwsupdater.model.WeatherForecastData;
 import com.aca.nwsupdater.service.WeatherAlertService;
+import com.aca.nwsupdater.service.WeatherForecastService;
 
 public class WeatherTest {
 	
 	public static void main(String[] args) {
-		WeatherAlertService service = new WeatherAlertService("https://", "api.weather.gov", "/gridpoints", "/LZK/", "/forecast?units=us");
-		WeatherForcastData weatherData = service.getWeatherForcastData("75,87");
+		WeatherForecastService weatherForecastService = new WeatherForecastService();
+		WeatherForecastData weatherForecastData = weatherForecastService.getWeatherForecastData("SHV", "30,96");
 		
-		System.out.println(weatherData.toString());
+		System.out.println(weatherForecastData.toString());
 	}
 }

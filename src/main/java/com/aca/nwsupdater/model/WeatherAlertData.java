@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WeatherAlertData {
 	@JsonProperty("features")
-	private List<Features> features;
+	private List<AlertFeatures> features;
 	
-	public List<Features> getFeatures(){
+	public List<AlertFeatures> getFeatures(){
 		return features;
 	}
 	

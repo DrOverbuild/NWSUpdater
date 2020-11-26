@@ -2,7 +2,7 @@ package com.aca.nwsupdater.service.sns;
 
 import java.util.*;
 
-import com.aca.nwsupdater.model.Features;
+import com.aca.nwsupdater.model.AlertFeatures;
 import com.aca.nwsupdater.model.AlertProperties;
 import com.aca.nwsupdater.model.WeatherAlertData;
 import com.aca.nwsupdater.service.WeatherAlertService;
@@ -22,17 +22,17 @@ public class SnsUserAlert extends TimerTask{
 
 	@Override
 	public void run() {	
-//		WeatherService service = new WeatherService();
-//		WeatherData weatherData = service.getWeatherData("25.441393,-80.471638");
-//		List<Features> features = weatherData.getFeatures();
-//			
-//		for(Features f : features) {
-//			Properties properties = f.getProperties();
-//				
-//			if(properties.getSeverity().equals("Major")) {					
-//				AwsSnsPublish.publishUpdate("Hello world", "Welcome to the world");
-//			}
-//		}		
+		WeatherAlertService service = new WeatherAlertService();
+		WeatherAlertData weatherAlertData = service.getWeatherAlertData("25.441393,-80.471638");
+		List<AlertFeatures> features = weatherAlertData.getFeatures();
+			
+		for(AlertFeatures f : features) {
+			AlertProperties properties = f.getProperties();
+				
+			if(properties.getSeverity().equals("Major")) {					
+				AwsSnsPublish.publishUpdate("Hello world", "Welcome to the world");
+			}
+		}		
 	}
 
 }

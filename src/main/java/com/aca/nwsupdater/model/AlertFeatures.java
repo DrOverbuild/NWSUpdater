@@ -2,7 +2,7 @@ package com.aca.nwsupdater.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Features {
+public class AlertFeatures {
 	
 	@JsonProperty("properties")
 	private AlertProperties properties;

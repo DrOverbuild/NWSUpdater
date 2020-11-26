@@ -4,15 +4,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class WeatherForcastData {
+public class WeatherForecastData {
 	@JsonProperty("properties")
 	private ForecastProperties properties;
 	
-	public ForecastProperties getProperties() {
+	public ForecastProperties getForecastProperties() {
 		return properties;
 	}
 
-	public void setProperties(ForecastProperties properties) {
+	public void setForecastProperties(ForecastProperties properties) {
 		this.properties = properties;
 	}
 

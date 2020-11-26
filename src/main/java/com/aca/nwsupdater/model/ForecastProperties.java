@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ForecastProperties {
 	@JsonProperty("periods")
-	private List<Periods> periods;
+	private List<ForecastPeriods> periods;
 	
-	public List<Periods> getPeriod(){
+	public List<ForecastPeriods> getPeriod(){
 		return periods;
 	}
 	

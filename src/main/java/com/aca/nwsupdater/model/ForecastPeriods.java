@@ -2,7 +2,7 @@ package com.aca.nwsupdater.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Periods {
+public class ForecastPeriods {
 	@JsonProperty("isDaytime")
 	private Boolean isDayTime;
 	

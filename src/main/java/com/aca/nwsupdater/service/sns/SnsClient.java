@@ -25,7 +25,10 @@ public class SnsClient {
 	
 	public static void main(String[] args) {
 		
-		SnsUserAlert snsUserAlert = new SnsUserAlert();
-		snsUserAlert.start();
+//		SnsUserAlert snsUserAlert = new SnsUserAlert();
+//		snsUserAlert.start();
+		
+		SnsUserForecast snsUserForecast = new SnsUserForecast();
+		snsUserForecast.start();
 	}
 }
