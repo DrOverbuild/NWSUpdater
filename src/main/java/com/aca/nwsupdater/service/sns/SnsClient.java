@@ -24,11 +24,11 @@ public class SnsClient {
 
 	
 	public static void main(String[] args) {
-		AwsSnsSubscription.subscribePhoneNumber("9032352355");
 		
-		AmazonSNS snsClient = SnsClient.getAwsClient();
-		System.out.println("snsClient: " + snsClient);
+//		SnsUserAlert snsUserAlert = new SnsUserAlert();
+//		snsUserAlert.start();
 		
-		AwsSnsPublish.publishUpdate("Hello world", "Welcome to the world");
+		SnsUserForecast snsUserForecast = new SnsUserForecast();
+		snsUserForecast.start();
 	}
 }

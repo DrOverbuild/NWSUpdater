@@ -4,10 +4,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class WeatherData {
+public class WeatherAlertData {
 	@JsonProperty("features")
-	private List<Features> features;
-
+	private List<AlertFeatures> features;
+	
+	public List<AlertFeatures> getFeatures(){
+		return features;
+	}
+	
 	@Override
 	public String toString() {
 		String value = null;
