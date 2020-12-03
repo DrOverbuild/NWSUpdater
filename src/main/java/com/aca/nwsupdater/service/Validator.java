@@ -11,17 +11,17 @@ public class Validator {
 
 	public String validateAuth(String auth) {
 		if (auth == null) {
-			ServiceUtil.sendError(1, "Not logged in: session token required");
+			ServiceUtils.sendError(1, "Not logged in: session token required");
 		}
 
 		String[] components = auth.split(" ");
 
 		if (components.length != 2) {
-			ServiceUtil.sendError(1, "Not logged in: invalid session token");
+			ServiceUtils.sendError(1, "Not logged in: invalid session token");
 		}
 
 		if (!components[0].equals("Bearer")) {
-			ServiceUtil.sendError(1, "Not logged in: session token must be in form of Bearer Token");
+			ServiceUtils.sendError(1, "Not logged in: session token must be in form of Bearer Token");
 		}
 
 		return components[1];
@@ -31,7 +31,7 @@ public class Validator {
 		int userId = service.getSessionManager().getSession(token);
 
 		if (userId == -1) {
-			ServiceUtil.sendError(1, "Not logged in: no session for given token");
+			ServiceUtils.sendError(1, "Not logged in: no session for given token");
 		}
 
 		return userId;
@@ -39,11 +39,11 @@ public class Validator {
 
 	public void validateUserId(int id) {
 		if (id < 0) {
-			ServiceUtil.sendError(2, "Invalid User Id: " + id);
+			ServiceUtils.sendError(2, "Invalid User Id: " + id);
 		}
 
 		if (service.getDao().getUser(id) == null) {
-			ServiceUtil.sendError(2, "User ID does not exist: " + id);
+			ServiceUtils.sendError(2, "User ID does not exist: " + id);
 		}
 	}
 
@@ -54,7 +54,7 @@ public class Validator {
 				!email.contains("@");
 
 		if (invalid) {
-			ServiceUtil.sendError(3, "Invalid email: " + email);
+			ServiceUtils.sendError(3, "Invalid email: " + email);
 		}
 	}
 
@@ -67,13 +67,13 @@ public class Validator {
 		Pattern pattern = Pattern.compile(patterns);
 
 		if (phone == null || !pattern.matcher(phone).matches()) {
-			ServiceUtil.sendError(4, "Invalid phone number: " + phone);
+			ServiceUtils.sendError(4, "Invalid phone number: " + phone);
 		}
 	}
 
 	public void validateUserPassword(String password) {
 		if (password == null || password.length() < 6 || password.length() > 16) {
-			ServiceUtil.sendError(5, "Invalid password");
+			ServiceUtils.sendError(5, "Invalid password");
 		}
 	}
 }

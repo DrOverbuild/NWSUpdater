@@ -82,7 +82,7 @@ public class NWSUpdaterService {
 		User newUser = dao.createAccount(user);
 
 		if (newUser == null) {
-			ServiceUtil.sendError(8, "Email already exists.");
+			ServiceUtils.sendError(8, "Email already exists.");
 		}
 
 		return newUser;
@@ -90,7 +90,7 @@ public class NWSUpdaterService {
 
 	public Session authenticate(User loginInfo) {
 		if (loginInfo == null) {
-			ServiceUtil.sendError(7, "Login information not provided.");
+			ServiceUtils.sendError(7, "Login information not provided.");
 		}
 
 		validator.validateUserEmail(loginInfo.getEmail());
@@ -101,7 +101,7 @@ public class NWSUpdaterService {
 		if (user != null) {
 			return sessionManager.newSession(user.getId());
 		} else {
-			ServiceUtil.sendError(5, "Username or password incorrect.");
+			ServiceUtils.sendError(5, "Username or password incorrect.");
 		}
 
 		return null;
@@ -122,7 +122,7 @@ public class NWSUpdaterService {
 		int userId = validator.validateToken(validator.validateAuth(auth));
 
 		if (location == null) {
-			ServiceUtil.sendError(10, "Location could not be read from JSON data.");
+			ServiceUtils.sendError(10, "Location could not be read from JSON data.");
 		}
 
 		location.setOwnerID(userId);
@@ -135,7 +135,7 @@ public class NWSUpdaterService {
 		int userId = validator.validateToken(validator.validateAuth(auth));
 
 		if (location == null) {
-			ServiceUtil.sendError(10, "Location could not be read from JSON data.");
+			ServiceUtils.sendError(10, "Location could not be read from JSON data.");
 		}
 
 		location.setOwnerID(userId);
@@ -148,7 +148,7 @@ public class NWSUpdaterService {
 		Location loc = dao.locationById(locationId, userId);
 
 		if (loc == null) {
-			ServiceUtil.sendError(6, "Location does not exist.");
+			ServiceUtils.sendError(6, "Location does not exist.");
 		}
 
 		return dao.deleteLocation(loc);
