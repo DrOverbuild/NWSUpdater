@@ -157,4 +157,9 @@ public class NWSUpdaterService {
 	public List<Alert> getAlerts() {
 		return dao.getAlerts();
 	}
+
+	public void getNewLocationCoords(String auth) {
+		
+		
+	}
 }
