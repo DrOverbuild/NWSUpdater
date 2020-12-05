@@ -8,17 +8,77 @@
 			<form name="newLocationForm">
 				<div class="form-inline" style="padding-right:3rem;">
 					<label for="name" class="font-weight-bold pr-5">Name:</label>
-					<input name="name" type="text" class="form-control col-sm" placeholder="Location" id="name">
+					<input ng-model="name" type="text" class="form-control col-sm" placeholder="City, State" id="name">
+					<button type="button" ng-click="updateMap()" class="btn btn-success btn ml-5">
+						Search
+					</button>
 				</div>
 				<div class="container-fluid m-0 p-5">
-					<div id="map" ng-model="map" style="width:80%; height:400px; margin:0 auto;">
+					<div id="map" ng-model="map" style="width:90%; height:400px; margin:0 auto;">
 					</div>
 				</div>
-				<div class="form-inline">
-					<label for="enabledSMS" class="font-weight-bold pr-3">Enabled SMS:</label>
+				<div class="form-group">
+					<label for="enabledSMS" ng-model="enabledSMS" class="font-weight-bold pr-3 pl-2">Enabled SMS:</label>
 					<input type="checkbox">
 				</div>
-			</form>
+				<div class="form-group">
+					<label for="enabledEmail" ng-model="enabledEmail" class="font-weight-bold pr-3">Enabled Email:</label>
+					<input type="checkbox">
+				</div>
+					<fieldset class="form-group">
+						<div class="row">
+							<label for="alerts" class="font-weight-bold ml-4"
+								style="padding-left: 3rem;">Alerts:</label>
+							<div class="col-sm-10 ml-2">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" ng-model="tornadoWarning"
+										name="tornadoWarning" id="tornadoWarning" value="option1"> 
+										<label class="form-check-label"
+										for="tornadoWarning"> Tornado Warning </label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" ng-model="tornadoWatch"
+										name="tornadoWatch" id="tornadoWatch" value="option2">
+									<label class="form-check-label" for="tornadoWatch">
+										Tornado Watch </label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" ng-model="severeThunderstormWarning"
+										name="severeThunderstormWarning"
+										id="severeThunderstormWarning" value="option2"> <label
+										class="form-check-label" for="severeThunderstormWarning">
+										Severe Thunderstorm Warning </label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" ng-model="severeThunderstormWatch"
+										name="severeThunderstormWatch" id="severeThunderstormWatch"
+										value="option2"> <label class="form-check-label"
+										for="severeThunderstormWatch"> Severe Thunderstorm
+										Watch </label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" ng-model="fleshFloodWarning"
+										name="fleshFloodWarning" id="fleshFloodWarning"
+										value="option2"> <label class="form-check-label"
+										for="fleshFloodWarning"> Flesh Flood Warning </label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" ng-model="fleshFloodWatch"
+										name="fleshFloodWatch" id="fleshFloodWatch" value="option2">
+									<label class="form-check-label" for="fleshFloodWatch">
+										Flesh Flood Watch </label>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div class="card-footer">
+				<div class="mx-5">
+					<button type="button" ng-click="createNewLocation()" class="btn btn-success btn-block float-right">
+						Save
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>

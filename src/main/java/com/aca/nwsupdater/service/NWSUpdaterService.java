@@ -2,6 +2,7 @@ package com.aca.nwsupdater.service;
 
 import com.aca.nwsupdater.dao.NWSUpdaterDAO;
 import com.aca.nwsupdater.dao.NWSUpdaterDAOImpl;
+import com.aca.nwsupdater.model.TestLocation;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.HomePageModel;
 import com.aca.nwsupdater.model.webapp.Location;
@@ -158,8 +159,8 @@ public class NWSUpdaterService {
 		return dao.getAlerts();
 	}
 
-	public void getNewLocationCoords(String auth) {
-		
-		
+	public void createNewLocationCoords(TestLocation location) {
+		System.out.println(location);
+		//dao.addLocation(location);
 	}
 }

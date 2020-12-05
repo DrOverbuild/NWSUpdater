@@ -75,4 +75,18 @@ public class Location {
 	public void setOwnerID(Integer ownerID) {
 		this.ownerID = ownerID;
 	}
+	
+	@Override
+	public String toString() {
+		String toReturn;
+		
+		toReturn = "\nName: " + name + 
+					"\nLongitude: " + lon +
+					"\nLatitude: " + lat +
+					"\nsmsEnabled: " + smsEnabled +
+					"\nemailEnabled: " + emailEnabled;
+		
+		
+		return toReturn;
+	}
 }
