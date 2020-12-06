@@ -1,10 +1,8 @@
-package com.aca.nwsupdater.model;
+package com.aca.nwsupdater.model.webapp;
 
 import java.util.List;
 
-import com.aca.nwsupdater.model.webapp.Alert;
-
-public class TestLocation {
+public class NewLocation {
 	private String name;
 	private Double lat;
 	private Double lon;

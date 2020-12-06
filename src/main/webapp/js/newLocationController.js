@@ -12,15 +12,6 @@
 		var name = "";
 		var lat = 0.0;
 		var lon = 0.0;
-		var enabledSMS = false;
-		var enabledEmail = false;
-		var alerts;
-		var tornadoWarning = "";
-		var tornadoWatch = "";
-		var severeThunderstormWarning = "";
-		var severeThunderstormWatch = "";
-		var fleshFloodWarning = "";
-		var fleshFloodWatch = "";
 		
 		var marker;
 		var lnglat
@@ -45,17 +36,8 @@
 					coords = feature.center;
 					$scope.displayMap();
 					lnglat = marker.getLngLat();
-					name = $scope.name;
 					lat = lnglat.lat;
 					lon = lnglat.lng;
-					enabledSMS = $scope.enabledSMS;
-					enabledEmail = $scope.enabledEmail;
-					tornadoWarning = $scope.tornadoWarning;
-					tornadoWatch = $scope.tornadoWatch;
-					severeThunderstormWarning = $scope.severeThunderstormWarning;
-					severeThunderstormWatch = $scope.severeThunderstormWatch;
-					fleshFloodWarning = $scope.fleshFloodWarning;
-					fleshFloodWatch = $scope.fleshFloodWatch;
 				}
 			});
 		};
@@ -71,12 +53,12 @@
 		};
 		
 		$scope.createNewLocation = function(){	
-			var coordinates ={
-					name : name,
+			var Location ={
+					name : $scope.name,
 					lon : lon,
 					lat : lat,
-					enabledSMS : enabledSMS,
-					enabledEmail : enabledEmail,
+					enabledSMS : $scope.enabledSMS,
+					enabledEmail : $scope.enabledEmail,
 					tornadoWarning : $scope.tornadoWarning,
 					tornadoWatch : $scope.tornadoWatch,
 					severeThunderstormWarning : $scope.severeThunderstormWarning,
@@ -85,7 +67,7 @@
 					fleshFloodWatch : $scope.fleshFloodWatch
 			};
 			
-			$http.post("/NWSUpdater/webapi/newloc/create", coordinates).then(
+			$http.post("/NWSUpdater/webapi/location", Location).then(
 					function success(reponse) {
 						console.log('success');
 					},

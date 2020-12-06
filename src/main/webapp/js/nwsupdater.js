@@ -7,7 +7,7 @@
 	
 	nwsupdaterapp.config(function($routeProvider){
 		$routeProvider
-		.when("/newloc", {
+		.when("/location", {
 			templateUrl : "newLocation.html",
 			controller : "newLocationController"
 		});

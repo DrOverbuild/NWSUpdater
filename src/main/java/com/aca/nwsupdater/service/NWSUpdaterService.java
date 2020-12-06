@@ -2,12 +2,13 @@ package com.aca.nwsupdater.service;
 
 import com.aca.nwsupdater.dao.NWSUpdaterDAO;
 import com.aca.nwsupdater.dao.NWSUpdaterDAOImpl;
-import com.aca.nwsupdater.model.TestLocation;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.HomePageModel;
 import com.aca.nwsupdater.model.webapp.Location;
+import com.aca.nwsupdater.model.webapp.NewLocation;
 import com.aca.nwsupdater.model.webapp.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NWSUpdaterService {
@@ -132,15 +133,66 @@ public class NWSUpdaterService {
 	}
 
 
-	public Location newLocation(String auth, Location location) {
+	public Location newLocation(String auth, NewLocation newLocation) {
+		Location location = new Location();
+		
 		int userId = validator.validateToken(validator.validateAuth(auth));
 
-		if (location == null) {
+		if (newLocation == null) {
 			ServiceUtils.sendError(10, "Location could not be read from JSON data.");
 		}
 
+		setLocation(newLocation, location);
 		location.setOwnerID(userId);
 		return dao.addLocation(location);
+	}
+
+	private void setLocation(NewLocation newLocation, Location location) {
+		List<Alert> alerts = new ArrayList<>();
+		
+		if(newLocation.getTornadoWarning()) {
+			Alert tornadoWarning = new Alert();
+			tornadoWarning.setId(1);
+			tornadoWarning.setName("Tornado Warning");
+			alerts.add(tornadoWarning);
+		}
+		if(newLocation.getTornadoWatch()) {
+			Alert tornadoWatch = new Alert();
+			tornadoWatch.setId(1);
+			tornadoWatch.setName("Tornado Watch");
+			alerts.add(tornadoWatch);
+		}
+		if(newLocation.getSevereThunderstormWarning()) {
+			Alert severeThunderstormWarning = new Alert();
+			severeThunderstormWarning.setId(1);
+			severeThunderstormWarning.setName("Severe Thunderstorm Warning");
+			alerts.add(severeThunderstormWarning);
+		}		
+		if(newLocation.getSevereThunderstormWatch()) {
+			Alert severeThunderstormWatch = new Alert();
+			severeThunderstormWatch.setId(1);
+			severeThunderstormWatch.setName("Severe Thunderstorm Watch");
+			alerts.add(severeThunderstormWatch);
+		}
+		if(newLocation.getFleshFloodWarning()) {
+			Alert fleshFloodWarning = new Alert();
+			fleshFloodWarning.setId(1);
+			fleshFloodWarning.setName("Flesh Flood Warning");
+			alerts.add(fleshFloodWarning);
+		}
+		if(newLocation.getFleshFloodWatch()) {
+			Alert fleshFloodWatch = new Alert();
+			fleshFloodWatch.setId(1);
+			fleshFloodWatch.setName("Flesh Flood Watch");
+			alerts.add(fleshFloodWatch);
+		}
+		
+		location.setName(newLocation.getName());
+		location.setLat(newLocation.getLat());
+		location.setLon(newLocation.getLon());
+		location.setEmailEnabled(newLocation.getEnabledEmail());
+		location.setSmsEnabled(newLocation.getEnabledSMS());
+		location.setAlerts(alerts);
 	}
 
 	public List<Location> deleteLocation(String auth, Integer locationId) {
@@ -159,8 +211,7 @@ public class NWSUpdaterService {
 		return dao.getAlerts();
 	}
 
-	public void createNewLocationCoords(TestLocation location) {
+	public void createNewLocationCoords(NewLocation location) {
 		System.out.println(location);
-		//dao.addLocation(location);
 	}
 }
