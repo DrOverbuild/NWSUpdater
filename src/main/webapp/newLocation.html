@@ -1,89 +1,116 @@
+<style>
+body {
+	background: url(image/newLocationBackground2.jpg) no-repeat center
+		center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+</style>
+
 <div class="row">
 	<div class="col-sm">
 		<div class="card bg-light">
-			<div class="card-header text-center">
-				<h3>New Location</h3>
+			<img class="card-img-top" src="image/newLocationTitle.jpg"
+				alt="title image">
+			<div class="card-img-overlay text-center">
+				<h3 class="text-white" id="title">New Location</h3>
 			</div>
-			<div class="card-body">
-			<form name="newLocationForm">
-				<div class="form-inline" id="nameForm">
-					<label for="name" class="font-weight-bold pr-5">Name:</label>
-					<input ng-model="name" type="text" name="name" required
-						class="form-control col-sm" placeholder="City, State" id="name">
-					<button type="button" ng-click="updateMap()" class="btn btn-success btn ml-5">
-						Search
-					</button>
-				</div>
-				<span ng-show="newLocationForm.name.$touched && newLocationForm.name.$invalid" class="text-danger pl-5" id="cityRequired">
-					required City and state
-				</span>
-				<div class="container-fluid m-0 p-5">
-					<div id="map" ng-model="map">
+			<div class="card-body bg-white">
+				<form name="newLocationForm">
+					<div class="form-inline">
+						<label for="name"
+							class="font-weight-bold col-sm-1 float-left mb-2" id="nameLabel">Name:</label>
+						<div class="col-sm-10 mb-2">
+							<input ng-model="name" type="text" name="name" required
+								class="form-control border" placeholder="City, State" id="name">
+						</div>
+						<div class="col-sm-1 mb-2">
+							<button type="button" ng-click="updateMap()"
+								class="btn btn-warning btn float-right border" id="searchButton">Search</button>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="enabledSMS" class="font-weight-bold pr-3 pl-2">Enabled SMS:</label>
-					<input type="checkbox" ng-model="enabledSMS">
-				</div>
-				<div class="form-group">
-					<label for="enabledEmail" class="font-weight-bold pr-3">Enabled Email:</label>
-					<input type="checkbox" ng-model="enabledEmail">
-				</div>
+					<span
+						ng-show="newLocationForm.name.$touched && newLocationForm.name.$invalid"
+						class="text-danger pl-5" id="cityRequired"> Required City
+						and state </span>
+					<div class="container-fluid m-0 p-5">
+						<div id="map" ng-model="map" class="border"></div>
+					</div>
+					<div class="form-group">
+						<label for="enabledSMS" class="font-weight-bold pr-3 pl-2">Enabled
+							SMS:</label> <input type="checkbox" ng-model="enabledSMS">
+					</div>
+					<div class="form-group">
+						<label for="enabledEmail" class="font-weight-bold pr-3">Enabled
+							Email:</label> <input type="checkbox" ng-model="enabledEmail">
+					</div>
 					<fieldset class="form-group">
 						<div class="row">
-							<label for="alerts" class="font-weight-bold ml-4"
-								id="alertLabel">Alerts:</label>
-							<div class="col-sm-10 ml-2">
+							<label for="alerts" class="font-weight-bold ml-4" id="alertLabel">Alerts:</label>
+							<div class="col-sm-8 ml-2 border border-dark rounded">
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" ng-model="tornadoWarning"
-										name="tornadoWarning" id="tornadoWarning" value="option1"> 
-										<label class="form-check-label"
-										for="tornadoWarning"> Tornado Warning </label>
+									<label class="form-check-label col-sm-4" for="tornadoWarning">
+										Tornado Warning </label> 
+										<input class="form-check-input float-left"
+										type="checkbox" ng-model="tornadoWarning"
+										name="tornadoWarning" id="tornadoWarning" value="option1">
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" ng-model="tornadoWatch"
-										name="tornadoWatch" id="tornadoWatch" value="option2">
-									<label class="form-check-label" for="tornadoWatch">
+									<label class="form-check-label col-sm-4" for="tornadoWatch">
 										Tornado Watch </label>
+										<input class="form-check-input" type="checkbox"
+										ng-model="tornadoWatch" name="tornadoWatch" id="tornadoWatch"
+										value="option2">
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" ng-model="severeThunderstormWarning"
+									<label class="form-check-label col-sm-4" for="severeThunderstormWarning">
+										Severe Thunderstorm Warning </label> 
+										<input class="form-check-input"
+										type="checkbox" ng-model="severeThunderstormWarning"
 										name="severeThunderstormWarning"
-										id="severeThunderstormWarning" value="option3"> <label
-										class="form-check-label" for="severeThunderstormWarning">
-										Severe Thunderstorm Warning </label>
+										id="severeThunderstormWarning" value="option3">
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" ng-model="severeThunderstormWatch"
+									<label class="form-check-label col-sm-4" for="severeThunderstormWatch">
+										Severe Thunderstorm Watch </label> 
+										<input class="form-check-input"
+										type="checkbox" ng-model="severeThunderstormWatch"
 										name="severeThunderstormWatch" id="severeThunderstormWatch"
-										value="option4"> <label class="form-check-label"
-										for="severeThunderstormWatch"> Severe Thunderstorm
-										Watch </label>
+										value="option4">
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" ng-model="fleshFloodWarning"
+									<label class="form-check-label col-sm-4" for="fleshFloodWarning">
+										Flesh Flood Warning </label> 
+										<input class="form-check-input"
+										type="checkbox" ng-model="fleshFloodWarning"
 										name="fleshFloodWarning" id="fleshFloodWarning"
-										value="option5"> <label class="form-check-label"
-										for="fleshFloodWarning"> Flesh Flood Warning </label>
+										value="option5">
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" ng-model="fleshFloodWatch"
+									<label class="form-check-label col-sm-4" for="fleshFloodWatch">
+										Flesh Flood Watch </label> 
+										<input class="form-check-input"
+										type="checkbox" ng-model="fleshFloodWatch"
 										name="fleshFloodWatch" id="fleshFloodWatch" value="option6">
-									<label class="form-check-label" for="fleshFloodWatch">
-										Flesh Flood Watch </label>
 								</div>
+							</div>
+							<div class="col-sm-2 ml-5">
+								<img class="img-fluid rounded-circle float-right mt-5"
+									src="image/logo.PNG" alt="logo image" id="logoImage">
 							</div>
 						</div>
 					</fieldset>
 				</form>
 			</div>
-			<div class="card-footer">
-				<div class="mx-5">
-					<button type="button" ng-click="createNewLocation()" ng-disabled="newLocationForm.$invalid || notSearched"
-						class="btn btn-success btn-block float-right">
-						Save
-					</button>
-				</div>
+			<img class="card-img-bottom" src="image/newLocationBottom.jpg"
+				alt="title image">
+			<div class="card-img-overlay d-flex align-items-end">
+				<button type="button" id="bottomButton"
+					ng-click="createNewLocation()"
+					ng-disabled="newLocationForm.$invalid || notSearched"
+					class="btn btn-warning btn-block float-right border">Save</button>
 			</div>
 		</div>
 	</div>

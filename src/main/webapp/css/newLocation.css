@@ -1,17 +1,81 @@
+.card-img-bottom{
+	height:5em;
+	min-height:3em;
+}
+
+.card-body{
+	 position: relative;
+	 z-index:1;
+}
+
+.img-fluid{
+	width:100px;
+}
+
+.form-check{
+	padding:0px;
+}
+
+.form-check-input{
+	margin-left: 5px;
+}
+
+.form-check-label{
+	padding:0px;
+}
+
+#map.border{
+	border-radius: 20px 60px;
+}
+
+#name.border{
+	border-radius: 10px 10px 10px 10px;
+}
+
 #cityRequired{
 	margin-left: 3rem;
 }
 
-#nameForm{
-	padding-right: 3rem;
+#name{
+	width:100%;
 }
 
 #map{
 	width: 90%;
 	height: 400px;
 	margin: 0 auto;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 2px 4px 0 rgba(0,0,0,0.19);
 }
 
 #alertLabel{
 	padding-left: 3rem;
+}
+
+#title{
+	padding-top: 1rem;
+	font-size:3vw;
+}
+
+#bottomButton:hover{
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+#bottomButton.border{
+	border-radius: 10px 10px 10px 10px;
+}
+
+#nameLabel{
+	font-size:26px;
+}
+
+#searchButton.border{
+	border-radius: 10px 10px 10px 10px;
+}
+
+#searchButton:hover{
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.19);
+}
+
+#logoImage{
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.19);
 }
