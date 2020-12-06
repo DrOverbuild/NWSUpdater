@@ -1,0 +1,17 @@
+#cityRequired{
+	margin-left: 3rem;
+}
+
+#nameForm{
+	padding-right: 3rem;
+}
+
+#map{
+	width: 90%;
+	height: 400px;
+	margin: 0 auto;
+}
+
+#alertLabel{
+	padding-left: 3rem;
+}

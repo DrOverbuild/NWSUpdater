@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
 
-@Path("location")
+@Path("/location")
 public class NWSUpdaterControllerLocation {
 	@GET
 	@Path("/{locationId}")

@@ -12,11 +12,21 @@
 		var name = "";
 		var lat = 0.0;
 		var lon = 0.0;
-		
+		$scope.enabledSMS = false;
+		$scope.enabledEmail = false;
+		$scope.tornadoWarning = false;
+		$scope.tornadoWatch = false;
+		$scope.severeThunderstormWarning = false;
+		$scope.severeThunderstormWatch = false;
+		$scope.fleshFloodWarning = false;
+		$scope.fleshFloodWatch = false;
 		var marker;
 		var lnglat
 		
+		$scope.notSearched = true;
+		
 		$scope.updateMap = function(){
+			$scope.notSearched = false;
 			var mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
 			mapboxClient.geocoding
 			.forwardGeocode({
@@ -67,7 +77,14 @@
 					fleshFloodWatch : $scope.fleshFloodWatch
 			};
 			
-			$http.post("/NWSUpdater/webapi/location", Location).then(
+			$http({
+				method : 'POST',
+				url : '/NWSUpdater/webapi/location',
+				data : Location,
+//				headers : {
+//					'Authorization' : 'Hello'
+//				}
+			}).then(
 					function success(reponse) {
 						console.log('success');
 					},

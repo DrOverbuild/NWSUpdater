@@ -143,7 +143,7 @@ public class NWSUpdaterService {
 		}
 
 		setLocation(newLocation, location);
-		location.setOwnerID(userId);
+		location.setOwnerID(1);
 		return dao.addLocation(location);
 	}
 
@@ -158,31 +158,31 @@ public class NWSUpdaterService {
 		}
 		if(newLocation.getTornadoWatch()) {
 			Alert tornadoWatch = new Alert();
-			tornadoWatch.setId(1);
+			tornadoWatch.setId(2);
 			tornadoWatch.setName("Tornado Watch");
 			alerts.add(tornadoWatch);
 		}
 		if(newLocation.getSevereThunderstormWarning()) {
 			Alert severeThunderstormWarning = new Alert();
-			severeThunderstormWarning.setId(1);
+			severeThunderstormWarning.setId(3);
 			severeThunderstormWarning.setName("Severe Thunderstorm Warning");
 			alerts.add(severeThunderstormWarning);
 		}		
 		if(newLocation.getSevereThunderstormWatch()) {
 			Alert severeThunderstormWatch = new Alert();
-			severeThunderstormWatch.setId(1);
+			severeThunderstormWatch.setId(4);
 			severeThunderstormWatch.setName("Severe Thunderstorm Watch");
 			alerts.add(severeThunderstormWatch);
 		}
 		if(newLocation.getFleshFloodWarning()) {
 			Alert fleshFloodWarning = new Alert();
-			fleshFloodWarning.setId(1);
+			fleshFloodWarning.setId(5);
 			fleshFloodWarning.setName("Flesh Flood Warning");
 			alerts.add(fleshFloodWarning);
 		}
 		if(newLocation.getFleshFloodWatch()) {
 			Alert fleshFloodWatch = new Alert();
-			fleshFloodWatch.setId(1);
+			fleshFloodWatch.setId(6);
 			fleshFloodWatch.setName("Flesh Flood Watch");
 			alerts.add(fleshFloodWatch);
 		}
@@ -209,9 +209,5 @@ public class NWSUpdaterService {
 
 	public List<Alert> getAlerts() {
 		return dao.getAlerts();
-	}
-
-	public void createNewLocationCoords(NewLocation location) {
-		System.out.println(location);
 	}
 }
