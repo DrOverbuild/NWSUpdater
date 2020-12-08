@@ -1,3 +1,7 @@
+label{
+	color:white;
+}
+
 .card-img-bottom{
 	height:5em;
 	min-height:3em;
@@ -33,7 +37,7 @@
 }
 
 #cityRequired{
-	margin-left: 3rem;
+	margin-left: 4rem;
 }
 
 #name{

@@ -133,10 +133,10 @@ public class NWSUpdaterService {
 	}
 
 
-	public Location newLocation(String auth, NewLocation newLocation) {
+	public Location newLocation(NewLocation newLocation) {
 		Location location = new Location();
 		
-		int userId = validator.validateToken(validator.validateAuth(auth));
+		//int userId = validator.validateToken(validator.validateAuth(auth));
 
 		if (newLocation == null) {
 			ServiceUtils.sendError(10, "Location could not be read from JSON data.");
