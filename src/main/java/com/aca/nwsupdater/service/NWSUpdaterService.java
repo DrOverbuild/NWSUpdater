@@ -133,7 +133,7 @@ public class NWSUpdaterService {
 	}
 
 
-	public Location newLocation(String auth, NewLocation newLocation) {
+	public Location newLocation(String auth, Location newLocation) {
 		Location location = new Location();
 		
 		int userId = validator.validateToken(validator.validateAuth(auth));
@@ -142,9 +142,9 @@ public class NWSUpdaterService {
 			ServiceUtils.sendError(10, "Location could not be read from JSON data.");
 		}
 
-		setLocation(newLocation, location);
-		location.setOwnerID(1);
-		return dao.addLocation(location);
+//		setLocation(newLocation, location);
+		location.setOwnerID(userId);
+		return dao.addLocation(newLocation);
 	}
 
 	private void setLocation(NewLocation newLocation, Location location) {

@@ -69,12 +69,20 @@
 					lat : lat,
 					enabledSMS : $scope.enabledSMS,
 					enabledEmail : $scope.enabledEmail,
-					tornadoWarning : $scope.tornadoWarning,
-					tornadoWatch : $scope.tornadoWatch,
-					severeThunderstormWarning : $scope.severeThunderstormWarning,
-					severeThunderstormWatch : $scope.severeThunderstormWatch,
-					fleshFloodWarning : $scope.fleshFloodWarning,
-					fleshFloodWatch : $scope.fleshFloodWatch
+					alerts: [
+						{
+							"id": 1
+						},
+						{
+							"id": 2
+						}
+					],
+					// tornadoWarning : $scope.tornadoWarning,
+					// tornadoWatch : $scope.tornadoWatch,
+					// severeThunderstormWarning : $scope.severeThunderstormWarning,
+					// severeThunderstormWatch : $scope.severeThunderstormWatch,
+					// fleshFloodWarning : $scope.fleshFloodWarning,
+					// fleshFloodWatch : $scope.fleshFloodWatch
 			};
 			
 			$http({
@@ -82,7 +90,7 @@
 				url : '/NWSUpdater/webapi/location',
 				data : Location,
 //				headers : {
-//					'Authorization' : 'Hello'
+//					'Authorization' : 'Bearer: Hello'
 //				}
 			}).then(
 					function success(reponse) {

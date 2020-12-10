@@ -7,9 +7,27 @@
 	
 	nwsupdaterapp.config(function($routeProvider){
 		$routeProvider
-		.when("/location", {
-			templateUrl : "newLocation.html",
-			controller : "newLocationController"
-		});
+			.when("/newlocation", {
+				templateUrl : "template/location.html",
+				controller : "newLocationController"
+			})
+			.when("/location/:loc_id", {
+				templateUrl: "template/location.html",
+				controller: "updateLocationController"
+			})
+			.when("/home", {
+				templateUrl: "template/userhome.html"
+			})
+			.when("/login",{
+				templateUrl: "template/login.html",
+				controller: "loginController"
+			})
+			.when("/signup", {
+				templateUrl: "template/signup.html"
+			})
+			.otherwise({
+				templateUrl: "template/home.html",
+				controller: "homeController"
+			});
 	});
 })()

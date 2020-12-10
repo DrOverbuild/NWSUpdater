@@ -25,20 +25,31 @@
 	<script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
 	
 	<!-- CSS -->
+	<link rel="stylesheet" href="./css/main.css">
 	<link rel="stylesheet" href="./css/newLocation.css" type="text/css">
-	
+
 	<!-- JavaScripts -->
 	<script src="./js/nwsupdater.js"></script>
+	<script src="./js/homeController.js"></script>
+	<script src="./js/loginController.js"></script>
 	<script src="./js/newLocationController.js"></script>
 </head>
-<body ng-app="nwsupdaterapp">
-	<nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
+<body class="bg-weather-image vh-100 text-white">
+	<nav id="navigation" class="navbar navbar-expand-sm bg-darkgrey navbar-dark" ng-controller="navigationController">
 		<ul class="navbar-nav">
-			<li class="nav-item"><a class="nav-link" href="#!location">Add New Location</a></li>
+			    <li class="nav-item"><a class="nav-link" href="#!newlocation">Add New Location</a></li>
 		</ul>
 	</nav>
-	<div class="container">
-		<div ng-view></div>
+
+	<div class="container h-100 bg-dark">
+		<div class="jumbotron bg-secondary">
+			<h1>NWSUpdater</h1>
+			<h3>Get notified of severe weather in your area.</h3>
+		</div>
+
+		<div ng-app="nwsupdaterapp">
+			<div ng-view></div>
+		</div>
 	</div>
 </body>
 </html>

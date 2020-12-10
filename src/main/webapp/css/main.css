@@ -1,0 +1,15 @@
+.text-danger-light {
+    color: #ff845f
+}
+
+.bg-darkgrey {
+    background: #373737;
+}
+
+.bg-weather-image {
+    background: url('../image/newLocationBackground2.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
