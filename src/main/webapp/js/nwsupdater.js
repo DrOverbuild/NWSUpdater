@@ -23,7 +23,8 @@
 				controller: "loginController"
 			})
 			.when("/signup", {
-				templateUrl: "template/signup.html"
+				templateUrl: "template/signup.html",
+				controller: "signupController"
 			})
 			.otherwise({
 				templateUrl: "template/home.html",

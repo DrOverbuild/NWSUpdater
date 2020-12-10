@@ -4,6 +4,7 @@
         <div class="card bg-secondary">
             <div class="card-header text-center">
                 <h3>Create Account</h3>
+                <p>{{signupErr}}</p>
             </div>
             <div class="card-body">
                 <form name="signupForm">
@@ -15,6 +16,13 @@
                         </span>
                     </div>
                     <div class="form-group">
+                        <label for="phone" class="font-weight-bold">Phone:</label>
+                        <input ng-model="user.phone" required type="tel" class="form-control" name="phone" id="phone">
+                        <span class="text-danger-light" ng-if="signupForm.phone.$touched && !signupForm.phone.$valid">
+                            Invalide phone number.
+                        </span>
+                    </div>
+                    <div class="form-group">
                         <label for="password" class="font-weight-bold">Pasword:</label>
                         <input ng-model="user.password" required ng-minlength="6" type="password" class="form-control" name="password" id="password">
                         <span class="text-danger-light" ng-if="signupForm.password.$touched && !signupForm.password.$valid">
@@ -23,8 +31,8 @@
                     </div>
                     <div class="form-group">
                         <label for="password" class="font-weight-bold">Verify:</label>
-                        <input ng-model="user.verifypassword" required type="password" class="form-control" name="verify" id="verify">
-                        <span class="text-danger-light" ng-if="signupForm.verify.$touched && !signupForm.verify.$valid">
+                        <input ng-model="user.verifypassword" required pwmatches type="password" class="form-control" name="verifypassword" id="verifypassword">
+                        <span class="text-danger-light" ng-if="signupForm.verifypassword.$touched && !signupForm.verifypassword.$valid">
                             Passwords do not match.
                         </span>
                     </div>
