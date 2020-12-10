@@ -3,7 +3,7 @@ Note that `https://nwsupdater.com` is not our own domain, and we use it here as 
 
 ## Quick URLS:
 A summary of all the URLs used. Descriptions are down below.
-* Logging in: `GET https://nwsupdater.com/auth`
+* Logging in: `POST https://nwsupdater.com/auth`
 * Logging out: `GET https://nwsupdater.com/logout`
 * New account creation: `POST https://nwsupdater.com/user`
 * Edit profile: `GET https://nwsupdater.com/user`
@@ -34,7 +34,7 @@ is not logged in. At this point, the browser will display a log in screen. When 
 this GET request:
 
 ```
-GET https://nwsupdater.com/auth
+POST https://nwsupdater.com/auth
 ```
 
 Request body:

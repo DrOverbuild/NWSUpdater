@@ -1,10 +1,18 @@
 (function() {
     var nwsapp = angular.module('nwsupdaterapp');
 
-    nwsapp.controller('loginController', function ($scope, $http, $location) {
+    nwsapp.controller('loginController', function ($scope, $http, $location, $sessionStorage) {
         $scope.login = function() {
-            // todo login
-            console.log("Login");
+            $scope.loginErr = "";
+            $http.post("/NWSUpdater/webapi/auth", $scope.user)
+                .then( function(response) {
+                    $sessionStorage.put(`sessionID`,response.data.sessionID)
+                    // todo send user to userhome
+                }, function (error) {
+                    if (error.data) {
+                        $scope.loginErr = error.data.message;
+                    }
+                });
         }
 
         $scope.createAccount = function () {
