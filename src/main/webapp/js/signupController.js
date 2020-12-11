@@ -2,21 +2,14 @@
     var nwsapp = angular.module('nwsupdaterapp');
 
     nwsapp.controller('signupController', function ($scope, $http, $location, $sessionStorage) {
-        // $scope.signupForm.verifypassword.$validators.matches = function() {
-        //     return $scope.user.verifypassword == $scope.user.password;
-        // }
-
         $scope.goback = function() {
             $location.path("/login");
         }
 
         $scope.createAccount = function () {
-            // console.log($scope.user);
             $http.post("/NWSUpdater/webapi/user", $scope.user)
                 .then( function(response) {
-                    console.log(response.data);
-                    // $sessionStorage.put(`sessionID`,response.data.sessionID)
-                    // todo send user to login
+                    $location.path('/login')
                 }, function (error) {
                     if (error.data) {
                         $scope.signupErr = error.data.message;

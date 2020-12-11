@@ -26,6 +26,10 @@
 				templateUrl: "template/signup.html",
 				controller: "signupController"
 			})
+			.when("/userhome", {
+				templateUrl: "template/userhome.html",
+				controller: "userHomeController"
+			})
 			.otherwise({
 				templateUrl: "template/home.html",
 				controller: "homeController"
