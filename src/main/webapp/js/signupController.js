@@ -17,18 +17,4 @@
                 });
         }
     });
-
-    // adding custom validator with directives
-    nwsapp.directive("pwmatches", function() {
-        return {
-            require: 'ngModel',
-            link: function (scope, element, attr, mCtrl) {
-                function pwMatchesValidation(value) {
-                    mCtrl.$setValidity('pwmatches', scope.signupForm.password.$modelValue == value);
-                    return value;
-                }
-                mCtrl.$parsers.push(pwMatchesValidation)
-            }
-        };
-    });
 })()

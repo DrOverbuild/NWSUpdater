@@ -22,8 +22,6 @@
             } else {
                 $location.path("/login");
             }
-
-
         }
 
         $scope.viewLocation = function (locId) {
@@ -32,6 +30,10 @@
 
         $scope.newLocation = function() {
             // TODO implement
+        }
+
+        $scope.editProfile = function() {
+            $location.path("/editprofile");
         }
 
         $scope.logout = function() {

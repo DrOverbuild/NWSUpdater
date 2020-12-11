@@ -30,9 +30,27 @@
 				templateUrl: "template/userhome.html",
 				controller: "userHomeController"
 			})
+			.when("/editprofile", {
+				templateUrl: "template/editprofile.html",
+				controller: "editProfileController"
+			})
 			.otherwise({
 				templateUrl: "template/home.html",
 				controller: "homeController"
 			});
+	});
+
+	// adding custom validator with directives
+	nwsupdaterapp.directive("pwmatches", function() {
+		return {
+			require: 'ngModel',
+			link: function (scope, element, attr, mCtrl) {
+				function pwMatchesValidation(value) {
+					mCtrl.$setValidity('pwmatches', scope.userForm.password.$modelValue == value);
+					return value;
+				}
+				mCtrl.$parsers.push(pwMatchesValidation)
+			}
+		};
 	});
 })()
