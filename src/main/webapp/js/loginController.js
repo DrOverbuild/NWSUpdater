@@ -8,7 +8,6 @@
                 .then( function(response) {
                     $sessionStorage.put(`sessionID`,response.data.sessionID);
                     $location.path('/userhome');
-                    // todo send user to userhome
                 }, function (error) {
                     if (error.data) {
                         $scope.loginErr = error.data.message;

@@ -5,13 +5,15 @@
         $scope.msg = "Loading..."
 
         $scope.getHome = function () {
-            // todo get session token from session storage, load homepage sending that as a bearer token
+            const sessionID = $sessionStorage.get('sessionID');
+            if (sessionID) {
+                $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
+            }
 
             $http.get("/NWSUpdater/webapi/")
                 .then(function (response) {
-                        console.log('Success')
                         $scope.msg = "Logged in"
-                        // todo send user to userhome
+                        $location.path('/userhome');
                     },
                     function error(response) {
                         console.log('Error')
