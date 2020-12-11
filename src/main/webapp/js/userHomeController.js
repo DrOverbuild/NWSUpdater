@@ -33,6 +33,17 @@
             // TODO implement
         }
 
+        $scope.logout = function() {
+            $http.get("/NWSUpdater/webapi/logout").then(
+                function (response) {
+                    $sessionStorage.remove('sessionID');
+                    $location.path('/login');
+                }, function (error) {
+                    console.log(error);
+                }
+            );
+        }
+
         $scope.getUserHome();
     });
 })()
