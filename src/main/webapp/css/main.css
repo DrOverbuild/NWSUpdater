@@ -1,5 +1,13 @@
 .text-danger-light {
-    color: #ff845f
+    color: #ffd3c1
+}
+
+.bg-darkblue {
+    background: #162127;
+}
+
+.bg-dark-secondary {
+    background: #7D8285;
 }
 
 .bg-darkgrey {
@@ -16,4 +24,10 @@
 
 .card-title-text {
     font-size: 1.75rem;
+}
+
+.btn-dark-secondary {
+    color: white;
+    background-color: #3d5368;
+    border-color: #3d5368;
 }
