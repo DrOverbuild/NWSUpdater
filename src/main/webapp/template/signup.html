@@ -2,12 +2,12 @@
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
         <div class="card bg-secondary">
-            <div class="card-header text-center">
-                <h3>Create Account</h3>
-                <p>{{signupErr}}</p>
-            </div>
-            <div class="card-body">
-                <form name="signupForm">
+            <form name="signupForm" ng-submit="createAccount()">
+                <div class="card-header text-center">
+                    <h3>Create Account</h3>
+                    <p>{{signupErr}}</p>
+                </div>
+                <div class="card-body">
                     <div class="form-group">
                         <label for="email" class="font-weight-bold">Email:</label>
                         <input ng-model="user.email" required type="email" class="form-control" name="email" id="email">
@@ -26,26 +26,30 @@
                         <label for="password" class="font-weight-bold">Pasword:</label>
                         <input ng-model="user.password" required ng-minlength="6" ng-maxlength="16"
                                type="password" class="form-control" name="password" id="password">
-                        <span class="text-danger-light" ng-if="signupForm.password.$touched && !signupForm.password.$valid">
+                        <span class="text-danger-light"
+                              ng-if="signupForm.password.$touched && !signupForm.password.$valid">
                             Password must be between 6 and 16 characters
                         </span>
                     </div>
                     <div class="form-group">
                         <label for="password" class="font-weight-bold">Verify:</label>
-                        <input ng-model="user.verifypassword" required pwmatches type="password" class="form-control" name="verifypassword" id="verifypassword">
-                        <span class="text-danger-light" ng-if="signupForm.verifypassword.$touched && !signupForm.verifypassword.$valid">
+                        <input ng-model="user.verifypassword" required pwmatches type="password" class="form-control"
+                               name="verifypassword" id="verifypassword">
+                        <span class="text-danger-light"
+                              ng-if="signupForm.verifypassword.$touched && !signupForm.verifypassword.$valid">
                             Passwords do not match.
                         </span>
                     </div>
-                </form>
-            </div>
-            <div class="card-footer text-center">
-                <button type="button" class="btn btn-info"
-                        ng-click="goback()">Back</button>
-                <button type="button" class="btn btn-success"
-                        ng-disabled="signupForm.$invalid"
-                        ng-click="createAccount()">Create</button>
-            </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-info"
+                            ng-click="goback()">Back
+                    </button>
+                    <button type="submit" class="btn btn-success"
+                            ng-disabled="signupForm.$invalid">Create
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
     <div class="col-sm-4"></div>
