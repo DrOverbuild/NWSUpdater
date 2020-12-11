@@ -1,1 +1,28 @@
-<h1>User Home</h1>
+<div class="card mt-3 mb-3">
+    <div class="card-header bg-secondary">
+        <span class="font-weight-bold card-title-text">{{username}}</span>
+        <span class="float-right">
+            <button class="btn btn-info" ng-click="newLocation()">Add location</button>
+        </span>
+    </div>
+    <div class="card-body bg-dark">
+        <table class="table table-dark table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>SMS Enabled</th>
+                <th>Email Enabled</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="location in locations" ng-click="viewLocation(location.id)">
+                <td>{{location.name}}</td>
+                <td>{{location.smsEnabled}}</td>
+                <td>{{location.emailEnabled}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer bg-secondary">
+    </div>
+</div>
