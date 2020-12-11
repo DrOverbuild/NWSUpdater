@@ -3,7 +3,7 @@
  */
 
 (function(){
-	var nwsupdaterapp = angular.module('nwsupdaterapp', ['ngRoute', 'swxSessionStorage']);
+	var nwsupdaterapp = angular.module('nwsupdaterapp', ['ngRoute', 'swxSessionStorage', 'ngSanitize']);
 	
 	nwsupdaterapp.config(function($routeProvider){
 		$routeProvider

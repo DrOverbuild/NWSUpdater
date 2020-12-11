@@ -19,8 +19,8 @@
             <tbody>
             <tr ng-repeat="location in locations" ng-click="viewLocation(location.id)">
                 <td>{{location.name}}</td>
-                <td>{{location.smsEnabled ? 'Yes':'No'}}</td>
-                <td>{{location.emailEnabled ? 'Yes':'No'}}</td>
+                <td ng-bind-html="location.smsEnabled ? fontAwesomeCheck:''"></td>
+                <td ng-bind-html="location.emailEnabled ? fontAwesomeCheck:''"></td>
             </tr>
             </tbody>
         </table>

@@ -2,6 +2,7 @@
     var nwsapp = angular.module('nwsupdaterapp');
 
     nwsapp.controller('userHomeController', function ($scope, $http, $location, $sessionStorage) {
+        $scope.fontAwesomeCheck = `<i class="fas fa-check"></i>`;
         $scope.userEemail = 'Logging in...';
         $scope.locations = [];
 
