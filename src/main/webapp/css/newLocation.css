@@ -12,18 +12,6 @@
 	width:100px;
 }
 
-.form-check{
-	padding:0px;
-}
-
-.form-check-input{
-	margin-left: 5px;
-}
-
-.form-check-label{
-	padding:0px;
-}
-
 #map.border{
 	border-radius: 20px 60px;
 }

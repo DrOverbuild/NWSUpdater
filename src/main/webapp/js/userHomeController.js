@@ -29,7 +29,7 @@
         }
 
         $scope.newLocation = function() {
-            // TODO implement
+            $location.path("/newlocation");
         }
 
         $scope.editProfile = function() {

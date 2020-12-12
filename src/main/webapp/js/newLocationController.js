@@ -7,7 +7,36 @@
 	
 	nwsupdaterapp.controller('newLocationController', function($scope, $http){
 		mapboxgl.accessToken = 'pk.eyJ1IjoibndzdXBkYXRlciIsImEiOiJja2k5d2JyMjQwangwMzJzMzczMDg1bDRoIn0.BCdLzAFlsi9EPqG-QecB4A';
-		
+
+		// mock alert types
+		$scope.alertTypes = [
+			{
+				id: 1,
+				name: "Severe Thunderstorm Warning"
+			},
+			{
+				id: 2,
+				name: "Severe Thunderstorm Watch"
+			},
+			{
+				id: 3,
+				name: "Tornado Warning"
+			},
+			{
+				id: 4,
+				name: "Tornado Watch"
+			},
+		]
+
+
+		$scope.enabledAlertTypes = {
+			1: true,
+			2: false,
+			3: true,
+			4: false
+		}
+
+
 		var coords = [-92.289597, 34.746483];
 		var name = "";
 		var lat = 0.0;
