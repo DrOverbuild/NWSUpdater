@@ -2,11 +2,15 @@ package com.aca.nwsupdater.service;
 
 import com.aca.nwsupdater.dao.NWSUpdaterDAO;
 import com.aca.nwsupdater.dao.NWSUpdaterDAOImpl;
+import com.aca.nwsupdater.model.sns.DistinctLocations;
+import com.aca.nwsupdater.model.sns.Simulation;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.HomePageModel;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.NewLocation;
 import com.aca.nwsupdater.model.webapp.User;
+import com.aca.nwsupdater.service.sns.SimulationAlertService;
+import com.aca.nwsupdater.service.sns.SnsSubscriberService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,71 +132,22 @@ public class NWSUpdaterService {
 		}
 
 		location.setOwnerID(userId);
-
+		
 		return dao.updateLocation(location);
 	}
 
 
-	public Location newLocation(String auth, NewLocation newLocation) {
-		Location location = new Location();
+	public Location newLocation(String auth, Location location) {
 		
 		int userId = validator.validateToken(validator.validateAuth(auth));
 
-		if (newLocation == null) {
+		if (location == null) {
 			ServiceUtils.sendError(10, "Location could not be read from JSON data.");
 		}
 
-		setLocation(newLocation, location);
-		location.setOwnerID(1);
+		location.setOwnerID(userId);
+		
 		return dao.addLocation(location);
-	}
-
-	private void setLocation(NewLocation newLocation, Location location) {
-		List<Alert> alerts = new ArrayList<>();
-		
-		if(newLocation.getTornadoWarning()) {
-			Alert tornadoWarning = new Alert();
-			tornadoWarning.setId(1);
-			tornadoWarning.setName("Tornado Warning");
-			alerts.add(tornadoWarning);
-		}
-		if(newLocation.getTornadoWatch()) {
-			Alert tornadoWatch = new Alert();
-			tornadoWatch.setId(2);
-			tornadoWatch.setName("Tornado Watch");
-			alerts.add(tornadoWatch);
-		}
-		if(newLocation.getSevereThunderstormWarning()) {
-			Alert severeThunderstormWarning = new Alert();
-			severeThunderstormWarning.setId(3);
-			severeThunderstormWarning.setName("Severe Thunderstorm Warning");
-			alerts.add(severeThunderstormWarning);
-		}		
-		if(newLocation.getSevereThunderstormWatch()) {
-			Alert severeThunderstormWatch = new Alert();
-			severeThunderstormWatch.setId(4);
-			severeThunderstormWatch.setName("Severe Thunderstorm Watch");
-			alerts.add(severeThunderstormWatch);
-		}
-		if(newLocation.getFleshFloodWarning()) {
-			Alert fleshFloodWarning = new Alert();
-			fleshFloodWarning.setId(5);
-			fleshFloodWarning.setName("Flesh Flood Warning");
-			alerts.add(fleshFloodWarning);
-		}
-		if(newLocation.getFleshFloodWatch()) {
-			Alert fleshFloodWatch = new Alert();
-			fleshFloodWatch.setId(6);
-			fleshFloodWatch.setName("Flesh Flood Watch");
-			alerts.add(fleshFloodWatch);
-		}
-		
-		location.setName(newLocation.getName());
-		location.setLat(newLocation.getLat());
-		location.setLon(newLocation.getLon());
-		location.setEmailEnabled(newLocation.getEnabledEmail());
-		location.setSmsEnabled(newLocation.getEnabledSMS());
-		location.setAlerts(alerts);
 	}
 
 	public List<Location> deleteLocation(String auth, Integer locationId) {
@@ -203,11 +158,24 @@ public class NWSUpdaterService {
 		if (loc == null) {
 			ServiceUtils.sendError(6, "Location does not exist.");
 		}
-
+		
 		return dao.deleteLocation(loc);
 	}
 
 	public List<Alert> getAlerts() {
 		return dao.getAlerts();
 	}
+
+	public List<DistinctLocations> getDistinctLocations(){		
+		return dao.getAllDistinctLocations();
+	}
+	
+	public User updateUserSubscriptionArn(int userID, String subscriptionArn) {
+		return dao.updateUserSubscriptionArn(userID, subscriptionArn);
+	}
+	
+	public Simulation simulation(Simulation simulation) {
+		return SimulationAlertService.simulate(simulation);
+	}
+
 }

@@ -11,13 +11,13 @@ body {
 
 <div class="row">
 	<div class="col-sm">
-		<div class="card bg-light">
+		<div class="card">
 			<img class="card-img-top" src="image/newLocationTitle.jpg"
 				alt="title image">
 			<div class="card-img-overlay text-center">
 				<h3 class="text-white" id="title">New Location</h3>
 			</div>
-			<div class="card-body bg-white">
+			<div class="card-body bg-dark">
 				<form name="newLocationForm">
 					<div class="form-inline">
 						<label for="name"
@@ -28,13 +28,14 @@ body {
 						</div>
 						<div class="col-sm-1 mb-2">
 							<button type="button" ng-click="updateMap()"
-								class="btn btn-warning btn float-right border" id="searchButton">Search</button>
+								class="btn btn-light btn float-right border" id="searchButton">Search</button>
 						</div>
 					</div>
 					<span
 						ng-show="newLocationForm.name.$touched && newLocationForm.name.$invalid"
-						class="text-danger pl-5" id="cityRequired"> Required City
-						and state </span>
+						class="text-danger pl-5" id="cityRequired">
+						Required City and state
+						</span>
 					<div class="container-fluid m-0 p-5">
 						<div id="map" ng-model="map" class="border"></div>
 					</div>
@@ -49,7 +50,7 @@ body {
 					<fieldset class="form-group">
 						<div class="row">
 							<label for="alerts" class="font-weight-bold ml-4" id="alertLabel">Alerts:</label>
-							<div class="col-sm-8 ml-2 border border-dark rounded">
+							<div class="col-sm-8 ml-2 border border-light rounded">
 								<div class="form-check">
 									<label class="form-check-label col-sm-4" for="tornadoWarning">
 										Tornado Warning </label> 
@@ -97,7 +98,7 @@ body {
 								</div>
 							</div>
 							<div class="col-sm-2 ml-5">
-								<img class="img-fluid rounded-circle float-right mt-5"
+								<img class="img-fluid border border-light rounded-circle float-right mt-5"
 									src="image/logo.PNG" alt="logo image" id="logoImage">
 							</div>
 						</div>
@@ -110,7 +111,7 @@ body {
 				<button type="button" id="bottomButton"
 					ng-click="createNewLocation()"
 					ng-disabled="newLocationForm.$invalid || notSearched"
-					class="btn btn-warning btn-block float-right border">Save</button>
+					class="btn btn-light btn-block float-right border">Save</button>
 			</div>
 		</div>
 	</div>

@@ -1,8 +1,11 @@
 package com.aca.nwsupdater.dao;
 
+import com.aca.nwsupdater.model.sns.DistinctLocations;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
+import com.aca.nwsupdater.service.sns.SnsSubscriberService;
+import com.aca.nwsupdater.service.sns.SnsSubscription;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +13,7 @@ import java.util.List;
 
 public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	private static final String authenticateQuery =
-			"SELECT id, email, phone FROM user " +
+			"SELECT id, email, phone, subscriptionArn FROM user " +
 					"WHERE email = ? AND password = AES_ENCRYPT(?, ?)";
 
 	private static final String createNewUserQuery =
@@ -18,7 +21,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 					"VALUES (?, ?, AES_ENCRYPT(?, ?))";
 
 	private static final String selectUserByIdQuery =
-			"SELECT id, email, phone FROM user " +
+			"SELECT id, email, phone, subscriptionArn FROM user " +
 					"WHERE id = ?";
 
 	private static final String updateUserQuery =
@@ -51,7 +54,16 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			"UPDATE location SET name = ?, lat = ?, lon = ?, gridpoint_office = ?," +
 					" gridpoint_x = ?, gridpoint_y = ?, sms_enabled = ?," +
 					" email_enabled = ? WHERE id = ?";
+	
+	private static final String getAllDistinctLocationsQuery =
+			"SELECT DISTINCT name "+
+			"FROM location";
 
+	private static final String updateUserSubscriptionArn = 
+			"UPDATE user " +
+			"SET subscriptionArn = ?" +
+			"WHERE id = ?";		
+	
 	private static final String deleteLocationQuery =
 			"DELETE FROM location WHERE id = ?";
 
@@ -208,6 +220,35 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	}
 
 	@Override
+	public User updateUserSubscriptionArn(int userID, String subscriptionArn) {
+		User updatedUser = null;
+
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		
+		String q = updateUserSubscriptionArn;
+		
+		try {
+			stmt = conn.prepareStatement(q);
+			stmt.setString(1, subscriptionArn);
+			stmt.setInt(2, userID);
+
+			int rowsUpdated = stmt.executeUpdate();
+			
+			if (rowsUpdated == 1) {
+				int id = userID;
+				updatedUser = getUser(id);
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(null, stmt, conn);
+		}
+		
+		return updatedUser;
+	}
+	
+	@Override
 	public List<Location> getLocations(int userID) {
 		List<Location> locations = new ArrayList<>();
 
@@ -300,11 +341,38 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 				addLocationAlert(newLoc, a);
 				newLoc.setAlerts(getAlertsForLocation(newLoc));
 			}
+			
 		}
+		
+		SnsSubscriberService.createSubcription(getUser(location.getOwnerID()), newLoc);
 
 		return newLoc;
 	}
+	
+	@Override
+	public List<DistinctLocations> getAllDistinctLocations(){
+		List<DistinctLocations> distinctLocations = new ArrayList<>();
 
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.prepareStatement(getAllDistinctLocationsQuery);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				distinctLocations.add(makeDistinctLocations(rs));
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(rs, stmt, conn);
+		}
+
+		return distinctLocations;
+	}
+	
 	@Override
 	public Location updateLocation(Location location) {
 		Location updated = null;
@@ -357,6 +425,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			updated.setAlerts(getAlertsForLocation(location));
 		}
 
+		SnsSubscriberService.updateSubcription(getUser(updated.getOwnerID()), updated);
+		
 		return updated;
 	}
 
@@ -383,6 +453,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			closeResourses(null, stmt, conn);
 		}
 
+		SnsSubscriberService.deleteFilter(getUser(location.getOwnerID()), getLocations(location.getOwnerID()));
+		
 		return getLocations(location.getOwnerID());
 	}
 
@@ -504,6 +576,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 		user.setId(rs.getInt("id"));
 		user.setEmail(rs.getString("email"));
 		user.setPhone(rs.getString("phone"));
+		user.setSubscriptionArn(rs.getString("subscriptionArn"));
 
 		return user;
 	}
@@ -524,6 +597,15 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 		return loc;
 	}
 
+	private DistinctLocations makeDistinctLocations(ResultSet rs) throws SQLException{
+		DistinctLocations disLoc = new DistinctLocations();
+		disLoc.setName(rs.getString("name"));
+		disLoc.setLat(rs.getDouble("lat"));
+		disLoc.setLon(rs.getDouble("lon"));
+		
+		return disLoc;
+	}
+	
 	private void closeResourses(ResultSet rs, PreparedStatement stmt, Connection conn) {
 		try {
 			if (stmt != null && !stmt.isClosed()) {

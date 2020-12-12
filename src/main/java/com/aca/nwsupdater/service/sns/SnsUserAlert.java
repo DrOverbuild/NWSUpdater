@@ -2,37 +2,72 @@ package com.aca.nwsupdater.service.sns;
 
 import java.util.*;
 
+import javax.servlet.ServletContextEvent;
+
 import com.aca.nwsupdater.model.AlertFeatures;
-import com.aca.nwsupdater.model.AlertProperties;
 import com.aca.nwsupdater.model.WeatherAlertData;
+import com.aca.nwsupdater.service.NWSUpdaterService;
 import com.aca.nwsupdater.service.WeatherAlertService;
-import com.amazonaws.services.sns.AmazonSNS;
+import com.aca.nwsupdater.model.sns.DistinctLocations;
 
-public class SnsUserAlert extends TimerTask{
+public class SnsUserAlert extends TimerTask implements javax.servlet.ServletContextListener{
 	private static long DELAY = 60_000;
-	private static AmazonSNS snsClient = SnsClient.getAwsClient();
+	private static List<DistinctLocations> distinctLocations = new ArrayList<>();
+	private static List<String> coords = new ArrayList<>();
+	private static List<String> cityName = new ArrayList<>();
+	private List<String> haveAlerts = new ArrayList<>();
+	private WeatherAlertService service = new WeatherAlertService();
 	
-	public SnsUserAlert() {
+	@Override
+	public void contextDestroyed(ServletContextEvent sce) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void contextInitialized(ServletContextEvent sce) {
+		start();
+	}
+
+	public static void start() {
+		new SnsUserAlert().startTimer();
+		distinctLocations = NWSUpdaterService.instance.getDistinctLocations();
+		setCoords();
 	}
 	
-	public void start() {
+	public void startTimer() {
 		new Timer().schedule(this, 0, DELAY);
 	}
 
 	@Override
 	public void run() {	
-		WeatherAlertService service = new WeatherAlertService();
-		WeatherAlertData weatherAlertData = service.getWeatherAlertData("25.441393,-80.471638");
-		List<AlertFeatures> features = weatherAlertData.getFeatures();
+		
+		for(int i = 0; i < distinctLocations.size(); i++) {
 			
-		for(AlertFeatures f : features) {
-			AlertProperties properties = f.getProperties();
-				
-			if(properties.getSeverity().equals("Major")) {					
-				AwsSnsPublish.publishUpdate("Hello world", "Welcome to the world");
+			WeatherAlertData weatherAlertData = service.getWeatherAlertData(coords.get(i));
+			List<AlertFeatures> features = weatherAlertData.getFeatures();
+			
+			if(!features.isEmpty()) {
+				if(haveAlerts.contains(coords.get(i))) {
+					System.out.println("Already have alerts");
+				} else {
+					haveAlerts.add(coords.get(i));
+					
+					for(AlertFeatures f : features) {
+						SnsPublishMessage.setSnsPublishMessage(f, cityName.get(i));
+					}
+				}
+			} else if(haveAlerts.contains(coords.get(i))) {
+				haveAlerts.remove(coords.get(i));
 			}
-		}		
+		}
+	}
+	
+	private static void setCoords() {
+		for(DistinctLocations disLoc : distinctLocations) {
+			coords.add(disLoc.getLat().toString() + "," + disLoc.getLon().toString());
+			cityName.add(disLoc.getName());
+		}
 	}
 
 }

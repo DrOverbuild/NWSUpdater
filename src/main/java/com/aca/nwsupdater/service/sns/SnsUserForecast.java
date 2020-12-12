@@ -30,7 +30,7 @@ public class SnsUserForecast extends TimerTask{
 		List<ForecastPeriods> periods = properties.getPeriod();
 		
 		if(periods.get(0).getIsDayTime()) {
-			AwsSnsPublish.publishUpdate("Hello world", "It is daytime");
+			//AwsSnsPublish.publishUpdate("Hello world", "It is daytime");
 		}	
 	}
 }
