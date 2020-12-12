@@ -15,22 +15,21 @@ public class SnsSubscriberService {
 		String subscriptionArn = "";
 		
 		if(newLoc.getSmsEnabled()) {
+			String subscriptionType = "subscriptionArnPhone";
 			subscriptionArn = SnsSubscription.subscribePhoneNumber(user.getPhone());
+			subcribeUsers(subscriptionArn, subscriptionType, newLoc, user);
 		} 
 		
 		if(newLoc.getEmailEnabled()) {
+			String subscriptionType = "subscriptionArnEmail";
 			subscriptionArn = SnsSubscription.subscribeEmail(user.getEmail());
-		}
-		
-		if(subscriptionArn != "") {
-			subscriptionFilter(newLoc, subscriptionArn);
-			user.setSubscriptionArn(subscriptionArn);
-			NWSUpdaterService.instance.updateUserSubscriptionArn(user.getId(), subscriptionArn);
+			subcribeUsers(subscriptionArn, subscriptionType, newLoc, user);
 		}
 	}
 
 	public static void deleteFilter(User user, List<Location> locations) {
-		String subscriptionArn = user.getSubscriptionArn();
+		
+		String subscriptionArn = user.getSubscriptionArnPhone();
 		
 		resetFilters(subscriptionArn);
 		
@@ -39,16 +38,22 @@ public class SnsSubscriberService {
 		}
 	}
 
+	public static void updateSubcription(User user, Location location) {
+		String subscriptionArn = user.getSubscriptionArnPhone();
+		subscriptionFilter(location, subscriptionArn);
+	}
+	
+	private static void subcribeUsers(String subscriptionArn, String subscriptionType, Location newLoc, User user) {
+		subscriptionFilter(newLoc, subscriptionArn);
+		user.setSubscriptionArnEmail(subscriptionArn);
+		NWSUpdaterService.instance.updateUserSubscriptionArn(user.getId(), subscriptionArn, subscriptionType);
+	}
+	
 	private static void resetFilters(String subscriptionArn) {
 		SetSubscriptionAttributesRequest request =
 		        new SetSubscriptionAttributesRequest(subscriptionArn, "FilterPolicy", "{}");
 		SnsClient.getAwsClient().setSubscriptionAttributes(request);
 		
-	}
-
-	public static void updateSubcription(User user, Location location) {
-		String subscriptionArn = user.getSubscriptionArn();
-		subscriptionFilter(location, subscriptionArn);
 	}
 	
 	private static void subscriptionFilter(Location location, String subscriptionArn) {
@@ -61,8 +66,7 @@ public class SnsSubscriberService {
 			alerts.add(a.getName());
 		}
 		
-		location.setName(location.getName().replace(" ", "_"));
-		fp.addAttributes(location.getName(), alerts);
+		fp.addAttributes(location.getLat() + "," + location.getLon(), alerts);
 		fp.apply(subscriptionArn);
 	}
 	

@@ -5,7 +5,8 @@ public class User {
 	private String email;
 	private String phone;
 	private String password; // only used when browser logs in, we will not store password retrieved from database
-	private String subscriptionArn;
+	private String subscriptionArnPhone;
+	private String subscriptionArnEmail;
 
 	public User() {
 	}
@@ -48,11 +49,19 @@ public class User {
 		this.password = password;
 	}
 
-	public String getSubscriptionArn() {
-		return subscriptionArn;
+	public String getSubscriptionArnPhone() {
+		return subscriptionArnPhone;
 	}
 
-	public void setSubscriptionArn(String subscriptionArn) {
-		this.subscriptionArn = subscriptionArn;
+	public void setSubscriptionArnPhone(String subscriptionArnPhone) {
+		this.subscriptionArnPhone = subscriptionArnPhone;
+	}
+
+	public String getSubscriptionArnEmail() {
+		return subscriptionArnEmail;
+	}
+
+	public void setSubscriptionArnEmail(String subscriptionArnEmail) {
+		this.subscriptionArnEmail = subscriptionArnEmail;
 	}
 }

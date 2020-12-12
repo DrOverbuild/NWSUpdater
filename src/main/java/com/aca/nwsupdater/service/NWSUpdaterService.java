@@ -170,8 +170,8 @@ public class NWSUpdaterService {
 		return dao.getAllDistinctLocations();
 	}
 	
-	public User updateUserSubscriptionArn(int userID, String subscriptionArn) {
-		return dao.updateUserSubscriptionArn(userID, subscriptionArn);
+	public User updateUserSubscriptionArn(int userID, String subscriptionArn, String subscriptionType) {
+		return dao.updateUserSubscriptionArn(userID, subscriptionArn, subscriptionType);
 	}
 	
 	public Simulation simulation(Simulation simulation) {

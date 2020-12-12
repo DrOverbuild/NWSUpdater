@@ -19,5 +19,5 @@ public interface NWSUpdaterDAO {
 	public List<Location> deleteLocation(Location location);
 	public List<Alert> getAlerts();
 	public List<DistinctLocations> getAllDistinctLocations();
-	public User updateUserSubscriptionArn(int userID, String subscriptionArn);
+	public User updateUserSubscriptionArn(int userID, String subscriptionArn, String subscriptionType);
 }

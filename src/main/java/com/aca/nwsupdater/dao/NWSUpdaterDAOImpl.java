@@ -13,7 +13,7 @@ import java.util.List;
 
 public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	private static final String authenticateQuery =
-			"SELECT id, email, phone, subscriptionArn FROM user " +
+			"SELECT id, email, phone, subscriptionArnPhone, subscriptionArnEmail FROM user " +
 					"WHERE email = ? AND password = AES_ENCRYPT(?, ?)";
 
 	private static final String createNewUserQuery =
@@ -56,12 +56,12 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 					" email_enabled = ? WHERE id = ?";
 	
 	private static final String getAllDistinctLocationsQuery =
-			"SELECT DISTINCT name "+
+			"SELECT DISTINCT name, lat, lon "+
 			"FROM location";
 
 	private static final String updateUserSubscriptionArn = 
 			"UPDATE user " +
-			"SET subscriptionArn = ?" +
+			"SET ? = ?" +
 			"WHERE id = ?";		
 	
 	private static final String deleteLocationQuery =
@@ -220,7 +220,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	}
 
 	@Override
-	public User updateUserSubscriptionArn(int userID, String subscriptionArn) {
+	public User updateUserSubscriptionArn(int userID, String subscriptionArn, String subscriptionType) {
 		User updatedUser = null;
 
 		Connection conn = NWSUpdaterDB.getConnection();
@@ -230,8 +230,9 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 		
 		try {
 			stmt = conn.prepareStatement(q);
-			stmt.setString(1, subscriptionArn);
-			stmt.setInt(2, userID);
+			stmt.setString(1, subscriptionType);
+			stmt.setString(2, subscriptionArn);
+			stmt.setInt(3, userID);
 
 			int rowsUpdated = stmt.executeUpdate();
 			
@@ -576,7 +577,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 		user.setId(rs.getInt("id"));
 		user.setEmail(rs.getString("email"));
 		user.setPhone(rs.getString("phone"));
-		user.setSubscriptionArn(rs.getString("subscriptionArn"));
+		user.setSubscriptionArnPhone(rs.getString("subscriptionArnPhone"));
+	
 
 		return user;
 	}
