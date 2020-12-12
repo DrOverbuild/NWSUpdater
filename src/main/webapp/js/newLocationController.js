@@ -16,10 +16,9 @@
 
 	var nwsupdaterapp = angular.module('nwsupdaterapp');
 
-	nwsupdaterapp.controller('newLocationController', function($scope, $http){
+	nwsupdaterapp.controller('newLocationController', function($scope, $http, $location, $sessionStorage){
 		mapboxgl.accessToken = 'pk.eyJ1IjoibndzdXBkYXRlciIsImEiOiJja2k5d2JyMjQwangwMzJzMzczMDg1bDRoIn0.BCdLzAFlsi9EPqG-QecB4A';
-
-		$scope.enabledAlertTypes = {}
+		$scope.title = "New Location"
 
 
 		var coords = [-92.289597, 34.746483];
@@ -30,7 +29,9 @@
 		$scope.enabledEmail = true;
 		var marker;
 		var lnglat
-		
+
+		$scope.enabledAlertTypes = {}
+
 		$scope.notSearched = true;
 		
 		$scope.updateMap = function(){
@@ -80,7 +81,7 @@
 			marker = new mapboxgl.Marker().setLngLat(coords).addTo($scope.map);
 		};
 		
-		$scope.createNewLocation = function(){	
+		$scope.submitLocation = function(){
 			const location ={
 					name : $scope.name,
 					lon : lon,
@@ -90,7 +91,7 @@
 					alerts: convertAlertCheckboxesToArray($scope.enabledAlertTypes)
 			};
 
-			const sessionID = $sessionStorage.get('sessionID')
+			const sessionID = $sessionStorage.get('sessionID');
 			if (sessionID) {
 				$http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
@@ -100,7 +101,7 @@
 					},
 					function error(response) {
 						console.log('error');
-						// todo handle error
+						$scope.locationErr = response.data.message;
 					}
 				);
 			} else {

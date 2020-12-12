@@ -7,13 +7,9 @@
 	
 	nwsupdaterapp.config(function($routeProvider){
 		$routeProvider
-			.when("/newlocation", {
-				templateUrl : "template/location.html",
-				controller : "newLocationController"
-			})
 			.when("/location/:loc_id", {
 				templateUrl: "template/location.html",
-				controller: "updateLocationController"
+				controller: "editLocationController"
 			})
 			.when("/home", {
 				templateUrl: "template/userhome.html"
@@ -33,6 +29,10 @@
 			.when("/editprofile", {
 				templateUrl: "template/editprofile.html",
 				controller: "editProfileController"
+			})
+			.when("/newlocation", {
+				templateUrl : "template/location.html",
+				controller : "newLocationController"
 			})
 			.otherwise({
 				templateUrl: "template/home.html",

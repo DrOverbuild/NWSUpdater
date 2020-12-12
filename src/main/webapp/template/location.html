@@ -4,7 +4,8 @@
 			<img class="card-img-top" src="image/newLocationTitle.jpg"
 				alt="title image">
 			<div class="card-img-overlay text-center">
-				<h3 class="text-white" id="title">New Location</h3>
+				<h3 class="text-white" id="title">{{title}}</h3>
+				<p class="text-danger-light" ng-show="locationErr">{{locationErr}}</p>
 			</div>
 			<div class="card-body bg-dark-secondary">
 				<form name="newLocationForm">
@@ -60,7 +61,7 @@
 				alt="title image">
 			<div class="card-img-overlay d-flex align-items-end">
 				<button type="button" id="bottomButton"
-					ng-click="createNewLocation()"
+					ng-click="submitLocation()"
 					ng-disabled="newLocationForm.$invalid || notSearched"
 					class="btn btn-warning btn-block float-right border">Save</button>
 			</div>
