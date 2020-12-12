@@ -3,52 +3,31 @@
  */
 
 (function(){
+	const convertAlertCheckboxesToArray = function (alertDict) {
+		const alertArr = []
+		for (let alert in alertDict) {
+			if (alertDict[alert]) {
+				alertArr.push({id: alert});
+			}
+		}
+
+		return alertArr;
+	}
+
 	var nwsupdaterapp = angular.module('nwsupdaterapp');
-	
+
 	nwsupdaterapp.controller('newLocationController', function($scope, $http){
 		mapboxgl.accessToken = 'pk.eyJ1IjoibndzdXBkYXRlciIsImEiOiJja2k5d2JyMjQwangwMzJzMzczMDg1bDRoIn0.BCdLzAFlsi9EPqG-QecB4A';
 
-		// mock alert types
-		$scope.alertTypes = [
-			{
-				id: 1,
-				name: "Severe Thunderstorm Warning"
-			},
-			{
-				id: 2,
-				name: "Severe Thunderstorm Watch"
-			},
-			{
-				id: 3,
-				name: "Tornado Warning"
-			},
-			{
-				id: 4,
-				name: "Tornado Watch"
-			},
-		]
-
-
-		$scope.enabledAlertTypes = {
-			1: true,
-			2: false,
-			3: true,
-			4: false
-		}
+		$scope.enabledAlertTypes = {}
 
 
 		var coords = [-92.289597, 34.746483];
 		var name = "";
 		var lat = 0.0;
 		var lon = 0.0;
-		$scope.enabledSMS = false;
-		$scope.enabledEmail = false;
-		$scope.tornadoWarning = false;
-		$scope.tornadoWatch = false;
-		$scope.severeThunderstormWarning = false;
-		$scope.severeThunderstormWatch = false;
-		$scope.fleshFloodWarning = false;
-		$scope.fleshFloodWatch = false;
+		$scope.enabledSMS = true;
+		$scope.enabledEmail = true;
 		var marker;
 		var lnglat
 		
@@ -80,7 +59,17 @@
 				}
 			});
 		};
-		
+
+		$scope.getAlerts = function() {
+			$http.get("/NWSUpdater/webapi/alerts").then(
+				function (response) {
+					$scope.alertTypes = response.data;
+				}, function (error) {
+					$scope.alertTypes = [];
+				}
+			)
+		};
+
 		$scope.displayMap = function(){
 			$scope.map = new mapboxgl.Map({
 				container: 'map',
@@ -92,45 +81,36 @@
 		};
 		
 		$scope.createNewLocation = function(){	
-			var Location ={
+			const location ={
 					name : $scope.name,
 					lon : lon,
 					lat : lat,
-					enabledSMS : $scope.enabledSMS,
-					enabledEmail : $scope.enabledEmail,
-					alerts: [
-						{
-							"id": 1
-						},
-						{
-							"id": 2
-						}
-					],
-					// tornadoWarning : $scope.tornadoWarning,
-					// tornadoWatch : $scope.tornadoWatch,
-					// severeThunderstormWarning : $scope.severeThunderstormWarning,
-					// severeThunderstormWatch : $scope.severeThunderstormWatch,
-					// fleshFloodWarning : $scope.fleshFloodWarning,
-					// fleshFloodWatch : $scope.fleshFloodWatch
+					smsEnabled : $scope.enabledSMS,
+					emailEnabled : $scope.enabledEmail,
+					alerts: convertAlertCheckboxesToArray($scope.enabledAlertTypes)
 			};
-			
-			$http({
-				method : 'POST',
-				url : '/NWSUpdater/webapi/location',
-				data : Location,
-//				headers : {
-//					'Authorization' : 'Bearer: Hello'
-//				}
-			}).then(
+
+			const sessionID = $sessionStorage.get('sessionID')
+			if (sessionID) {
+				$http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
+
+				$http.post('/NWSUpdater/webapi/location', location).then(
 					function success(reponse) {
-						console.log('success');
+						$location.path('/userhome');
 					},
 					function error(response) {
 						console.log('error');
+						// todo handle error
 					}
-			);
+				);
+			} else {
+				$location.path("/login");
+			}
 		};
 		
 		$scope.displayMap();
-	})
-})()
+		$scope.getAlerts();
+	});
+
+
+})();
