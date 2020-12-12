@@ -1,5 +1,6 @@
 package com.aca.nwsupdater.dao;
 
+import com.aca.nwsupdater.model.sns.DistinctLocations;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
@@ -17,4 +18,6 @@ public interface NWSUpdaterDAO {
 	public Location updateLocation(Location location);
 	public List<Location> deleteLocation(Location location);
 	public List<Alert> getAlerts();
+	public List<DistinctLocations> getAllDistinctLocations();
+	public User updateUserSubscriptionArn(int userID, String subscriptionArn);
 }

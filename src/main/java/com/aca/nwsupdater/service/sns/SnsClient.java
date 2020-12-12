@@ -1,9 +1,13 @@
 package com.aca.nwsupdater.service.sns;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.MessageAttributeValue;
 
 public class SnsClient {
 	
@@ -28,7 +32,22 @@ public class SnsClient {
 //		SnsUserAlert snsUserAlert = new SnsUserAlert();
 //		snsUserAlert.start();
 		
-		SnsUserForecast snsUserForecast = new SnsUserForecast();
-		snsUserForecast.start();
+//		SnsUserForecast snsUserForecast = new SnsUserForecast();
+//		snsUserForecast.start();
+		
+//		String subscriptionArn = "arn:aws:sns:us-east-1:983316871082:NWSUpdate:efb49127-d678-465d-8f19-5bbda1dbc787";
+//		
+//		SnsSubscriptionFilter fp = new SnsSubscriptionFilter();
+//		
+//		fp.addAttribute("Person", "Longtin");
+//		
+//		fp.apply(subscriptionArn);
+		
+		Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
+		smsAttributes.put("Person", new MessageAttributeValue()
+				.withStringValue("Whitney")
+				.withDataType("String"));
+	
+		SnsPublish.publishUpdate("Alerts", "Hello Master", smsAttributes);
 	}
 }

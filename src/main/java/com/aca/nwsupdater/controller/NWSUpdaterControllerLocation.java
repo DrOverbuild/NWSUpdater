@@ -20,8 +20,8 @@ public class NWSUpdaterControllerLocation {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Location newLocation(NewLocation newLocation) {
-		return NWSUpdaterService.instance.newLocation(newLocation);
+	public Location newLocation(@HeaderParam("Authorization") String auth, Location location) {
+		return NWSUpdaterService.instance.newLocation(auth, location);
 	}
 
 	@PUT

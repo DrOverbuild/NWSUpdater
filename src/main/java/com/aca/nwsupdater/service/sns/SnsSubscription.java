@@ -4,7 +4,7 @@ import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.SubscribeRequest;
 import com.amazonaws.services.sns.model.SubscribeResult;
 
-public class AwsSnsSubscription {
+public class SnsSubscription {
 	
 	public static String subscribePhoneNumber(String phoneNumber) {
 		SubscribeRequest request = new SubscribeRequest();
@@ -14,6 +14,14 @@ public class AwsSnsSubscription {
 		return subscribe(request);
 	}
 
+	public static String subscribeEmail(String email) {
+		SubscribeRequest request = new SubscribeRequest();
+		request.setEndpoint(email);
+		request.setProtocol("email");
+		
+		return subscribe(request);
+	}
+	
 	private static String subscribe(SubscribeRequest request) {
 		request.setTopicArn(SnsClient.WEATHER_TOPIC_ARN);
 		
