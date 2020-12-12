@@ -12,13 +12,21 @@ public class SnsPublishMessage {
 		StringBuffer message = new StringBuffer();
 		Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
 		
-		message.append("Location : " + cityName);
-		message.append("Event: " + features.getProperties().getEvent());
+		appendMessage(message, cityName, features);
 		
-		smsAttributes.put("City", new MessageAttributeValue()
-					.withStringValue(cityName)
+		cityName = cityName.replace(" ", "_");
+		features.getProperties().setEvent(features.getProperties().getEvent().replace(" ", "_"));
+		
+		smsAttributes.put(cityName, new MessageAttributeValue()
+					.withStringValue(features.getProperties().getEvent())
 					.withDataType("String"));
 		
 		SnsPublish.publishUpdate("Alerts", message.toString(), smsAttributes);
+	}
+	
+	private static void appendMessage(StringBuffer message, String cityName, AlertFeatures features) {
+		message.append("Location : " + cityName);
+		message.append(System.lineSeparator());
+		message.append("Event: " + features.getProperties().getEvent());
 	}
 }

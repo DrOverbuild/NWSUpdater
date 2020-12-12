@@ -2,13 +2,14 @@ package com.aca.nwsupdater.service;
 
 import com.aca.nwsupdater.dao.NWSUpdaterDAO;
 import com.aca.nwsupdater.dao.NWSUpdaterDAOImpl;
-import com.aca.nwsupdater.model.Simulation;
 import com.aca.nwsupdater.model.sns.DistinctLocations;
+import com.aca.nwsupdater.model.sns.Simulation;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.HomePageModel;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.NewLocation;
 import com.aca.nwsupdater.model.webapp.User;
+import com.aca.nwsupdater.service.sns.SimulationAlertService;
 import com.aca.nwsupdater.service.sns.SnsSubscriberService;
 
 import java.util.ArrayList;
@@ -174,8 +175,7 @@ public class NWSUpdaterService {
 	}
 	
 	public Simulation simulation(Simulation simulation) {
-		// TODO Auto-generated method stub
-		return null;
+		return SimulationAlertService.simulate(simulation);
 	}
 
 }

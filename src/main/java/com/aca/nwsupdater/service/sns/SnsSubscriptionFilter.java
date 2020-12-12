@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.aca.nwsupdater.model.webapp.Alert;
+import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.SetSubscriptionAttributesRequest;
 
 public class SnsSubscriptionFilter {

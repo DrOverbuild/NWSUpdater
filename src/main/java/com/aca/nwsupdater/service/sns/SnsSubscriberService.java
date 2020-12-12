@@ -57,9 +57,11 @@ public class SnsSubscriberService {
 		ArrayList<String> alerts = new ArrayList<>();
 		
 		for(Alert a : location.getAlerts()) {
+			a.setName(a.getName().replace(" ", "_"));
 			alerts.add(a.getName());
 		}
 		
+		location.setName(location.getName().replace(" ", "_"));
 		fp.addAttributes(location.getName(), alerts);
 		fp.apply(subscriptionArn);
 	}
