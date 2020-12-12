@@ -12,13 +12,13 @@
 					<div class="form-inline">
 						<label for="name"
 							class="font-weight-bold col-sm-1 float-left mb-2" id="nameLabel">Name:</label>
-						<div class="col-sm-10 mb-2">
+						<div class="col-sm-9 mr-3 mb-2">
 							<input ng-model="name" type="text" name="name" required
 								class="form-control border" placeholder="City, State" id="name">
 						</div>
 						<div class="col-sm-1 mb-2">
 							<button type="button" ng-click="updateMap()"
-								class="btn btn-warning btn float-right border" id="searchButton">Search</button>
+								class="btn btn-warning btn rounder float-right border" id="searchButton">Search</button>
 						</div>
 					</div>
 					<span
@@ -60,10 +60,16 @@
 			<img class="card-img-bottom" src="image/newLocationBottom.jpg"
 				alt="title image">
 			<div class="card-img-overlay d-flex align-items-end">
-				<button type="button" id="bottomButton"
+				<button type="button" id="deleteButton"
+						ng-click="deleteLocation()"
+						ng-show="locationId"
+						class="btn btn-dark-secondary mr-3 btn-block float-right rounder border">Delete</button>
+				<!-- delete button only shown if locationId is set -->
+				<button type="button" id="submitButton"
 					ng-click="submitLocation()"
 					ng-disabled="newLocationForm.$invalid || notSearched"
-					class="btn btn-warning btn-block float-right border">Save</button>
+					class="btn btn-warning btn-block float-right rounder border">Save</button>
+
 			</div>
 		</div>
 	</div>

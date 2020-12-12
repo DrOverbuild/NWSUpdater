@@ -108,6 +108,10 @@
             marker = new mapboxgl.Marker().setLngLat(coords).addTo($scope.map);
         };
 
+        $scope.deleteLocation = function() {
+            // todo implement
+        }
+
         $scope.submitLocation = function(){
             const location ={
                 name : $scope.name,
