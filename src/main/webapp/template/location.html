@@ -37,8 +37,8 @@
 					</div>
 					<fieldset class="form-group">
 						<div class="row">
-							<label for="alerts" class="font-weight-bold ml-4" id="alertLabel">Alerts:</label>
-							<div class="ml-2 border border-dark rounded">
+							<label for="alerts" class="font-weight-bold col-lg-2" id="alertLabel">Alerts:</label>
+							<div class="col-lg-10 border border-dark rounded overflow-auto alert-types">
 								<div class="form-check" ng-repeat="type in alertTypes">
 									<label class="form-check-label" for="alertType{{type.id}}">
 										<input class="form-check-input" type="checkbox"
@@ -48,12 +48,12 @@
 
 								</div>
 							</div>
-							<div class="col-sm-2 ml-5">
-								<img class="img-fluid rounded-circle float-right mt-5"
-                                     src="image/nwsd.png" alt="logo image" id="logoImage">
-							</div>
 						</div>
 					</fieldset>
+					<div class="col-sm-2 ml-5">
+						<img class="img-fluid rounded-circle float-right mt-5"
+							 src="image/nwsd.png" alt="logo image" id="logoImage">
+					</div>
 				</form>
 			</div>
 			<img class="card-img-bottom" src="image/newLocationBottom.jpg"
