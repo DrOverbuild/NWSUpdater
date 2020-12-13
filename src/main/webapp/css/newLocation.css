@@ -75,3 +75,16 @@ label{
 .alert-types {
 	max-height: 60vh;
 }
+
+.alert-check-row {
+	padding: 1rem 1rem 1rem 2rem;
+	border-bottom: solid #7D8285 1px;
+}
+
+.alert-check-row:first-child {
+	/*padding-top: 1rem;*/
+}
+
+.alert-check-row:hover {
+	background-color: #343a40;
+}
