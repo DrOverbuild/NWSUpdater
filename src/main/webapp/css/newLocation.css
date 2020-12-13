@@ -16,18 +16,6 @@ label{
 	width:100px;
 }
 
-.form-check{
-	padding:0px;
-}
-
-.form-check-input{
-	margin-left: 5px;
-}
-
-.form-check-label{
-	padding:0px;
-}
-
 #map.border{
 	border-radius: 20px 60px;
 }
@@ -60,11 +48,11 @@ label{
 	font-size:3vw;
 }
 
-#bottomButton:hover{
+#submitButton:hover{
 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
-#bottomButton.border{
+.btn.rounder {
 	border-radius: 10px 10px 10px 10px;
 }
 
@@ -82,4 +70,8 @@ label{
 
 #logoImage{
 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.19);
+}
+
+.alert-types {
+	max-height: 60vh;
 }

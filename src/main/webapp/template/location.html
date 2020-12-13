@@ -1,0 +1,76 @@
+<div class="row">
+	<div class="col-sm">
+		<div class="card bg-light">
+			<img class="card-img-top" src="image/newLocationTitle.jpg"
+				alt="title image">
+			<div class="card-img-overlay text-center">
+				<h3 class="text-white" id="title">{{title}}</h3>
+				<p class="text-danger-light" ng-show="locationErr">{{locationErr}}</p>
+			</div>
+			<div class="card-body bg-dark-secondary">
+				<form name="newLocationForm">
+					<div class="form-inline">
+						<label for="name"
+							class="font-weight-bold col-sm-1 float-left mb-2" id="nameLabel">Name:</label>
+						<div class="col-sm-9 mr-3 mb-2">
+							<input ng-model="location.name" type="text" name="name" required ng-disabled="locationErr"
+								class="form-control border" placeholder="City, State" id="name">
+						</div>
+						<div class="col-sm-1 mb-2">
+							<button type="button" ng-click="updateMap()"
+								class="btn btn-warning btn rounder float-right border" id="searchButton">Search</button>
+						</div>
+					</div>
+					<span
+						ng-show="newLocationForm.name.$touched && newLocationForm.name.$invalid"
+						class="text-danger-light pl-5" id="cityRequired"> Required City
+						and state </span>
+					<div class="container-fluid m-0 p-5">
+						<div id="map" ng-model="map" class="border"></div>
+					</div>
+					<div class="form-group">
+						<label for="smsEnabled" class="font-weight-bold pr-3 pl-2">Enabled
+							SMS:</label> <input type="checkbox" ng-model="location.smsEnabled" id="smsEnabled">
+					</div>
+					<div class="form-group">
+						<label for="emailEnabled" class="font-weight-bold pr-3">Enabled
+							Email:</label> <input type="checkbox" ng-model="location.emailEnabled" id="emailEnabled">
+					</div>
+					<fieldset class="form-group">
+						<div class="row">
+							<label for="alerts" class="font-weight-bold col-lg-2" id="alertLabel">Alerts:</label>
+							<div class="col-lg-10 border border-dark rounded overflow-auto alert-types">
+								<div class="form-check" ng-repeat="type in alertTypes">
+									<label class="form-check-label" for="alertType{{type.id}}">
+										<input class="form-check-input" type="checkbox"
+											   ng-model="enabledAlertTypes[type.id]" name="alertType[{{type.id}}]" id="alertType{{type.id}}"
+											   value="option2">{{type.name}}
+									</label>
+
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					<div class="col-sm-2 ml-5">
+						<img class="img-fluid rounded-circle float-right mt-5"
+							 src="image/nwsd.png" alt="logo image" id="logoImage">
+					</div>
+				</form>
+			</div>
+			<img class="card-img-bottom" src="image/newLocationBottom.jpg"
+				alt="title image">
+			<div class="card-img-overlay d-flex align-items-end">
+				<button type="button" id="deleteButton"
+						ng-click="deleteLocation()"
+						ng-show="locationId" ng-disabled="locationErr"
+						class="btn btn-dark-secondary mr-3 btn-block float-right rounder border">Delete</button>
+				<!-- delete button only shown if locationId is set -->
+				<button type="button" id="submitButton"
+					ng-click="submitLocation()"
+					ng-disabled="newLocationForm.$invalid || notSearched || locationErr"
+					class="btn btn-warning btn-block float-right rounder border">Save</button>
+
+			</div>
+		</div>
+	</div>
+</div>
