@@ -71,7 +71,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			"DELETE FROM location_alerts WHERE location_id = ?";
 
 	private static final String selectAllAlertsQuery =
-			"SELECT id, name FROM alert";
+			"SELECT id, name FROM alert ORDER BY name";
 
 	private static final String insertLocationAlertQuery =
 			"INSERT INTO location_alerts (location_id, alert_id) VALUES (?, ?)";

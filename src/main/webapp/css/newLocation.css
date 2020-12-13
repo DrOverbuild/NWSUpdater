@@ -56,6 +56,10 @@ label{
 	border-radius: 10px 10px 10px 10px;
 }
 
+.btn.sharp {
+	border-radius: 0;
+}
+
 #nameLabel{
 	font-size:26px;
 }
@@ -74,11 +78,14 @@ label{
 
 .alert-types {
 	max-height: 60vh;
+	border-radius: 10px;
+	border: solid 1px white;
 }
 
 .alert-check-row {
-	padding: 1rem 1rem 1rem 2rem;
+	/*padding: 1rem 1rem 1rem 2rem;*/
 	border-bottom: solid #7D8285 1px;
+	display: block;
 }
 
 .alert-check-row:first-child {

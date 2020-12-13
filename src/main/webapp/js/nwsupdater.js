@@ -53,6 +53,35 @@
 			}
 		};
 	});
+
+	// stylizable checkboxes,
+	// code adapted from https://embed.plnkr.co/plunk/vEu3hO
+	nwsupdaterapp.directive('checkbox', function(){
+		return {
+			restrict: 'EA',
+			require: 'ngModel',
+			replace: true,
+			template: '<span class="g-checkbox-row">' +
+				'<span class="checkbox"><i class="fas fa-check"></i></span>' +
+				'{{alertName}}' +
+				'<input id="{{id}}" type="checkbox" style="display: none" ng-checked="ngModel"/>' +
+				'</span>',
+			scope: {
+				id: '@',
+				ngModel: '='
+			},
+			link: function(scope, element, attrs){
+				scope.alertName = attrs.alertname;
+				element.removeAttr('id');
+				element.bind('click', function(){
+					element.toggleClass('checked');
+					scope.ngModel = !scope.ngModel;
+					scope.$apply();
+				})
+			}
+
+		};
+	});
 })();
 
 // convert alert dict to alert array

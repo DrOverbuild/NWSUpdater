@@ -93,6 +93,10 @@
 				$location.path("/login");
 			}
 		};
+
+		$scope.clearAlertSearch = function() {
+			$scope.searchValue = "";
+		}
 		
 		$scope.displayMap();
 		$scope.getAlerts();
