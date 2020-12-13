@@ -3,17 +3,6 @@
  */
 
 (function(){
-    const convertAlertCheckboxesToArray = function (alertDict) {
-        const alertArr = []
-        for (let alert in alertDict) {
-            if (alertDict[alert]) {
-                alertArr.push({id: alert});
-            }
-        }
-
-        return alertArr;
-    }
-
     var nwsupdaterapp = angular.module('nwsupdaterapp');
 
     nwsupdaterapp.controller('editLocationController', function($scope, $routeParams, $location, $http, $sessionStorage){
@@ -21,25 +10,32 @@
         $scope.title = "Edit Location";
         $scope.locationId = $routeParams.loc_id;
 
+        $scope.location = {
+            id: $routeParams.loc_id,
+            name: "",
+            smsEnabled: true,
+            emailEnabled: true,
+            lat: 0.0,
+            lon: 0.0,
+            alerts: []
+        };
+
         var coords = [-92.289597, 34.746483];
-        var name = "";
         var lat = 0.0;
         var lon = 0.0;
-        $scope.enabledSMS = true;
-        $scope.enabledEmail = true;
         var marker;
         var lnglat
 
         $scope.enabledAlertTypes = {}
 
-        $scope.notSearched = true;
+        $scope.notSearched = false;
 
         $scope.updateMap = function(){
             $scope.notSearched = false;
             var mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
             mapboxClient.geocoding
                 .forwardGeocode({
-                    query: $scope.name,
+                    query: $scope.location.name,
                     autocomplete: false,
                     limit: 1
                 })
@@ -51,12 +47,15 @@
                         response.body.features &&
                         response.body.features.length
                     ) {
-                        var feature = response.body.features[0];
+                        const feature = response.body.features[0];
                         coords = feature.center;
                         $scope.displayMap();
                         lnglat = marker.getLngLat();
                         lat = lnglat.lat;
                         lon = lnglat.lng;
+
+                        $scope.location.lat = lat;
+                        $scope.location.lon = lon;
                     }
                 });
         };
@@ -82,6 +81,12 @@
 
                         if (response.data) {
                             console.log(response.data);
+                            $scope.location = response.data;
+                            lon = $scope.location.lon
+                            lat = $scope.location.lat
+                            coords = [lon, lat];
+                            $scope.displayMap()
+                            $scope.enabledAlertTypes = convertAlertArrayToCheckboxes($scope.location.alerts);
                         } else {
                             $scope.locationErr = "Could not load location";
                         }
@@ -90,7 +95,11 @@
                             $location.path('/login');
                         } else {
                             console.log("error");
-                            $scope.locationErr = error.data.message;
+                            if (error.data.message) {
+                                $scope.locationErr = error.data.message;
+                            } else {
+                                $scope.locationErr = "Unable to load location";
+                            }
                         }
                     });
             } else {
@@ -113,20 +122,13 @@
         }
 
         $scope.submitLocation = function(){
-            const location ={
-                name : $scope.name,
-                lon : lon,
-                lat : lat,
-                smsEnabled : $scope.enabledSMS,
-                emailEnabled : $scope.enabledEmail,
-                alerts: convertAlertCheckboxesToArray($scope.enabledAlertTypes)
-            };
+            $scope.location.alerts = convertAlertCheckboxesToArray($scope.enabledAlertTypes);
 
             const sessionID = $sessionStorage.get('sessionID')
             if (sessionID) {
                 $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
-                $http.put(`/NWSUpdater/webapi/location/${$scope.locationId}`, location).then(
+                $http.put(`/NWSUpdater/webapi/location`, $scope.location).then(
                     function success(reponse) {
                         $location.path('/userhome');
                     },

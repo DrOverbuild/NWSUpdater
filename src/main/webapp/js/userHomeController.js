@@ -25,7 +25,7 @@
         }
 
         $scope.viewLocation = function (locId) {
-            // TODO implement
+            $location.path(`/location/${locId}`);
         }
 
         $scope.newLocation = function() {

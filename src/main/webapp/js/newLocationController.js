@@ -3,32 +3,24 @@
  */
 
 (function(){
-	const convertAlertCheckboxesToArray = function (alertDict) {
-		const alertArr = []
-		for (let alert in alertDict) {
-			if (alertDict[alert]) {
-				alertArr.push({id: alert});
-			}
-		}
-
-		return alertArr;
-	}
-
 	var nwsupdaterapp = angular.module('nwsupdaterapp');
 
 	nwsupdaterapp.controller('newLocationController', function($scope, $http, $location, $sessionStorage){
 		mapboxgl.accessToken = 'pk.eyJ1IjoibndzdXBkYXRlciIsImEiOiJja2k5d2JyMjQwangwMzJzMzczMDg1bDRoIn0.BCdLzAFlsi9EPqG-QecB4A';
 		$scope.title = "New Location"
 
+		$scope.location = {
+			name: "",
+			smsEnabled: true,
+			emailEnabled: true,
+			lat: 0.0,
+			lon: 0.0,
+			alerts: []
+		};
 
 		var coords = [-92.289597, 34.746483];
-		var name = "";
-		var lat = 0.0;
-		var lon = 0.0;
-		$scope.enabledSMS = true;
-		$scope.enabledEmail = true;
 		var marker;
-		var lnglat
+		var lnglat;
 
 		$scope.enabledAlertTypes = {}
 
@@ -39,7 +31,7 @@
 			var mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
 			mapboxClient.geocoding
 			.forwardGeocode({
-				query: $scope.name,
+				query: $scope.location.name,
 				autocomplete: false,
 				limit: 1
 			})
@@ -55,8 +47,8 @@
 					coords = feature.center;
 					$scope.displayMap();
 					lnglat = marker.getLngLat();
-					lat = lnglat.lat;
-					lon = lnglat.lng;
+					$scope.location.lat = lnglat.lat;
+					$scope.location.lon = lnglat.lng;
 				}
 			});
 		};
@@ -82,20 +74,13 @@
 		};
 		
 		$scope.submitLocation = function(){
-			const location ={
-					name : $scope.name,
-					lon : lon,
-					lat : lat,
-					smsEnabled : $scope.enabledSMS,
-					emailEnabled : $scope.enabledEmail,
-					alerts: convertAlertCheckboxesToArray($scope.enabledAlertTypes)
-			};
+			$scope.location.alerts = convertAlertCheckboxesToArray($scope.enabledAlertTypes);
 
 			const sessionID = $sessionStorage.get('sessionID');
 			if (sessionID) {
 				$http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
-				$http.post('/NWSUpdater/webapi/location', location).then(
+				$http.post('/NWSUpdater/webapi/location', $scope.location).then(
 					function success(reponse) {
 						$location.path('/userhome');
 					},
@@ -112,6 +97,4 @@
 		$scope.displayMap();
 		$scope.getAlerts();
 	});
-
-
 })();

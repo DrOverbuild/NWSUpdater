@@ -53,4 +53,26 @@
 			}
 		};
 	});
-})()
+})();
+
+// convert alert dict to alert array
+const convertAlertCheckboxesToArray = function (alertDict) {
+	const alertArr = []
+	for (let alert in alertDict) {
+		if (alertDict[alert]) {
+			alertArr.push({id: alert});
+		}
+	}
+
+	return alertArr;
+}
+
+// convert alert array to alert types
+const convertAlertArrayToCheckboxes = function(alertArr) {
+	const alertDict = {}
+	alertArr.forEach(function (alert) {
+		alertDict[alert.id] = true;
+	});
+
+	return alertDict;
+}
