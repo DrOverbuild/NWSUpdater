@@ -11,7 +11,7 @@
         $scope.locationId = $routeParams.loc_id;
 
         $scope.location = {
-            id: $routeParams.loc_id,
+            id: $scope.locationId,
             name: "",
             smsEnabled: true,
             emailEnabled: true,
@@ -118,7 +118,20 @@
         };
 
         $scope.deleteLocation = function() {
-            // todo implement
+            const sessionID = $sessionStorage.get('sessionID')
+            if (sessionID) {
+                $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
+
+                $http.delete(`/NWSUpdater/webapi/location/${$scope.location.id}`).then(
+                    function (response) {
+                        $location.path('/userhome');
+                    }, function (error) {
+                        $scope.locationErr = "There was a problem deleting this location.";
+                    }
+                );
+            } else {
+                $location.path("/login");
+            }
         }
 
         $scope.submitLocation = function(){
