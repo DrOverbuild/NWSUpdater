@@ -138,7 +138,6 @@ public class NWSUpdaterService {
 
 
 	public Location newLocation(String auth, Location location) {
-		
 		int userId = validator.validateToken(validator.validateAuth(auth));
 
 		if (location == null) {
@@ -146,7 +145,6 @@ public class NWSUpdaterService {
 		}
 
 		location.setOwnerID(userId);
-		
 		return dao.addLocation(location);
 	}
 

@@ -4,25 +4,26 @@
 
 (function(){
 	var nwsupdaterapp = angular.module('nwsupdaterapp');
-	
-	nwsupdaterapp.controller('newLocationController', function($scope, $http){
+
+	nwsupdaterapp.controller('newLocationController', function($scope, $http, $location, $sessionStorage){
 		mapboxgl.accessToken = 'pk.eyJ1IjoibndzdXBkYXRlciIsImEiOiJja2k5d2JyMjQwangwMzJzMzczMDg1bDRoIn0.BCdLzAFlsi9EPqG-QecB4A';
-		
+		$scope.title = "New Location"
+
+		$scope.location = {
+			name: "",
+			smsEnabled: true,
+			emailEnabled: true,
+			lat: 0.0,
+			lon: 0.0,
+			alerts: []
+		};
+
 		var coords = [-92.289597, 34.746483];
-		var name = "";
-		var lat = 0.0;
-		var lon = 0.0;
-		$scope.enabledSMS = false;
-		$scope.enabledEmail = false;
-		$scope.tornadoWarning = false;
-		$scope.tornadoWatch = false;
-		$scope.severeThunderstormWarning = false;
-		$scope.severeThunderstormWatch = false;
-		$scope.fleshFloodWarning = false;
-		$scope.fleshFloodWatch = false;
 		var marker;
-		var lnglat
-		
+		var lnglat;
+
+		$scope.enabledAlertTypes = {}
+
 		$scope.notSearched = true;
 		
 		$scope.updateMap = function(){
@@ -30,7 +31,7 @@
 			var mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
 			mapboxClient.geocoding
 			.forwardGeocode({
-				query: $scope.name,
+				query: $scope.location.name,
 				autocomplete: false,
 				limit: 1
 			})
@@ -46,12 +47,22 @@
 					coords = feature.center;
 					$scope.displayMap();
 					lnglat = marker.getLngLat();
-					lat = lnglat.lat;
-					lon = lnglat.lng;
+					$scope.location.lat = lnglat.lat;
+					$scope.location.lon = lnglat.lng;
 				}
 			});
 		};
-		
+
+		$scope.getAlerts = function() {
+			$http.get("/NWSUpdater/webapi/alerts").then(
+				function (response) {
+					$scope.alertTypes = response.data;
+				}, function (error) {
+					$scope.alertTypes = [];
+				}
+			)
+		};
+
 		$scope.displayMap = function(){
 			$scope.map = new mapboxgl.Map({
 				container: 'map',
@@ -62,38 +73,28 @@
 			marker = new mapboxgl.Marker().setLngLat(coords).addTo($scope.map);
 		};
 		
-		$scope.createNewLocation = function(){	
-			var Location ={
-					name : $scope.name,
-					lon : lon,
-					lat : lat,
-					enabledSMS : $scope.enabledSMS,
-					enabledEmail : $scope.enabledEmail,
-					tornadoWarning : $scope.tornadoWarning,
-					tornadoWatch : $scope.tornadoWatch,
-					severeThunderstormWarning : $scope.severeThunderstormWarning,
-					severeThunderstormWatch : $scope.severeThunderstormWatch,
-					fleshFloodWarning : $scope.fleshFloodWarning,
-					fleshFloodWatch : $scope.fleshFloodWatch
-			};
-			
-			$http({
-				method : 'POST',
-				url : '/NWSUpdater/webapi/location',
-				data : Location,
-//				headers : {
-//					'Authorization' : 'Hello'
-//				}
-			}).then(
+		$scope.submitLocation = function(){
+			$scope.location.alerts = convertAlertCheckboxesToArray($scope.enabledAlertTypes);
+
+			const sessionID = $sessionStorage.get('sessionID');
+			if (sessionID) {
+				$http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
+
+				$http.post('/NWSUpdater/webapi/location', $scope.location).then(
 					function success(reponse) {
-						console.log('success');
+						$location.path('/userhome');
 					},
 					function error(response) {
 						console.log('error');
+						$scope.locationErr = response.data.message;
 					}
-			);
+				);
+			} else {
+				$location.path("/login");
+			}
 		};
 		
 		$scope.displayMap();
-	})
-})()
+		$scope.getAlerts();
+	});
+})();
