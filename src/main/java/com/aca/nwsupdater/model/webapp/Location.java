@@ -11,6 +11,7 @@ public class Location {
 	private Boolean emailEnabled;
 	private List<Alert> alerts;
 	private Integer ownerID;
+	private String topicArn;
 
 	public Integer getId() {
 		return id;
@@ -88,5 +89,13 @@ public class Location {
 		
 		
 		return toReturn;
+	}
+
+	public String getTopicArn() {
+		return topicArn;
+	}
+
+	public void setTopicArn(String topicArn) {
+		this.topicArn = topicArn;
 	}
 }

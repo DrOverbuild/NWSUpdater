@@ -7,6 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.aca.nwsupdater.model.webapp.ErrorMessage;
+import com.aca.nwsupdater.service.sns.SnsClient;
+import com.amazonaws.services.sns.model.UnsubscribeRequest;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
