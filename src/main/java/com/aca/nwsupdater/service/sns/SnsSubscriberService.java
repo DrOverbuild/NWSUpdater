@@ -1,6 +1,10 @@
 package com.aca.nwsupdater.service.sns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.aca.nwsupdater.model.sns.TopicSubscriber;
+import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
 import com.aca.nwsupdater.service.NWSUpdaterService;
@@ -61,6 +65,10 @@ public class SnsSubscriberService extends Thread{
 			topicArn = distinctLoc.getTopicArn();
 		}
 		
+		if(loc.getAlerts().isEmpty()) {
+			SnsUtils.setAlertToNone(loc);
+		}
+		
 		if(loc.getSmsEnabled()) {
 			subscriptionArn = SnsSubscription.subscribePhoneNumber(user.getPhone(), topicArn);
 			topicSubscriber.setPhoneArn(subscriptionArn);
@@ -92,22 +100,42 @@ public class SnsSubscriberService extends Thread{
 	private void update() {
 		TopicSubscriber topicSubscriber = AwsSnsService.instance.getTopicSubscriber(loc.getOwnerID(), loc.getId());
 		User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
-		
-		if(loc.getSmsEnabled()) {
-			SnsUtils.subscriptionFilter(topicSubscriber.getPhoneArn(), loc);
-		} else {
-			SnsUtils.unsubscribe(topicSubscriber.getPhoneArn());
-		}
 
-		if(loc.getEmailEnabled()) {
+		if(loc.getAlerts().isEmpty()) {
+			SnsUtils.setAlertToNone(loc);
+		}
+		
+		if(topicSubscriber.getPhoneArn() == null) {
+			if(loc.getSmsEnabled()) {
+				String subscriptionArn = SnsSubscription.subscribePhoneNumber(user.getPhone(), topicSubscriber.getTopicArn());
+				SnsUtils.subscriptionFilter(subscriptionArn, loc);
+				AwsSnsService.instance.updateSubscriberArn(subscriptionArn, "phone", loc.getId(), loc.getOwnerID());
+			}
+		} else {
+			//save alerts incase of sms not enabled
+			List<Alert> temp = loc.getAlerts();
+			if(!loc.getSmsEnabled()) {
+				SnsUtils.setAlertToNone(loc);
+			}
+			SnsUtils.subscriptionFilter(topicSubscriber.getPhoneArn(), loc);
+			loc.setAlerts(temp);
+		}
+		
+		if(topicSubscriber.getEmailArn() == null) {
+			if(loc.getEmailEnabled()) {
+				String subscriptionArn = SnsSubscription.subscribeEmail(user.getEmail(), topicSubscriber.getTopicArn());
+				AwsSnsService.instance.updateSubscriberArn(subscriptionArn, "email", loc.getId(), loc.getOwnerID());
+			}
+		} else {
+			if(!loc.getEmailEnabled()) {
+				SnsUtils.setAlertToNone(loc);
+			}
+			
 			if(topicSubscriber.getEmailArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
 				SnsUtils.checkEmailForConfirmation(user, loc);
 			} else {
 				SnsUtils.subscriptionFilter(topicSubscriber.getEmailArn(), loc);
 			}
-		} else {
-			SnsUtils.unsubscribe(topicSubscriber.getEmailArn());
 		}
 	}
-
 }

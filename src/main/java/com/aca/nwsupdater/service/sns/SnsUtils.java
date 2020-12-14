@@ -15,19 +15,19 @@ public class SnsUtils{
 	
 	public static void checkEmailForConfirmation(User user, Location loc) {
 		ListSubscriptionsByTopicResult subscription = SnsClient.getAwsClient().listSubscriptionsByTopic(loc.getTopicArn());
-		
 		//check if the user have comfirm their email
 		for(Subscription s : subscription.getSubscriptions()) {
 			if(s.getEndpoint().equals(user.getEmail())) {
 				if(s.getSubscriptionArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
 					System.out.println("Please comfirm your subscription!!");
 				} else {
-					AwsSnsService.instance.updateEmailArn(s.getSubscriptionArn(), loc.getId(), loc.getOwnerID());
+					AwsSnsService.instance.updateSubscriberArn(s.getSubscriptionArn(), "email", loc.getId(), loc.getOwnerID());
 					subscriptionFilter(s.getSubscriptionArn(), loc);
 				}
 				break;
 			}
 		}
+		
 	}
 	
 	public static void checkAllEmailForConfirmation(List<Location> locs) {
@@ -35,6 +35,14 @@ public class SnsUtils{
 			User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
 			checkEmailForConfirmation(user, loc);
 		}
+	}
+	
+	public static void setAlertToNone(Location loc) {
+		List<Alert> alerts = new ArrayList<>();
+		Alert a = new Alert();
+		a.setName("None");
+		alerts.add(a);
+		loc.setAlerts(alerts);
 	}
 	
 	public static void unsubscribe(String subscriptionArn) {

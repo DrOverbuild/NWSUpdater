@@ -29,7 +29,7 @@ public class AwsSnsService {
 		return dao.getTopicSubscriber(userId, locationId);
 	}
 	
-	public void updateEmailArn(String emailArn, int locationId, int userId) {
-		dao.updateEmailArn(emailArn, locationId, userId);
+	public void updateSubscriberArn(String arn, String type, int locationId, int userId) {
+		dao.updateSubscriberArn(arn, type, locationId, userId);
 	}
 }

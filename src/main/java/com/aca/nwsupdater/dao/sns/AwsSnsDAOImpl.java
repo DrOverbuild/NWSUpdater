@@ -15,12 +15,20 @@ public class AwsSnsDAOImpl implements AwsSnsDAO{
 			"INSERT INTO subscriptionArn (location_id, user_id, phoneArn, emailArn) " +
 			"VALUES(?, ?, ?, ?)";
 	
+	private static final String insertTopicSubscriberPhoneQuery = 
+			"INSERT INTO subscriptionArn (location_id, user_id, phoneArn) " +
+			"VALUES(?, ?, ?)";
+	
+	private static final String insertTopicSubscriberEmailQuery = 
+			"INSERT INTO subscriptionArn (location_id, user_id, emailArn) " +
+			"VALUES(?, ?, ?)";
+	
 	private static final String updateTopicArnQuery = 
 			"UPDATE location " +
 			"Set topicArn = ? " +
 			"Where id = ? ";
 	
-	private static final String selectTopicAndSubscriberQuery = 
+	private static final String selectTopicSubscriberQuery = 
 			"SELECT location_id, user_id, phoneArn, topicArn, emailArn " + 
 			"FROM subscriptionArn sub " + 
 			"INNER JOIN location loc ON loc.id = sub.location_id " + 
@@ -30,6 +38,11 @@ public class AwsSnsDAOImpl implements AwsSnsDAO{
 	private static final String updateEmailArn = 
 			"UPDATE subscriptionArn " + 
 			"SET emailArn = ? " + 
+			"WHERE location_id = ? AND user_id = ? ";
+	
+	private static final String updatePhoneArn = 
+			"UPDATE subscriptionArn " + 
+			"SET phoneArn = ? " + 
 			"WHERE location_id = ? AND user_id = ? ";
 	
 	@Override
@@ -60,7 +73,7 @@ public class AwsSnsDAOImpl implements AwsSnsDAO{
 		ResultSet rs = null;
 		
 		try {
-			stmt = conn.prepareStatement(selectTopicAndSubscriberQuery);
+			stmt = conn.prepareStatement(selectTopicSubscriberQuery);
 			stmt.setInt(1, locationId);
 			stmt.setInt(2, userId);
 
@@ -83,11 +96,12 @@ public class AwsSnsDAOImpl implements AwsSnsDAO{
 
 		Connection conn = NWSUpdaterDB.getConnection();
 		PreparedStatement stmt = null;
-
+		
 		try {
 			stmt = conn.prepareStatement(insertTopicSubscriberQuery);
 			stmt.setInt(1, topic.getLocationID());
 			stmt.setInt(2, topic.getUserID());
+			
 			if(topic.getPhoneArn() == null) {
 				stmt.setNull(3, Types.VARCHAR);
 			} else {
@@ -111,13 +125,20 @@ public class AwsSnsDAOImpl implements AwsSnsDAO{
 	}
 	
 	@Override
-	public void updateEmailArn(String emailArn, int locationId, int userId) {
+	public void updateSubscriberArn(String arn, String type, int locationId, int userId) {
 		Connection conn = NWSUpdaterDB.getConnection();
 		PreparedStatement stmt = null;
+		String q = "";
+		
+		if(type.equals("email")) {
+			q = updateEmailArn;
+		} else if(type.equals("phone")){
+			q = updatePhoneArn;
+		}
 		
 		try {
-			stmt = conn.prepareStatement(updateEmailArn);
-			stmt.setString(1, emailArn);
+			stmt = conn.prepareStatement(q);
+			stmt.setString(1, arn);
 			stmt.setInt(2, locationId);
 			stmt.setInt(3, userId);
 
