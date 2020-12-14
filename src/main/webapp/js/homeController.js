@@ -13,6 +13,6 @@
             }
         }
 
-        $scope.getHome();
+        // $scope.getHome();
     });
 })()
