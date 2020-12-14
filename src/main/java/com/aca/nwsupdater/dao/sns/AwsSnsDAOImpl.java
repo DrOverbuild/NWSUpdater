@@ -15,14 +15,6 @@ public class AwsSnsDAOImpl implements AwsSnsDAO{
 			"INSERT INTO subscriptionArn (location_id, user_id, phoneArn, emailArn) " +
 			"VALUES(?, ?, ?, ?)";
 	
-	private static final String insertTopicSubscriberPhoneQuery = 
-			"INSERT INTO subscriptionArn (location_id, user_id, phoneArn) " +
-			"VALUES(?, ?, ?)";
-	
-	private static final String insertTopicSubscriberEmailQuery = 
-			"INSERT INTO subscriptionArn (location_id, user_id, emailArn) " +
-			"VALUES(?, ?, ?)";
-	
 	private static final String updateTopicArnQuery = 
 			"UPDATE location " +
 			"Set topicArn = ? " +

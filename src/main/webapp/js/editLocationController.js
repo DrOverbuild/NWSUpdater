@@ -49,7 +49,7 @@
                     ) {
                         const feature = response.body.features[0];
                         coords = feature.center;
-                        $scope.displayMap();
+                        $scope.moveMarker();
                         lnglat = marker.getLngLat();
                         lat = lnglat.lat;
                         lon = lnglat.lng;
@@ -85,7 +85,7 @@
                             lon = $scope.location.lon
                             lat = $scope.location.lat
                             coords = [lon, lat];
-                            $scope.displayMap()
+                            $scope.moveMarker();
                             $scope.enabledAlertTypes = convertAlertArrayToCheckboxes($scope.location.alerts);
                         } else {
                             $scope.locationErr = "Could not load location";
@@ -112,11 +112,11 @@
                 container: 'map',
                 style: 'mapbox://styles/mapbox/streets-v11',
                 center: coords,
-                zoom: 9
+                zoom: 11
             });
             marker = new mapboxgl.Marker().setLngLat(coords).addTo($scope.map);
         };
-
+        
         $scope.deleteLocation = function() {
             const sessionID = $sessionStorage.get('sessionID')
             if (sessionID) {
@@ -159,7 +159,32 @@
         }
 
         $scope.displayMap();
+        
         $scope.getAlerts();
         $scope.getLocation();
+		$scope.map.on('click', function (e){
+			console.log(e.lngLat);
+			coords = e.lngLat;
+			$scope.moveMarker();
+			lnglat = marker.getLngLat();
+			$scope.location.lat = lnglat.lat;
+			$scope.location.lon = lnglat.lng;
+
+		});
+		
+		$scope.moveMarker = function(){
+			$scope.map.flyTo({
+				center: coords,
+				zoom: 11,
+				bearing: 0,
+				speed:1, 
+				curve: 1, 
+				easing: function (t) {
+				return t;
+				},
+				essential: true
+			});
+			marker.setLngLat(coords);
+		};
     });
 })();
