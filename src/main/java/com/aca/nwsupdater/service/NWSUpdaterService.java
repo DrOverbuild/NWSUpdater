@@ -169,7 +169,7 @@ public class NWSUpdaterService {
 	}
 	
 	public List<Location> getLocationByCoords(Double lat, Double lon) {
-		return dao.getLocationByCoords(lat, lon);
+		return dao.getLocationsByCoords(lat, lon);
 	}
 	
 	public Simulation simulation(Simulation simulation) {

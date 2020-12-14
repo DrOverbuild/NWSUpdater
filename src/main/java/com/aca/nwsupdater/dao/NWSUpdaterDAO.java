@@ -19,5 +19,5 @@ public interface NWSUpdaterDAO {
 	public List<Location> deleteLocation(Location location);
 	public List<Alert> getAlerts();
 	public List<DistinctLocations> getAllDistinctLocations();
-	public List<Location> getLocationByCoords(Double lat, Double lon);
+	public List<Location> getLocationsByCoords(Double lat, Double lon);
 }

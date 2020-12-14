@@ -275,7 +275,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	}
 
 	@Override
-	public List<Location> getLocationByCoords(Double lat, Double lon) {
+	public List<Location> getLocationsByCoords(Double lat, Double lon) {
 		List<Location> locations = new ArrayList<>();
 
 		Connection conn = NWSUpdaterDB.getConnection();

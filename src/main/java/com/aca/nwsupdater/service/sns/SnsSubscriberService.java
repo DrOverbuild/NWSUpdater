@@ -58,7 +58,6 @@ public class SnsSubscriberService extends Thread{
 			subscriptionArn = SnsSubscription.subscribePhoneNumber(user.getPhone(), topicArn);
 			topicSubscriber.setPhoneArn(subscriptionArn);
 			SnsUtils.subscriptionFilter(subscriptionArn, loc);
-			
 		}
 		
 		if(loc.getEmailEnabled()) {
