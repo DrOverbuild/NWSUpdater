@@ -61,7 +61,7 @@
         };
 
         $scope.getAlerts = function() {
-            $http.get("/NWSUpdater/webapi/alerts").then(
+            $http.get(`${APIHOME}/alerts`).then(
                 function (response) {
                     $scope.alertTypes = response.data;
                 }, function (error) {
@@ -75,7 +75,7 @@
             if (sessionID) {
                 $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
-                $http.get(`/NWSUpdater/webapi/location/${$scope.locationId}`)
+                $http.get(`${APIHOME}/location/${$scope.locationId}`)
                     .then(function (response) {
                         console.log("success");
 
@@ -123,7 +123,7 @@
             if (sessionID) {
                 $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
-                $http.delete(`/NWSUpdater/webapi/location/${$scope.location.id}`).then(
+                $http.delete(`${APIHOME}/location/${$scope.location.id}`).then(
                     function (response) {
                         $location.path('/userhome');
                     }, function (error) {
@@ -142,7 +142,7 @@
             if (sessionID) {
                 $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
-                $http.put(`/NWSUpdater/webapi/location`, $scope.location).then(
+                $http.put(`${APIHOME}/location`, $scope.location).then(
                     function success(reponse) {
                         $location.path('/userhome');
                     },

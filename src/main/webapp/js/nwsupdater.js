@@ -2,6 +2,8 @@
  * create a new module named 'nwsupdaterapp'
  */
 
+const APIHOME = "/NWSUpdater/webapi";
+
 (function(){
 	var nwsupdaterapp = angular.module('nwsupdaterapp', ['ngRoute', 'swxSessionStorage', 'ngSanitize']);
 	

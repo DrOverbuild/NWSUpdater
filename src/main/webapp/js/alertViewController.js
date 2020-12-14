@@ -35,7 +35,7 @@
         };
 
         $scope.getAlert = function() {
-            $http.get(`/NWSUpdater/webapi/alert/${$routeParams.alertId}`).then(
+            $http.get(`${APIHOME}/alert/${$routeParams.alertId}`).then(
                 function (response) {
                     $scope.alert = response.data;
                     $scope.prepareData();
@@ -47,7 +47,7 @@
         }
 
         $scope.getLocation = function() {
-            $http.get(`/NWSUpdater/webapi/point/${$routeParams.locId}`).then(
+            $http.get(`${APIHOME}/point/${$routeParams.locId}`).then(
                 function (response) {
                     $scope.cwa = response.data.properties.cwa;
                     coords = response.data.geometry.coordinates;
