@@ -13,7 +13,7 @@
                 container: 'map',
                 style: 'mapbox://styles/mapbox/streets-v11',
                 center: coords,
-                zoom: 11
+                zoom: 8
             });
             marker = new mapboxgl.Marker().setLngLat(coords).addTo($scope.map);
 
@@ -22,7 +22,7 @@
         $scope.moveMarker = function(){
             $scope.map.flyTo({
                 center: coords,
-                zoom: 6,
+                zoom: 8,
                 bearing: 0,
                 speed: 2,
                 curve: 1,

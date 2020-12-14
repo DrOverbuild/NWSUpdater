@@ -12,7 +12,13 @@ import java.io.IOException;
 public class URLShortener {
 	private static String requestURLString = "https://goolnk.com/api/v1/shorten";
 
-	public static  String shortenURL(String urlToShorten) {
+	public static String shortenedUrlForAlert(int locationID, String alertID) {
+		StringBuilder url = new StringBuilder("http://nwsupdater-env.eba-ypcyxugd.us-east-1.elasticbeanstalk.com/#!/alert/");
+		url.append(locationID).append("/").append(alertID);
+		return shortenURL(url.toString());
+	}
+
+	public static String shortenURL(String urlToShorten) {
 		try {
 			String param = "url=" + URLEncoder.encode(urlToShorten,"UTF-8");
 			URL url = new URL(requestURLString);

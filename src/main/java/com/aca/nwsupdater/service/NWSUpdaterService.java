@@ -26,6 +26,8 @@ public class NWSUpdaterService {
 	private Validator validator;
 	private WeatherAlertService alertService;
 
+	private AlertProperties simulationAlert = null;
+
 	public NWSUpdaterService() {
 		dao = new NWSUpdaterDAOImpl();
 		sessionManager = new SessionManager();
@@ -45,6 +47,14 @@ public class NWSUpdaterService {
 
 	public Validator getValidator() {
 		return validator;
+	}
+
+	public AlertProperties getSimulationAlert() {
+		return simulationAlert;
+	}
+
+	public void setSimulationAlert(AlertProperties simulationAlert) {
+		this.simulationAlert = simulationAlert;
 	}
 
 	public HomePageModel homePage(String auth) {
@@ -187,6 +197,10 @@ public class NWSUpdaterService {
 	}
 
 	public AlertProperties getAlert(String alertId) {
+		if (alertId.equals("SIMULATION")) {
+			return simulationAlert;
+		}
+
 		NWSAlert alert = alertService.getAlertById(alertId);
 		if (alert != null) {
 			return alert.getProperties();

@@ -7,6 +7,7 @@ import javax.servlet.ServletContextEvent;
 import com.aca.nwsupdater.model.AlertFeatures;
 import com.aca.nwsupdater.model.WeatherAlertData;
 import com.aca.nwsupdater.service.NWSUpdaterService;
+import com.aca.nwsupdater.service.URLShortener;
 import com.aca.nwsupdater.service.WeatherAlertService;
 import com.aca.nwsupdater.model.sns.DistinctLocations;
 
@@ -59,7 +60,7 @@ public class SnsUserAlert extends TimerTask implements javax.servlet.ServletCont
 					System.out.println("    Sending alerts...");
 
 					for(AlertFeatures f : features) {
-						SnsPublishMessage.setSnsPublishMessage(f, cityName.get(i), topic);
+						SnsPublishMessage.setSnsPublishMessage(f, cityName.get(i), topic, "");
 					}
 				}
 			} else if(haveAlerts.contains(coords.get(i))) {
