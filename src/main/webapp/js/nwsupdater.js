@@ -63,7 +63,7 @@
 			replace: true,
 			template: '<span class="g-checkbox-row">' +
 				'<span class="checkbox"><i class="fas fa-check"></i></span>' +
-				'{{alertName}}' +
+				'{{label}}' +
 				'<input id="{{id}}" type="checkbox" style="display: none" ng-checked="ngModel"/>' +
 				'</span>',
 			scope: {
@@ -71,7 +71,16 @@
 				ngModel: '='
 			},
 			link: function(scope, element, attrs){
-				scope.alertName = attrs.alertname;
+				if (scope.ngModel) {
+					element.addClass('checked');
+				}
+
+				if (attrs.label) {
+					scope.label = attrs.label;
+				} else {
+					scope.label = "";
+				}
+
 				element.removeAttr('id');
 				element.bind('click', function(){
 					element.toggleClass('checked');

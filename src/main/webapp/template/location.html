@@ -29,17 +29,28 @@
                     <div class="container-fluid m-0 p-5">
                         <div id="map" ng-model="map" class="border"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="smsEnabled" class="font-weight-bold pr-3 pl-2">Enabled
-                            SMS:</label> <input type="checkbox" ng-model="location.smsEnabled" id="smsEnabled">
+                    <div class="row form-group">
+                        <div class="col-lg-1"></div>
+                        <checkbox class="font-weight-bold checkbox-border" id="smsEnabled" ng-model="location.smsEnabled"
+                                  data-label="SMS Enabled"></checkbox>
+                        <div class="col-lg-1"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="emailEnabled" class="font-weight-bold pr-3">Enabled
-                            Email:</label> <input type="checkbox" ng-model="location.emailEnabled" id="emailEnabled">
+
+                    <div class="row form-group">
+                        <div class="col-lg-1"></div>
+                        <checkbox class="font-weight-bold checkbox-border" id="emailEnabled" ng-model="location.emailEnabled"
+                                  data-label="Email Enabled"></checkbox>
+                        <div class="col-lg-1"></div>
                     </div>
+
                     <fieldset class="form-group">
                         <div class="row">
-                            <label for="alerts" class="font-weight-bold col-lg-2" id="alertLabel">Alerts:</label>
+                            <div class="col-lg-1"></div>
+                            <label for="alerts" class="font-weight-bold col-lg-10" id="alertLabel">Alerts:</label>
+                            <div class="col-lg-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-1"></div>
                             <div class="col-lg-10 table table-dark bg-darkblue table-hover overflow-auto alert-types">
                                 <div class="row">
                                     <input class="flex-grow-1 p-2" placeholder="Search" type="text" ng-model="searchValue">
@@ -47,9 +58,11 @@
                                 </div>
                                 <div class="row alert-check-row" ng-repeat="type in alertTypes | filter:searchValue">
                                     <checkbox id="alertType{{type.id}}" ng-model="enabledAlertTypes[type.id]"
-                                              data-alertname="{{type.name}}"></checkbox>
+                                              data-label="{{type.name}}"></checkbox>
                                 </div>
                             </div>
+                            <div class="col-lg-1"></div>
+
                         </div>
                     </fieldset>
                     <div class="col-sm-2 ml-5">
