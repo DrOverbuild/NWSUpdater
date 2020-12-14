@@ -38,6 +38,10 @@
 				templateUrl : "template/location.html",
 				controller : "newLocationController"
 			})
+			.when("/alert/:locId/:alertId", {
+				templateUrl: "template/alertview.html",
+				controller: "alertViewController"
+			})
 			.otherwise({
 				templateUrl: "template/home.html",
 				controller: "homeController"

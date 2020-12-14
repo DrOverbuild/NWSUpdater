@@ -25,7 +25,7 @@ public class SnsPublishMessage {
 	}
 	
 	private static void appendMessage(StringBuffer message, String cityName, AlertFeatures features) {
-		message.append("Location : " + cityName);
+		message.append("Location: " + cityName);
 		message.append(System.lineSeparator());
 		message.append("Event: " + features.getProperties().getEvent());
 	}
