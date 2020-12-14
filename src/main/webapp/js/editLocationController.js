@@ -157,7 +157,7 @@
         $scope.clearAlertSearch = function() {
             $scope.searchValue = "";
         }
-
+        
         $scope.displayMap();
         $scope.getAlerts();
         $scope.getLocation();

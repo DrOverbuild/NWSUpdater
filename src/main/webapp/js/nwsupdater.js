@@ -70,9 +70,13 @@
 				id: '@',
 				ngModel: '='
 			},
-			link: function(scope, element, attrs){
-				if (scope.ngModel) {
-					element.addClass('checked');
+			link: function(scope, element, attrs, ngModelController){
+				var render = function() {
+					if (scope.ngModel) {
+						element.addClass('checked');
+					} else {
+						element.removeClass('checked');
+					}
 				}
 
 				if (attrs.label) {
@@ -83,12 +87,17 @@
 
 				element.removeAttr('id');
 				element.bind('click', function(){
-					element.toggleClass('checked');
-					scope.ngModel = !scope.ngModel;
-					scope.$apply();
-				})
-			}
+					scope.$apply(function () {
+						scope.ngModel = !scope.ngModel;
+						ngModelController.$setViewValue(scope.ngModel);
+						render();
+					});
+				});
 
+				ngModelController.$render = function() {
+					scope.$evalAsync(render);
+				}
+			}
 		};
 	});
 })();
