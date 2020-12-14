@@ -9,9 +9,9 @@ import com.amazonaws.services.sns.model.MessageAttributeValue;
 
 public class SnsPublish {
 	
-	public static String publishUpdate(String subject, String message, Map<String, MessageAttributeValue> smsAttributes) {
+	public static String publishUpdate(String subject, String message, Map<String, MessageAttributeValue> smsAttributes, String topic) {
 		PublishRequest publishRequest = new PublishRequest();
-		publishRequest.setTopicArn(SnsClient.WEATHER_TOPIC_ARN);
+		publishRequest.setTopicArn(topic);
 		publishRequest.setMessage(message);
 		publishRequest.setSubject(subject);
 		publishRequest.setMessageAttributes(smsAttributes);

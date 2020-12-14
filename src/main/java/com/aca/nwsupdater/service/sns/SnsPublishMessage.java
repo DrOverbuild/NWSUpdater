@@ -8,7 +8,7 @@ import com.amazonaws.services.sns.model.MessageAttributeValue;
 
 public class SnsPublishMessage {
 	
-	public static void setSnsPublishMessage(AlertFeatures features, String cityName) {
+	public static void setSnsPublishMessage(AlertFeatures features, String cityName, String topic) {
 		StringBuffer message = new StringBuffer();
 		Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
 		
@@ -17,11 +17,11 @@ public class SnsPublishMessage {
 		cityName = cityName.replace(" ", "_");
 		features.getProperties().setEvent(features.getProperties().getEvent().replace(" ", "_"));
 		
-		smsAttributes.put(cityName, new MessageAttributeValue()
+		smsAttributes.put("Alerts", new MessageAttributeValue()
 					.withStringValue(features.getProperties().getEvent())
 					.withDataType("String"));
 		
-		SnsPublish.publishUpdate("Alerts", message.toString(), smsAttributes);
+		SnsPublish.publishUpdate("Alerts", message.toString(), smsAttributes, topic);
 	}
 	
 	private static void appendMessage(StringBuffer message, String cityName, AlertFeatures features) {

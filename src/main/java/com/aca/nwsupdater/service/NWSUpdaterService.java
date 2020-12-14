@@ -168,8 +168,12 @@ public class NWSUpdaterService {
 		return dao.getAllDistinctLocations();
 	}
 	
-	public User updateUserSubscriptionArn(int userID, String subscriptionArn) {
-		return dao.updateUserSubscriptionArn(userID, subscriptionArn);
+	public List<Location> getLocationByCoords(Double lat, Double lon) {
+		return dao.getLocationsByCoords(lat, lon);
+	}
+	
+	public Location getDistinctLocationByCoords(Double lat, Double lon) {
+		return dao.getDistinctLocationByCoords(lat, lon);
 	}
 	
 	public Simulation simulation(Simulation simulation) {

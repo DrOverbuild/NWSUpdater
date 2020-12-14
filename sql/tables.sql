@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS received_alerts;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS location_alerts;
+DROP TABLE IF EXISTS subscriptionArn;
 
 CREATE TABLE IF NOT EXISTS alert
 (
@@ -75,3 +76,17 @@ CREATE TABLE IF NOT EXISTS location_alerts
             ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS subscriptionArn
+(
+	location_id INT NOT NULL,
+	user_id INT NOT NULL,
+	phoneArn VARCHAR(100) NOT NULL,
+	emailArn VARCHAR(100) NOT NULL,
+	CONSTRAINT subscriptionArn_location_id_user_id_pk PRIMARY KEY (location_id, user_id),
+	CONSTRAINT subscriptionArn_location_id_fk
+	FOREIGN KEY (location_id) REFERENCES location (id)
+	ON DELETE CASCADE,
+	CONSTRAINT subscriptionArn_user_id_fk
+	FOREIGN KEY (user_id) REFERENCES user (id)
+	ON DELETE CASCADE
+);
