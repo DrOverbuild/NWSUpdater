@@ -12,7 +12,7 @@ public class SimulationAlertService {
 	
 	public static Simulation simulate(Simulation sim) {
 		AlertProperties properties = new AlertProperties();
-		properties.setAreaDes(sim.getAreaDesc());
+		properties.setAreaDesc(sim.getAreaDesc());
 		properties.setCertainty(sim.getCertainty());
 		properties.setDescription(sim.getDescription());
 		properties.setEvent(sim.getEvent());

@@ -2,6 +2,9 @@ package com.aca.nwsupdater.service;
 
 import com.aca.nwsupdater.dao.NWSUpdaterDAO;
 import com.aca.nwsupdater.dao.NWSUpdaterDAOImpl;
+import com.aca.nwsupdater.model.AlertProperties;
+import com.aca.nwsupdater.model.NWSAlert;
+import com.aca.nwsupdater.model.nws.Point;
 import com.aca.nwsupdater.model.sns.DistinctLocations;
 import com.aca.nwsupdater.model.sns.Simulation;
 import com.aca.nwsupdater.model.webapp.Alert;
@@ -21,12 +24,15 @@ public class NWSUpdaterService {
 	private SessionManager sessionManager;
 	private NWSUpdaterDAO dao;
 	private Validator validator;
+	private WeatherAlertService alertService;
 
 	public NWSUpdaterService() {
 		dao = new NWSUpdaterDAOImpl();
 		sessionManager = new SessionManager();
 		validator = new Validator(this);
 		sessionManager.start();
+
+		alertService = new WeatherAlertService();
 	}
 
 	public SessionManager getSessionManager() {
@@ -180,4 +186,18 @@ public class NWSUpdaterService {
 		return SimulationAlertService.simulate(simulation);
 	}
 
+	public AlertProperties getAlert(String alertId) {
+		NWSAlert alert = alertService.getAlertById(alertId);
+		if (alert != null) {
+			return alert.getProperties();
+		}
+
+		return null;
+	}
+
+	public Point getPoint(Integer locationId) {
+		Location locCoords = dao.locationCoordsById(locationId);
+		String point = locCoords.getLat() + "," + locCoords.getLon();
+		return alertService.getPoint(point);
+	}
 }

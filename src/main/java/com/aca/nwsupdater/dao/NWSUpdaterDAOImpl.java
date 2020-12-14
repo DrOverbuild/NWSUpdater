@@ -45,7 +45,10 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			"SELECT id, name, lat, lon, gridpoint_office, gridpoint_x, " +
 					"        gridpoint_y, sms_enabled, email_enabled, owner_id, topicArn " +
 					"FROM location WHERE id = ? AND owner_id = ?";
-	
+
+	private static final String selectCoordsByLocationID =
+			"SELECT id, lat, lon FROM location WHERE id = ?";
+
 	private static final String selectLocationsByCoordsQuery =
 			"SELECT id, name, lat, lon, gridpoint_office, gridpoint_x, " +
 					"        gridpoint_y, sms_enabled, email_enabled, owner_id, topicArn " +
@@ -274,6 +277,34 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		if (location != null) {
 			location.setAlerts(getAlertsForLocation(location));
+		}
+
+		return location;
+	}
+
+	@Override
+	public Location locationCoordsById(int locationID) {
+		Location location = null;
+
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.prepareStatement(selectCoordsByLocationID);
+			stmt.setInt(1, locationID);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				location = new Location();
+				location.setId(rs.getInt("id"));
+				location.setLat(rs.getDouble("lat"));
+				location.setLon(rs.getDouble("lon"));
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(rs, stmt, conn);
 		}
 
 		return location;

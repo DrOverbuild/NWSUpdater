@@ -14,6 +14,7 @@ public interface NWSUpdaterDAO {
 	public User updateUser(User userInformation);
 	public List<Location> getLocations(int userID);
 	public Location locationById(int locationID, int userId);
+	public Location locationCoordsById(int locationID);
 	public Location addLocation(Location location);
 	public Location updateLocation(Location location);
 	public List<Location> deleteLocation(Location location);

@@ -30,6 +30,7 @@ public class SnsUserAlert extends TimerTask implements javax.servlet.ServletCont
 	}
 
 	public static void start() {
+		System.out.println("Starting SNS User Alert Service");
 		new SnsUserAlert().startTimer();
 		distinctLocations = NWSUpdaterService.instance.getDistinctLocations();
 		setCoords();
@@ -40,20 +41,23 @@ public class SnsUserAlert extends TimerTask implements javax.servlet.ServletCont
 	}
 
 	@Override
-	public void run() {	
-		
+	public void run() {
+		System.out.println("Looking through all locations...");
+
 		for(int i = 0; i < distinctLocations.size(); i++) {
-			
+			System.out.println("Searching " + distinctLocations.get(i).getName() + "...");
 			WeatherAlertData weatherAlertData = service.getWeatherAlertData(coords.get(i));
 			List<AlertFeatures> features = weatherAlertData.getFeatures();
 			String topic = "";
 			
 			if(!features.isEmpty()) {
+				System.out.println("  - Found " + features.size() + " alerts");
 				if(haveAlerts.contains(coords.get(i))) {
-					System.out.println("Already have alerts");
+					System.out.println("    Already have alerts");
 				} else {
 					haveAlerts.add(coords.get(i));
-					
+					System.out.println("    Sending alerts...");
+
 					for(AlertFeatures f : features) {
 						SnsPublishMessage.setSnsPublishMessage(f, cityName.get(i), topic);
 					}
@@ -61,6 +65,8 @@ public class SnsUserAlert extends TimerTask implements javax.servlet.ServletCont
 			} else if(haveAlerts.contains(coords.get(i))) {
 				haveAlerts.remove(coords.get(i));
 			}
+
+			System.out.println();
 		}
 	}
 	
