@@ -80,21 +80,12 @@ public class SnsSubscriberService extends Thread{
 	}
 	
 	private void delete() {
-		
-		if(loc.getSmsEnabled()) {
-			UnsubscribeRequest request = new UnsubscribeRequest();
-			request.setSubscriptionArn(topicSub.getPhoneArn());
-			SnsClient.getAwsClient().unsubscribe(request);
-		}
-		
-		if(loc.getEmailEnabled()) {
-			if(topicSub.getEmailArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
-				System.out.println("Please Unsubscriber from your email");
-			} else {
-				UnsubscribeRequest request = new UnsubscribeRequest();
-				request.setSubscriptionArn(topicSub.getEmailArn());
-				SnsClient.getAwsClient().unsubscribe(request);
-			}
+		SnsUtils.unsubscribe(topicSub.getPhoneArn());
+
+		if(topicSub.getEmailArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
+			System.out.println("Please Unsubscriber from your email");
+		} else {
+			SnsUtils.unsubscribe(topicSub.getEmailArn());
 		}
 	}
 	
@@ -104,15 +95,18 @@ public class SnsSubscriberService extends Thread{
 		
 		if(loc.getSmsEnabled()) {
 			SnsUtils.subscriptionFilter(topicSubscriber.getPhoneArn(), loc);
+		} else {
+			SnsUtils.unsubscribe(topicSubscriber.getPhoneArn());
 		}
 
 		if(loc.getEmailEnabled()) {
-			
 			if(topicSubscriber.getEmailArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
 				SnsUtils.checkEmailForConfirmation(user, loc);
 			} else {
 				SnsUtils.subscriptionFilter(topicSubscriber.getEmailArn(), loc);
 			}
+		} else {
+			SnsUtils.unsubscribe(topicSubscriber.getEmailArn());
 		}
 	}
 

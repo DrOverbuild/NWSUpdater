@@ -9,6 +9,7 @@ import com.aca.nwsupdater.model.webapp.User;
 import com.aca.nwsupdater.service.NWSUpdaterService;
 import com.amazonaws.services.sns.model.ListSubscriptionsByTopicResult;
 import com.amazonaws.services.sns.model.Subscription;
+import com.amazonaws.services.sns.model.UnsubscribeRequest;
 
 public class SnsUtils{
 	
@@ -34,6 +35,12 @@ public class SnsUtils{
 			User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
 			checkEmailForConfirmation(user, loc);
 		}
+	}
+	
+	public static void unsubscribe(String subscriptionArn) {
+		UnsubscribeRequest request = new UnsubscribeRequest();
+		request.setSubscriptionArn(subscriptionArn);
+		SnsClient.getAwsClient().unsubscribe(request);
 	}
 	
 	public static void subscriptionFilter(String subscriptionArn, Location loc) {		
