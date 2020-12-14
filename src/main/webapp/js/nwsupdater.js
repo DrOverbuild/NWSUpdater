@@ -26,6 +26,10 @@
 				templateUrl: "template/userhome.html",
 				controller: "userHomeController"
 			})
+			.when("/userhome/:status", {
+				templateUrl: "template/userhome.html",
+				controller: "userHomeController"
+			})
 			.when("/editprofile", {
 				templateUrl: "template/editprofile.html",
 				controller: "editProfileController"

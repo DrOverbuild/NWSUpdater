@@ -1,10 +1,15 @@
 (function() {
     var nwsapp = angular.module('nwsupdaterapp');
 
-    nwsapp.controller('userHomeController', function ($scope, $http, $location, $sessionStorage) {
+    nwsapp.controller('userHomeController', function ($scope, $http, $location, $sessionStorage, $routeParams) {
         $scope.fontAwesomeCheck = `<i class="fas fa-check"></i>`;
         $scope.userEemail = 'Logging in...';
         $scope.locations = [];
+        $scope.msg = "";
+
+        if ($routeParams.status == "verify") {
+            $scope.msg = "Please verify your email for the location";
+        }
 
         $scope.getUserHome = function () {
             const sessionID = $sessionStorage.get('sessionID')
@@ -16,7 +21,6 @@
                         $scope.userEmail = response.data.user.email;
                         $scope.locations = response.data.locations;
                     }, function (error) {
-                        console.log(error);
                         $location.path("/login");
                     });
             } else {

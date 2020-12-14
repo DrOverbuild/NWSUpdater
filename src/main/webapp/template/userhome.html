@@ -1,6 +1,7 @@
 <div class="card mt-3 mb-3">
     <div class="card-header bg-dark-secondary">
         <h3>{{userEmail}}</h3>
+        <p ng-show="msg" class="text-warning">{{msg}}</p>
         <div>
             <button class="btn btn-success" ng-click="newLocation()">Add location</button>
             <button class="btn btn-info float-right" ng-click="logout()">Log out</button>

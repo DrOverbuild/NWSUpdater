@@ -81,8 +81,12 @@
 				$http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
 				$http.post('/NWSUpdater/webapi/location', $scope.location).then(
-					function success(reponse) {
-						$location.path('/userhome');
+					function success(response) {
+						if (response.data.emailEnabled) {
+							$location.path('/userhome/verify');
+						} else {
+							$location.path('/userhome');
+						}
 					},
 					function error(response) {
 						console.log('error');
