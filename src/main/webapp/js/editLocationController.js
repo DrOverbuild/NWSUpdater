@@ -86,6 +86,7 @@
                             lat = $scope.location.lat
                             coords = [lon, lat];
                             $scope.moveMarker();
+                            $scope.map.setCenter(coords);
                             $scope.enabledAlertTypes = convertAlertArrayToCheckboxes($scope.location.alerts);
                         } else {
                             $scope.locationErr = "Could not load location";
