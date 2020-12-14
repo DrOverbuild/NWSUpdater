@@ -46,6 +46,7 @@ public class SnsUserAlert extends TimerTask implements javax.servlet.ServletCont
 			
 			WeatherAlertData weatherAlertData = service.getWeatherAlertData(coords.get(i));
 			List<AlertFeatures> features = weatherAlertData.getFeatures();
+			String topic = "";
 			
 			if(!features.isEmpty()) {
 				if(haveAlerts.contains(coords.get(i))) {
@@ -54,7 +55,7 @@ public class SnsUserAlert extends TimerTask implements javax.servlet.ServletCont
 					haveAlerts.add(coords.get(i));
 					
 					for(AlertFeatures f : features) {
-						SnsPublishMessage.setSnsPublishMessage(f, cityName.get(i));
+						SnsPublishMessage.setSnsPublishMessage(f, cityName.get(i), topic);
 					}
 				}
 			} else if(haveAlerts.contains(coords.get(i))) {

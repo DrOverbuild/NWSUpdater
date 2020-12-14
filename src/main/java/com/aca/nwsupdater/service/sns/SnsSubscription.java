@@ -6,24 +6,24 @@ import com.amazonaws.services.sns.model.SubscribeResult;
 
 public class SnsSubscription {
 	
-	public static String subscribePhoneNumber(String phoneNumber) {
+	public static String subscribePhoneNumber(String phoneNumber, String topic) {
 		SubscribeRequest request = new SubscribeRequest();
 		request.setEndpoint("+1" + phoneNumber);
 		request.setProtocol("sms");
 		
-		return subscribe(request);
+		return subscribe(request, topic);
 	}
 
-	public static String subscribeEmail(String email) {
+	public static String subscribeEmail(String email, String topic) {
 		SubscribeRequest request = new SubscribeRequest();
 		request.setEndpoint(email);
 		request.setProtocol("email");
 		
-		return subscribe(request);
+		return subscribe(request, topic);
 	}
 	
-	private static String subscribe(SubscribeRequest request) {
-		request.setTopicArn(SnsClient.WEATHER_TOPIC_ARN);
+	private static String subscribe(SubscribeRequest request, String topic) {
+		request.setTopicArn(topic);
 		
 		AmazonSNS client = SnsClient.getAwsClient();
 		SubscribeResult result = client.subscribe(request);

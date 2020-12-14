@@ -2,6 +2,8 @@ package com.aca.nwsupdater.model.sns;
 
 public class Simulation {
 	private String cityName;
+	private Double lat;
+	private Double lon;
 	private String areaDesc;
 	private String severity;
 	private String certainty;
@@ -18,12 +20,28 @@ public class Simulation {
 		this.cityName = cityName;
 	}
 
+	public Double getLat() {
+		return lat;
+	}
+
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public Double getLon() {
+		return lon;
+	}
+
+	public void setLon(Double lon) {
+		this.lon = lon;
+	}
+
+	public void setAreaDesc(String areaDesc) {
+		this.areaDesc = areaDesc;
+	}
+
 	public String getAreaDesc() {
 		return areaDesc;
-	}
-	
-	public void setAreaDes(String areaDesc) {
-		this.areaDesc = areaDesc;
 	}
 	
 	public String getSeverity() {

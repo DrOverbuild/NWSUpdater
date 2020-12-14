@@ -1,73 +1,113 @@
 package com.aca.nwsupdater.service.sns;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.aca.nwsupdater.model.webapp.Alert;
+import com.aca.nwsupdater.model.sns.TopicSubscriber;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
 import com.aca.nwsupdater.service.NWSUpdaterService;
-import com.amazonaws.services.sns.model.SetSubscriptionAttributesRequest;
+import com.amazonaws.services.sns.model.UnsubscribeRequest;
 
-public class SnsSubscriberService {
+public class SnsSubscriberService extends Thread{
+	private static boolean create = false;
+	private static boolean delete = false;
+	private static boolean update = false;
+	private static Location loc;
+	private static TopicSubscriber topicSub;
 	
-	public static void createSubcription(User user, Location newLoc) {
+	@Override
+	public void run() {
+		if(create) {
+			create();
+			create = false;
+		} else if(delete) {
+			delete();
+			delete = false;
+		} else if(update) {
+			update();
+			update = false;
+		}
+	}
+	
+	public static void createSubcription(Location newLocation) {
+		loc = newLocation;
+		create = true;
+		new SnsSubscriberService().start();
+	}
+
+	public static void deleteFilter(TopicSubscriber topicSubscriber) {
+		topicSub = topicSubscriber;
+		delete = true;
+		new SnsSubscriberService().start();
+	}
+
+	public static void updateSubcription(Location location) {
+		loc = location;
+		update = true;
+		new SnsSubscriberService().start();
+	}
+	
+	private void create(){
 		String subscriptionArn = "";
+		User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
+		String topicArn = SnsCreateTopic.createLocationTopic(loc.getName() + 
+							loc.getLat().toString() + 
+							loc.getLon().toString());
 		
-		if(newLoc.getSmsEnabled()) {
-			String subscriptionType = "subscriptionArnPhone";
-			subscriptionArn = SnsSubscription.subscribePhoneNumber(user.getPhone());
-			subcribeUsers(subscriptionArn, subscriptionType, newLoc, user);
-		} 
+		TopicSubscriber topicSubscriber = new TopicSubscriber();
 		
-		if(newLoc.getEmailEnabled()) {
-			String subscriptionType = "subscriptionArnEmail";
-			subscriptionArn = SnsSubscription.subscribeEmail(user.getEmail());
-			subcribeUsers(subscriptionArn, subscriptionType, newLoc, user);
+		if(loc.getSmsEnabled()) {
+			subscriptionArn = SnsSubscription.subscribePhoneNumber(user.getPhone(), topicArn);
+			topicSubscriber.setPhoneArn(subscriptionArn);
+			SnsUtils.subscriptionFilter(subscriptionArn, loc);
+			
+		}
+		
+		if(loc.getEmailEnabled()) {
+			subscriptionArn = SnsSubscription.subscribeEmail(user.getEmail(), topicArn);
+			topicSubscriber.setEmailArn(subscriptionArn);
+		}
+		
+		topicSubscriber.setLocationID(loc.getId());
+		topicSubscriber.setUserID(loc.getOwnerID());
+		
+		AwsSnsService.instance.addTopicSubscriber(topicSubscriber);
+		AwsSnsService.instance.updateTopicArn(topicArn, loc.getId());
+	}
+	
+	private void delete() {
+		
+		if(loc.getSmsEnabled()) {
+			UnsubscribeRequest request = new UnsubscribeRequest();
+			request.setSubscriptionArn(topicSub.getPhoneArn());
+			SnsClient.getAwsClient().unsubscribe(request);
+		}
+		
+		if(loc.getEmailEnabled()) {
+			if(topicSub.getEmailArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
+				System.out.println("Please Unsubscriber from your email");
+			} else {
+				UnsubscribeRequest request = new UnsubscribeRequest();
+				request.setSubscriptionArn(topicSub.getEmailArn());
+				SnsClient.getAwsClient().unsubscribe(request);
+			}
+		}
+	}
+	
+	private void update() {
+		TopicSubscriber topicSubscriber = AwsSnsService.instance.getTopicSubscriber(loc.getOwnerID(), loc.getId());
+		User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
+		
+		if(loc.getSmsEnabled()) {
+			SnsUtils.subscriptionFilter(topicSubscriber.getPhoneArn(), loc);
+		}
+
+		if(loc.getEmailEnabled()) {
+			
+			if(topicSubscriber.getEmailArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
+				SnsUtils.checkEmailForConfirmation(user, loc);
+			} else {
+				SnsUtils.subscriptionFilter(topicSubscriber.getEmailArn(), loc);
+			}
 		}
 	}
 
-	public static void deleteFilter(User user, List<Location> locations) {
-		
-		String subscriptionArn = user.getSubscriptionArnPhone();
-		
-		resetFilters(subscriptionArn);
-		
-		for(Location location : locations) {
-			subscriptionFilter(location, subscriptionArn);
-		}
-	}
-
-	public static void updateSubcription(User user, Location location) {
-		String subscriptionArn = user.getSubscriptionArnPhone();
-		subscriptionFilter(location, subscriptionArn);
-	}
-	
-	private static void subcribeUsers(String subscriptionArn, String subscriptionType, Location newLoc, User user) {
-		subscriptionFilter(newLoc, subscriptionArn);
-		user.setSubscriptionArnEmail(subscriptionArn);
-		NWSUpdaterService.instance.updateUserSubscriptionArn(user.getId(), subscriptionArn, subscriptionType);
-	}
-	
-	private static void resetFilters(String subscriptionArn) {
-		SetSubscriptionAttributesRequest request =
-		        new SetSubscriptionAttributesRequest(subscriptionArn, "FilterPolicy", "{}");
-		SnsClient.getAwsClient().setSubscriptionAttributes(request);
-		
-	}
-	
-	private static void subscriptionFilter(Location location, String subscriptionArn) {
-		SnsSubscriptionFilter fp = new SnsSubscriptionFilter();
-		
-		ArrayList<String> alerts = new ArrayList<>();
-		
-		for(Alert a : location.getAlerts()) {
-			a.setName(a.getName().replace(" ", "_"));
-			alerts.add(a.getName());
-		}
-		
-		fp.addAttributes(location.getLat() + "," + location.getLon(), alerts);
-		fp.apply(subscriptionArn);
-	}
-	
 }
