@@ -21,6 +21,7 @@
 		var coords = [-92.289597, 34.746483];
 		var marker;
 		var lnglat;
+		var afterFirstDisplay = false;
 
 		$scope.enabledAlertTypes = {}
 
@@ -45,7 +46,7 @@
 				) {
 					var feature = response.body.features[0];
 					coords = feature.center;
-					$scope.displayMap();
+					$scope.moveMarker();
 					lnglat = marker.getLngLat();
 					$scope.location.lat = lnglat.lat;
 					$scope.location.lon = lnglat.lng;
@@ -68,9 +69,10 @@
 				container: 'map',
 				style: 'mapbox://styles/mapbox/streets-v11', 
 				center: coords,
-				zoom: 9 
+				zoom: 11 
 			});
 			marker = new mapboxgl.Marker().setLngLat(coords).addTo($scope.map);
+			
 		};
 		
 		$scope.submitLocation = function(){
@@ -93,12 +95,39 @@
 				$location.path("/login");
 			}
 		};
-
+	
+		
 		$scope.clearAlertSearch = function() {
 			$scope.searchValue = "";
 		}
 		
 		$scope.displayMap();
+		
+		$scope.map.on('click', function (e){
+			console.log(e.lngLat);
+			coords = e.lngLat;
+			$scope.moveMarker();
+			lnglat = marker.getLngLat();
+			$scope.location.lat = lnglat.lat;
+			$scope.location.lon = lnglat.lng;
+
+		});
+		
+		$scope.moveMarker = function(){
+			$scope.map.flyTo({
+				center: coords,
+				zoom: 11,
+				bearing: 0,
+				speed:1, 
+				curve: 1, 
+				easing: function (t) {
+				return t;
+				},
+				essential: true
+			});
+			marker.setLngLat(coords);
+		};
+		
 		$scope.getAlerts();
 	});
 })();
