@@ -48,11 +48,18 @@ public class SnsSubscriberService extends Thread{
 	private void create(){
 		String subscriptionArn = "";
 		User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
-		String topicArn = SnsCreateTopic.createLocationTopic(loc.getName() + 
-							loc.getLat().toString() + 
-							loc.getLon().toString());
-		
 		TopicSubscriber topicSubscriber = new TopicSubscriber();
+		String topicArn = "";
+		
+		//check if topic for coords already exist
+		Location distinctLoc = NWSUpdaterService.instance.getDistinctLocationByCoords(loc.getLat(), loc.getLon());
+		if(distinctLoc.getTopicArn() == null) {
+			topicArn = SnsCreateTopic.createLocationTopic(loc.getName() +
+					loc.getLat().toString() + 
+					loc.getLon().toString());
+		} else {
+			topicArn = distinctLoc.getTopicArn();
+		}
 		
 		if(loc.getSmsEnabled()) {
 			subscriptionArn = SnsSubscription.subscribePhoneNumber(user.getPhone(), topicArn);

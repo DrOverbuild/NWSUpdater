@@ -50,6 +50,11 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			"SELECT id, name, lat, lon, gridpoint_office, gridpoint_x, " +
 					"        gridpoint_y, sms_enabled, email_enabled, owner_id, topicArn " +
 					"FROM location WHERE lat = ? AND lon = ?";
+	
+	private static final String selectDistinctLocationByCoordsQuery =
+			"SELECT Distinct lat, lon, topicArn " + 
+			"FROM location " + 
+			"WHERE lat = ? AND lon = ?";
 
 	private static final String insertLocationQuery =
 			"INSERT INTO location (name, lat, lon, gridpoint_office, gridpoint_x, " +
@@ -302,6 +307,34 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 		}
 
 		return locations;
+	}
+	
+	@Override
+	public Location getDistinctLocationByCoords(Double lat, Double lon) {
+		Location location = new Location();
+
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt = conn.prepareStatement(selectDistinctLocationByCoordsQuery);
+			stmt.setDouble(1, lat);
+			stmt.setDouble(2, lon);
+			rs = stmt.executeQuery();
+
+			if(rs.next()) {
+				location.setLat(rs.getDouble("lat"));
+				location.setLon(rs.getDouble("lon"));
+				location.setTopicArn(rs.getString("topicArn"));
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(rs, stmt, conn);
+		}
+
+		return location;
 	}
 	
 	@Override

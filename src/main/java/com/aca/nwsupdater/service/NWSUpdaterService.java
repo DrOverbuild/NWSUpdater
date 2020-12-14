@@ -172,6 +172,10 @@ public class NWSUpdaterService {
 		return dao.getLocationsByCoords(lat, lon);
 	}
 	
+	public Location getDistinctLocationByCoords(Double lat, Double lon) {
+		return dao.getDistinctLocationByCoords(lat, lon);
+	}
+	
 	public Simulation simulation(Simulation simulation) {
 		return SimulationAlertService.simulate(simulation);
 	}
