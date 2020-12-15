@@ -181,16 +181,8 @@ public class NWSUpdaterService {
 		return SimulationAlertService.simulate(simulation);
 	}
 
-	public List<ForecastPeriods> getForecastPeriods(String auth, Location location) {
-		int userId = validator.validateToken(validator.validateAuth(auth));
-		
-		if (location == null) {
-			ServiceUtils.sendError(10, "Location could not be read from JSON data.");
-		}
-
-		location.setOwnerID(userId);
-		
-		return WeatherService.requestForecastData(location);
+	public List<ForecastPeriods> getForecastPeriods(Double lat, Double lon) {
+		return WeatherService.requestForecastData(lat, lon);
 	}
 
 }

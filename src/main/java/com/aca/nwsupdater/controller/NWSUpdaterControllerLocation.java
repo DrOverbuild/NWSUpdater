@@ -17,13 +17,6 @@ public class NWSUpdaterControllerLocation {
 	public Location getLocation(@HeaderParam("Authorization") String auth, @PathParam("locationId") Integer locationId) {
 		return NWSUpdaterService.instance.getLocation(auth, locationId);
 	}
-	
-	@GET
-	@Path("/weather")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ForecastPeriods> getForecastPeriods(@HeaderParam("Authorization") String auth, Location location){
-		return NWSUpdaterService.instance.getForecastPeriods(auth, location);
-	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

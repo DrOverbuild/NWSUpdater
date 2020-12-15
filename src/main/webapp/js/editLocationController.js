@@ -108,6 +108,20 @@
             }
         }
 
+		$scope.getForecasts = function(){
+			$scope.location.lat = 34.746483;
+			$scope.location.lon = -92.289597;
+			var config = { params : $scope.location}
+			$http.get("/NWSUpdater/webapi/forecast", config).then(
+				function (response){
+					$scope.forecastPeriods = response.data;
+					console.log('success');
+				}, function (error){
+					console.log('error');
+				}
+			);
+		};
+        
         $scope.displayMap = function(){
             $scope.map = new mapboxgl.Map({
                 container: 'map',
@@ -160,9 +174,10 @@
         }
 
         $scope.displayMap();
-        
+        $scope.getForecasts();
         $scope.getAlerts();
         $scope.getLocation();
+        
 		$scope.map.on('click', function (e){
 			console.log(e.lngLat);
 			coords = e.lngLat;
@@ -186,6 +201,7 @@
 				essential: true
 			});
 			marker.setLngLat(coords);
+			$scope.getForecasts();
 		};
     });
 })();
