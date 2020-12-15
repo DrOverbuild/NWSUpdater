@@ -72,6 +72,10 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	private static final String getAllDistinctLocationsQuery =
 			"SELECT DISTINCT name, lat, lon "+
 			"FROM location";
+
+	private static final String getAllLocationsQuery =
+			"SELECT id, name, lat, lon, topicArn "+
+					"FROM location";
 	
 	private static final String deleteLocationQuery =
 			"DELETE FROM location WHERE id = ?";
@@ -367,7 +371,37 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		return location;
 	}
-	
+
+	@Override
+	public List<Location> getAllLocations() {
+		List<Location> locations = new ArrayList<>();
+
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.prepareStatement(getAllLocationsQuery);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Location loc = new Location();
+				loc.setId(rs.getInt("id"));
+				loc.setLat(rs.getDouble("lat"));
+				loc.setLon(rs.getDouble("lon"));
+				loc.setName(rs.getString("name"));
+				loc.setTopicArn(rs.getString("topicArn"));
+				locations.add(loc);
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(rs, stmt, conn);
+		}
+
+		return locations;
+	}
+
 	@Override
 	public Location addLocation(Location location) {
 		Location newLoc = null;

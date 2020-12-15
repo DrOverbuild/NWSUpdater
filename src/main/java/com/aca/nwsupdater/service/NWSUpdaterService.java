@@ -187,7 +187,11 @@ public class NWSUpdaterService {
 	public List<Location> getLocationByCoords(Double lat, Double lon) {
 		return dao.getLocationsByCoords(lat, lon);
 	}
-	
+
+	public List<Location> getAllLocations() {
+		return dao.getAllLocations();
+	}
+
 	public Location getDistinctLocationByCoords(Double lat, Double lon) {
 		return dao.getDistinctLocationByCoords(lat, lon);
 	}

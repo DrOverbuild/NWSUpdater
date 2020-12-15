@@ -9,15 +9,16 @@
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>com.aca.nwsupdater.controller</param-value>
         </init-param>
-        <!--  
-         <listener>
-         	com.aca.nwsupdater.service.sns.SnsUserAlert
-    	</listener>
-    	-->
+
         <load-on-startup>1</load-on-startup>      
     </servlet>
     <servlet-mapping>
         <servlet-name>Jersey Web Application</servlet-name>
         <url-pattern>/webapi/*</url-pattern>
     </servlet-mapping>
+    <listener>
+        <listener-class>
+            com.aca.nwsupdater.service.sns.SnsUserAlert
+        </listener-class>
+    </listener>
 </web-app>
