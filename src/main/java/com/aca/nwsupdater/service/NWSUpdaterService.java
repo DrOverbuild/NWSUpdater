@@ -2,6 +2,7 @@ package com.aca.nwsupdater.service;
 
 import com.aca.nwsupdater.dao.NWSUpdaterDAO;
 import com.aca.nwsupdater.dao.NWSUpdaterDAOImpl;
+import com.aca.nwsupdater.model.ForecastPeriods;
 import com.aca.nwsupdater.model.sns.DistinctLocations;
 import com.aca.nwsupdater.model.sns.Simulation;
 import com.aca.nwsupdater.model.webapp.Alert;
@@ -178,6 +179,18 @@ public class NWSUpdaterService {
 	
 	public Simulation simulation(Simulation simulation) {
 		return SimulationAlertService.simulate(simulation);
+	}
+
+	public List<ForecastPeriods> getForecastPeriods(String auth, Location location) {
+		int userId = validator.validateToken(validator.validateAuth(auth));
+		
+		if (location == null) {
+			ServiceUtils.sendError(10, "Location could not be read from JSON data.");
+		}
+
+		location.setOwnerID(userId);
+		
+		return WeatherService.requestForecastData(location);
 	}
 
 }

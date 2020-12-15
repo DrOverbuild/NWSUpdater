@@ -1,5 +1,6 @@
 package com.aca.nwsupdater.controller;
 
+import com.aca.nwsupdater.model.ForecastPeriods;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.NewLocation;
 import com.aca.nwsupdater.service.NWSUpdaterService;
@@ -15,6 +16,13 @@ public class NWSUpdaterControllerLocation {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Location getLocation(@HeaderParam("Authorization") String auth, @PathParam("locationId") Integer locationId) {
 		return NWSUpdaterService.instance.getLocation(auth, locationId);
+	}
+	
+	@GET
+	@Path("/weather")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ForecastPeriods> getForecastPeriods(@HeaderParam("Authorization") String auth, Location location){
+		return NWSUpdaterService.instance.getForecastPeriods(auth, location);
 	}
 
 	@POST

@@ -1,6 +1,5 @@
 package com.aca.nwsupdater.service.sns;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.aca.nwsupdater.model.sns.TopicSubscriber;
@@ -8,7 +7,6 @@ import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
 import com.aca.nwsupdater.service.NWSUpdaterService;
-import com.amazonaws.services.sns.model.UnsubscribeRequest;
 
 public class SnsSubscriberService extends Thread{
 	private static boolean create = false;

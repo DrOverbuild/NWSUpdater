@@ -12,14 +12,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class WeatherForecastService {
-	private final String protocol = "https://";
-	private final String domain = "api.weather.gov";
-	private final String firstResource = "/gridpoints";
-	private final String secondResource = "/forecast";
 	
-	public WeatherForecastData getWeatherForecastData(String wfo, String point) {
+	public WeatherForecastData getWeatherForecastData(String forecastUrl) {
 		WeatherForecastData weatherAlertData = null;
-		String jsonString = start(wfo, point);
+		String jsonString = start(forecastUrl);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -33,13 +29,12 @@ public class WeatherForecastService {
 		return weatherAlertData;
 	}
 	
-	public String start(String wfo, String point) {
-		String request = getRequestURL(wfo, point);
+	public String start(String forecastUrl) {
 		int responseCode = 0;
 		String responseBody = "";
 		
 		try {
-			URL url = new URL(request);
+			URL url = new URL(forecastUrl);
 			HttpURLConnection con = ServiceUtils.getConnection(url);
 			responseCode = con.getResponseCode();
 			responseBody = ServiceUtils.getResponseBody(con);
@@ -50,20 +45,4 @@ public class WeatherForecastService {
 		return responseBody;
 	}
 	
-	private String getRequestURL(String wfo, String point) {
-		StringBuffer myRequest = new StringBuffer();
-		
-		myRequest.append(protocol);
-		myRequest.append(domain);
-		myRequest.append(firstResource);
-		myRequest.append("/" + wfo);
-		myRequest.append("/" + point);
-		myRequest.append(secondResource);
-		myRequest.append("?");
-		myRequest.append("units=us");
-		
-		System.out.println(myRequest);
-		
-		return myRequest.toString();
-	}
 }

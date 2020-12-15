@@ -17,20 +17,16 @@ import com.amazonaws.services.sns.AmazonSNS;
 public class SnsUserForecast extends TimerTask{
 	private static long DELAY = 60_000;
 	private static AmazonSNS snsClient = SnsClient.getAwsClient();
-	
-	public void start() {
-		new Timer().schedule(this, 0, DELAY);
-	}
 
 	@Override
 	public void run() {	
-		WeatherForecastService service = new WeatherForecastService();
-		WeatherForecastData weatherForecastData = service.getWeatherForecastData("SHV", "30,96");
-		ForecastProperties properties = weatherForecastData.getForecastProperties();
-		List<ForecastPeriods> periods = properties.getPeriod();
+//		WeatherForecastService service = new WeatherForecastService();
+//		WeatherForecastData weatherForecastData = service.getWeatherForecastData("SHV", "30,96");
+//		ForecastProperties properties = weatherForecastData.getForecastProperties();
+//		List<ForecastPeriods> periods = properties.getPeriod();
 		
-		if(periods.get(0).getIsDayTime()) {
-			//AwsSnsPublish.publishUpdate("Hello world", "It is daytime");
-		}	
+//		if(periods.get(0).getIsDayTime()) {
+//			//AwsSnsPublish.publishUpdate("Hello world", "It is daytime");
+//		}	
 	}
 }

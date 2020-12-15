@@ -1,5 +1,6 @@
 package com.aca.nwsupdater.dao;
 
+import com.aca.nwsupdater.model.ForecastPeriods;
 import com.aca.nwsupdater.model.sns.DistinctLocations;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.Location;

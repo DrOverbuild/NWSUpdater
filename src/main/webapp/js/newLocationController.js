@@ -4,7 +4,7 @@
 
 (function(){
 	var nwsupdaterapp = angular.module('nwsupdaterapp');
-
+	
 	nwsupdaterapp.controller('newLocationController', function($scope, $http, $location, $sessionStorage){
 		mapboxgl.accessToken = 'pk.eyJ1IjoibndzdXBkYXRlciIsImEiOiJja2k5d2JyMjQwangwMzJzMzczMDg1bDRoIn0.BCdLzAFlsi9EPqG-QecB4A';
 		$scope.title = "New Location"
@@ -72,7 +72,6 @@
 				zoom: 11 
 			});
 			marker = new mapboxgl.Marker().setLngLat(coords).addTo($scope.map);
-			
 		};
 		
 		$scope.submitLocation = function(){
@@ -131,7 +130,6 @@
 			});
 			marker.setLngLat(coords);
 		};
-		
 		$scope.getAlerts();
 	});
 })();

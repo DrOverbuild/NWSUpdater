@@ -29,7 +29,25 @@
                     <div class="container-fluid m-0 p-5">
                         <div id="map" ng-model="map" class="border"></div>
                     </div>
-                    <div class="row form-group">
+					<div class="ajax-section row">
+						<div class="col-lg-1"></div>
+						<div class="col-lg-3">
+							<div class="city">
+								<h2 class="city-name" data-name="Conway,USA">
+									<span>Conway</span><sup>USA</sup>
+								</h2>
+								<div class="city-temp">
+									6<sup>&#176C</sup>
+								</div>
+								<figure>
+									<img class="city-icon" src="image/weatherIcons/ThunderRain.PNG"
+										alt="test">
+									<figcaption>Clear Sky</figcaption>
+								</figure>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group">
                         <div class="col-lg-1"></div>
                         <checkbox class="font-weight-bold checkbox-border" id="smsEnabled" ng-model="location.smsEnabled"
                                   data-label="SMS Enabled"></checkbox>
