@@ -30,6 +30,7 @@
 
         $scope.notSearched = false;
 
+        // SCOPE FUNCTIONS
         $scope.updateMap = function(){
             $scope.notSearched = false;
             var mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
@@ -56,6 +57,8 @@
 
                         $scope.location.lat = lat;
                         $scope.location.lon = lon;
+
+                        $scope.getForecasts();
                     }
                 });
         };
@@ -88,6 +91,7 @@
                             $scope.moveMarker();
                             $scope.map.setCenter(coords);
                             $scope.enabledAlertTypes = convertAlertArrayToCheckboxes($scope.location.alerts);
+                            $scope.getForecasts();
                         } else {
                             $scope.locationErr = "Could not load location";
                         }
@@ -109,16 +113,14 @@
         }
 
 		$scope.getForecasts = function(){
-			$scope.location.lat = 34.746483;
-			$scope.location.lon = -92.289597;
-			var config = { params : $scope.location}
-			$http.get("/NWSUpdater/webapi/forecast", config).then(
+            $scope.forecastPeriods = null;
+            var config = { params : $scope.location}
+			$http.get(`${APIHOME}/forecast`, config).then(
 				function (response){
 					$scope.forecastPeriods = response.data;
-					console.log('success');
 				}, function (error){
-					console.log('error');
-				}
+				    $scope.forecastPeriods = [];
+                }
 			);
 		};
         
@@ -173,35 +175,34 @@
             $scope.searchValue = "";
         }
 
+        $scope.moveMarker = function(){
+            $scope.map.flyTo({
+                center: coords,
+                zoom: 11,
+                bearing: 0,
+                speed:1,
+                curve: 1,
+                easing: function (t) {
+                    return t;
+                },
+                essential: true
+            });
+            marker.setLngLat(coords);
+            $scope.getForecasts();
+        };
+
         $scope.displayMap();
-        $scope.getForecasts();
         $scope.getAlerts();
         $scope.getLocation();
-        
-		$scope.map.on('click', function (e){
-			console.log(e.lngLat);
-			coords = e.lngLat;
-			$scope.moveMarker();
-			lnglat = marker.getLngLat();
-			$scope.location.lat = lnglat.lat;
-			$scope.location.lon = lnglat.lng;
 
-		});
-		
-		$scope.moveMarker = function(){
-			$scope.map.flyTo({
-				center: coords,
-				zoom: 11,
-				bearing: 0,
-				speed:1, 
-				curve: 1, 
-				easing: function (t) {
-				return t;
-				},
-				essential: true
-			});
-			marker.setLngLat(coords);
-			$scope.getForecasts();
-		};
+        $scope.map.on('click', function (e){
+            console.log(e.lngLat);
+            coords = e.lngLat;
+            $scope.moveMarker();
+            lnglat = marker.getLngLat();
+            $scope.location.lat = lnglat.lat;
+            $scope.location.lon = lnglat.lng;
+            $scope.getForecasts();
+        });
     });
 })();

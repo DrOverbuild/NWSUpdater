@@ -29,6 +29,13 @@
                     <div class="container-fluid m-0 p-5">
                         <div id="map" ng-model="map" class="border"></div>
                     </div>
+
+                    <div class="row d-flex justify-content-center" ng-show="!forecastPeriods">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+
 					<div class="forecast-section row">
 						<div class="col-lg-1"></div>
                         <div class="col-lg-10 row">
