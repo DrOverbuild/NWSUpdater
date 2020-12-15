@@ -13,7 +13,7 @@
             const sessionID = $sessionStorage.get('sessionID')
             if (sessionID) {
                 $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
-                $http.get("/NWSUpdater/webapi/user")
+                $http.get(`${APIHOME}/user`)
                     .then(function (response) {
                         $scope.user = response.data
                     }, function (error) {
@@ -32,7 +32,7 @@
             const sessionID = $sessionStorage.get('sessionID')
             if (sessionID) {
                 $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
-                $http.put("/NWSUpdater/webapi/user", $scope.user)
+                $http.put(`${APIHOME}/user`, $scope.user)
                     .then(function (response) {
                         $location.path('/userhome')
                     }, function (error) {

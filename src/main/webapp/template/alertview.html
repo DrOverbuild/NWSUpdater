@@ -1,0 +1,50 @@
+<div class="card bg-dark-secondary">
+    <div class="card-header text-center">
+        <h1>{{alert.event}}</h1>
+    </div>
+    <div class="card-body row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <h3>Headline</h3>
+            <p>{{alert.headline}}</p>
+
+            <div class="container-fluid m-0">
+                <div id="map" ng-model="map" class="border"></div>
+            </div>
+
+            <h3 class="pt-3">Description</h3>
+            <p class="mb-1" ng-repeat="desc in descriptions">{{desc}}</p>
+<!--            <p>...Accumulating snow expected Tuesday morning through the afternoon hours...</p>-->
+<!--            <p>* WHAT...Snow expected. Total snow accumulations of 2 to 4 inches, with locally higher amounts-->
+<!--                possible. </p>-->
+<!--            <p>* WHERE...Portions of central, northern, northwest and western Oklahoma.</p>-->
+<!--            <p>* WHEN...From 6 AM to 9 PM CST Tuesday.</p>-->
+<!--            <p>* IMPACTS...Plan on slippery road conditions. The hazardous conditions could impact the morning and-->
+<!--                evening-->
+<!--                commute.</p>-->
+            <h3 class="pt-3">Counties And Areas Affected</h3>
+            <ul>
+                <li ng-repeat="area in areas">{{area}}</li>
+            </ul>
+<!--            <ul>-->
+<!--                <li>Garfield</li>-->
+<!--                <li>Grant</li>-->
+<!--                <li>Kingfisher</li>-->
+<!--                <li>Logan</li>-->
+<!--                <li>Kay</li>-->
+<!--                <li>Woodward</li>-->
+<!--                <li>Major</li>-->
+<!--                <li>Alfalfa</li>-->
+<!--                <li>Blaine</li>-->
+<!--                <li>Lincoln</li>-->
+<!--                <li>Harper</li>-->
+<!--                <li>Dewey</li>-->
+<!--            </ul>-->
+        </div>
+        <div class="col-lg-1"></div>
+
+    </div>
+    <div class="card-footer">
+        <a href="https://weather.gov/{{cwa}}" target="_blank" class="btn btn-warning w-100">Go to Weather.gov</a>
+    </div>
+</div>

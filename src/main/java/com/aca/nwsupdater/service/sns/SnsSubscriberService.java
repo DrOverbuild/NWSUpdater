@@ -1,6 +1,9 @@
 package com.aca.nwsupdater.service.sns;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import com.aca.nwsupdater.model.sns.TopicSubscriber;
 import com.aca.nwsupdater.model.webapp.Alert;
@@ -8,46 +11,55 @@ import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
 import com.aca.nwsupdater.service.NWSUpdaterService;
 
-public class SnsSubscriberService extends Thread{
-	private static boolean create = false;
-	private static boolean delete = false;
-	private static boolean update = false;
-	private static Location loc;
-	private static TopicSubscriber topicSub;
-	
+public class SnsSubscriberService implements Runnable{
+	public static SnsSubscriberService instance;
+
+	private Queue<SubscriberServiceTask> taskQueue = new LinkedList<>();
+	private Thread taskThread;
+
+	public SnsSubscriberService() {
+		taskThread = new Thread(this);
+		taskThread.start();
+	}
+
 	@Override
 	public void run() {
-		if(create) {
-			create();
-			create = false;
-		} else if(delete) {
-			delete();
-			delete = false;
-		} else if(update) {
-			update();
-			update = false;
+		while(true) {
+			if (taskQueue.size() > 0) {
+				try {
+					taskQueue.poll().execute();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
-	public static void createSubcription(Location newLocation) {
-		loc = newLocation;
-		create = true;
-		new SnsSubscriberService().start();
+	public void createSubcription(Location newLocation) {
+		SubscriberServiceTask task = () -> {
+			create(newLocation);
+		};
+
+		taskQueue.add(task);
 	}
 
-	public static void deleteFilter(TopicSubscriber topicSubscriber) {
-		topicSub = topicSubscriber;
-		delete = true;
-		new SnsSubscriberService().start();
+	public void deleteFilter(TopicSubscriber topicSubscriber) {
+		SubscriberServiceTask task = () -> {
+			delete(topicSubscriber);
+		};
+
+		taskQueue.add(task);
 	}
 
-	public static void updateSubcription(Location location) {
-		loc = location;
-		update = true;
-		new SnsSubscriberService().start();
+	public void updateSubcription(Location location) {
+		SubscriberServiceTask task = () -> {
+			update(location);
+		};
+
+		taskQueue.add(task);
 	}
 	
-	private void create(){
+	private void create(Location loc){
 		String subscriptionArn = "";
 		User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
 		TopicSubscriber topicSubscriber = new TopicSubscriber();
@@ -85,7 +97,7 @@ public class SnsSubscriberService extends Thread{
 		AwsSnsService.instance.updateTopicArn(topicArn, loc.getId());
 	}
 	
-	private void delete() {
+	private void delete(TopicSubscriber topicSub) {
 		SnsUtils.unsubscribe(topicSub.getPhoneArn());
 
 		if(topicSub.getEmailArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
@@ -95,7 +107,7 @@ public class SnsSubscriberService extends Thread{
 		}
 	}
 	
-	private void update() {
+	private void update(Location loc) {
 		TopicSubscriber topicSubscriber = AwsSnsService.instance.getTopicSubscriber(loc.getOwnerID(), loc.getId());
 		User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
 
@@ -136,4 +148,8 @@ public class SnsSubscriberService extends Thread{
 			}
 		}
 	}
+}
+
+interface SubscriberServiceTask {
+	void execute();
 }

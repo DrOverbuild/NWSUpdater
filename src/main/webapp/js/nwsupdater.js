@@ -2,11 +2,16 @@
  * create a new module named 'nwsupdaterapp'
  */
 
+const APIHOME = "/NWSUpdater/webapi";
+
 (function(){
 	var nwsupdaterapp = angular.module('nwsupdaterapp', ['ngRoute', 'swxSessionStorage', 'ngSanitize']);
 	
 	nwsupdaterapp.config(function($routeProvider){
 		$routeProvider
+			.when("/jasperreddin", {
+				templateUrl: "template/jasperreddin.html"
+			})
 			.when("/location/:loc_id", {
 				templateUrl: "template/location.html",
 				controller: "editLocationController"
@@ -37,6 +42,10 @@
 			.when("/newlocation", {
 				templateUrl : "template/location.html",
 				controller : "newLocationController"
+			})
+			.when("/alert/:locId/:alertId", {
+				templateUrl: "template/alertview.html",
+				controller: "alertViewController"
 			})
 			.otherwise({
 				templateUrl: "template/home.html",

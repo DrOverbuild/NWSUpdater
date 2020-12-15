@@ -3,6 +3,8 @@ package com.aca.nwsupdater.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AlertProperties {
+	@JsonProperty("id")
+	private String id;
 	@JsonProperty("areaDesc")
 	private String areaDesc;
 	@JsonProperty("severity")
@@ -17,12 +19,24 @@ public class AlertProperties {
 	private String headline;
 	@JsonProperty("description")
 	private String description;
-	
+	@JsonProperty("effective")
+	private String effective;
+	@JsonProperty("expires")
+	private String expires;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String getAreaDesc() {
 		return areaDesc;
 	}
 	
-	public void setAreaDes(String areaDesc) {
+	public void setAreaDesc(String areaDesc) {
 		this.areaDesc = areaDesc;
 	}
 	

@@ -16,7 +16,7 @@
             if (sessionID) {
                 $http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
-                $http.get("/NWSUpdater/webapi").then(
+                $http.get(`${APIHOME}`).then(
                     function (response) {
                         $scope.userEmail = response.data.user.email;
                         $scope.locations = response.data.locations;
@@ -41,7 +41,7 @@
         }
 
         $scope.logout = function() {
-            $http.get("/NWSUpdater/webapi/logout").then(
+            $http.get(`${APIHOME}/logout`).then(
                 function (response) {
                     $sessionStorage.remove('sessionID');
                     $location.path('/login');

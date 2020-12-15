@@ -3,12 +3,14 @@ package com.aca.nwsupdater.service;
 import com.aca.nwsupdater.dao.NWSUpdaterDAO;
 import com.aca.nwsupdater.dao.NWSUpdaterDAOImpl;
 import com.aca.nwsupdater.model.ForecastPeriods;
+import com.aca.nwsupdater.model.AlertProperties;
+import com.aca.nwsupdater.model.NWSAlert;
+import com.aca.nwsupdater.model.nws.Point;
 import com.aca.nwsupdater.model.sns.DistinctLocations;
 import com.aca.nwsupdater.model.sns.Simulation;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.HomePageModel;
 import com.aca.nwsupdater.model.webapp.Location;
-import com.aca.nwsupdater.model.webapp.NewLocation;
 import com.aca.nwsupdater.model.webapp.User;
 import com.aca.nwsupdater.service.sns.SimulationAlertService;
 import com.aca.nwsupdater.service.sns.SnsSubscriberService;
@@ -22,12 +24,19 @@ public class NWSUpdaterService {
 	private SessionManager sessionManager;
 	private NWSUpdaterDAO dao;
 	private Validator validator;
+	private WeatherAlertService alertService;
+	private SnsSubscriberService subscriberService;
+
+	private AlertProperties simulationAlert = null;
 
 	public NWSUpdaterService() {
 		dao = new NWSUpdaterDAOImpl();
 		sessionManager = new SessionManager();
 		validator = new Validator(this);
 		sessionManager.start();
+
+		alertService = new WeatherAlertService();
+		subscriberService = new SnsSubscriberService();
 	}
 
 	public SessionManager getSessionManager() {
@@ -40,6 +49,22 @@ public class NWSUpdaterService {
 
 	public Validator getValidator() {
 		return validator;
+	}
+
+	public AlertProperties getSimulationAlert() {
+		return simulationAlert;
+	}
+
+	public void setSimulationAlert(AlertProperties simulationAlert) {
+		this.simulationAlert = simulationAlert;
+	}
+
+	public SnsSubscriberService getSubscriberService() {
+		return subscriberService;
+	}
+
+	public void setSubscriberService(SnsSubscriberService subscriberService) {
+		this.subscriberService = subscriberService;
 	}
 
 	public HomePageModel homePage(String auth) {
@@ -172,7 +197,11 @@ public class NWSUpdaterService {
 	public List<Location> getLocationByCoords(Double lat, Double lon) {
 		return dao.getLocationsByCoords(lat, lon);
 	}
-	
+
+	public List<Location> getAllLocations() {
+		return dao.getAllLocations();
+	}
+
 	public Location getDistinctLocationByCoords(Double lat, Double lon) {
 		return dao.getDistinctLocationByCoords(lat, lon);
 	}
@@ -185,4 +214,22 @@ public class NWSUpdaterService {
 		return WeatherService.requestForecastData(lat, lon);
 	}
 
+	public AlertProperties getAlert(String alertId) {
+		if (alertId.equals("SIMULATION")) {
+			return simulationAlert;
+		}
+
+		NWSAlert alert = alertService.getAlertById(alertId);
+		if (alert != null) {
+			return alert.getProperties();
+		}
+
+		return null;
+	}
+
+	public Point getPoint(Integer locationId) {
+		Location locCoords = dao.locationCoordsById(locationId);
+		String point = locCoords.getLat() + "," + locCoords.getLon();
+		return alertService.getPoint(point);
+	}
 }

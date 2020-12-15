@@ -67,7 +67,7 @@
 		};
 		
 		$scope.getAlerts = function() {
-			$http.get("/NWSUpdater/webapi/alerts").then(
+			$http.get(`${APIHOME}/alerts`).then(
 				function (response) {
 					$scope.alertTypes = response.data;
 				}, function (error) {
@@ -93,7 +93,7 @@
 			if (sessionID) {
 				$http.defaults.headers.common.Authorization = `Bearer ${sessionID}`;
 
-				$http.post('/NWSUpdater/webapi/location', $scope.location).then(
+				$http.post(`${APIHOME}/location`, $scope.location).then(
 					function success(response) {
 						if (response.data.emailEnabled) {
 							$location.path('/userhome/verify');

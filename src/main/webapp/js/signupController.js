@@ -7,7 +7,7 @@
         }
 
         $scope.createAccount = function () {
-            $http.post("/NWSUpdater/webapi/user", $scope.user)
+            $http.post(`${APIHOME}/user`, $scope.user)
                 .then( function(response) {
                     $location.path('/login')
                 }, function (error) {

@@ -2,9 +2,11 @@ package com.aca.nwsupdater.dao;
 
 import com.aca.nwsupdater.model.ForecastPeriods;
 import com.aca.nwsupdater.model.sns.DistinctLocations;
+import com.aca.nwsupdater.model.sns.TopicSubscriber;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
+import com.aca.nwsupdater.service.NWSUpdaterService;
 import com.aca.nwsupdater.service.sns.AwsSnsService;
 import com.aca.nwsupdater.service.sns.SnsSubscriberService;
 import com.aca.nwsupdater.service.sns.SnsSubscription;
@@ -46,7 +48,10 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			"SELECT id, name, lat, lon, gridpoint_office, gridpoint_x, " +
 					"        gridpoint_y, sms_enabled, email_enabled, owner_id, topicArn " +
 					"FROM location WHERE id = ? AND owner_id = ?";
-	
+
+	private static final String selectCoordsByLocationID =
+			"SELECT id, lat, lon FROM location WHERE id = ?";
+
 	private static final String selectLocationsByCoordsQuery =
 			"SELECT id, name, lat, lon, gridpoint_office, gridpoint_x, " +
 					"        gridpoint_y, sms_enabled, email_enabled, owner_id, topicArn " +
@@ -70,6 +75,10 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	private static final String getAllDistinctLocationsQuery =
 			"SELECT DISTINCT name, lat, lon "+
 			"FROM location";
+
+	private static final String getAllLocationsQuery =
+			"SELECT id, name, lat, lon, topicArn "+
+					"FROM location";
 	
 	private static final String deleteLocationQuery =
 			"DELETE FROM location WHERE id = ?";
@@ -281,6 +290,34 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 	}
 
 	@Override
+	public Location locationCoordsById(int locationID) {
+		Location location = null;
+
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.prepareStatement(selectCoordsByLocationID);
+			stmt.setInt(1, locationID);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				location = new Location();
+				location.setId(rs.getInt("id"));
+				location.setLat(rs.getDouble("lat"));
+				location.setLon(rs.getDouble("lon"));
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(rs, stmt, conn);
+		}
+
+		return location;
+	}
+
+	@Override
 	public List<Location> getLocationsByCoords(Double lat, Double lon) {
 		List<Location> locations = new ArrayList<>();
 
@@ -337,7 +374,37 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 
 		return location;
 	}
-	
+
+	@Override
+	public List<Location> getAllLocations() {
+		List<Location> locations = new ArrayList<>();
+
+		Connection conn = NWSUpdaterDB.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.prepareStatement(getAllLocationsQuery);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Location loc = new Location();
+				loc.setId(rs.getInt("id"));
+				loc.setLat(rs.getDouble("lat"));
+				loc.setLon(rs.getDouble("lon"));
+				loc.setName(rs.getString("name"));
+				loc.setTopicArn(rs.getString("topicArn"));
+				locations.add(loc);
+			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} finally {
+			closeResourses(rs, stmt, conn);
+		}
+
+		return locations;
+	}
+
 	@Override
 	public Location addLocation(Location location) {
 		Location newLoc = null;
@@ -378,8 +445,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			}
 			
 		}
-		
-		SnsSubscriberService.createSubcription(newLoc);
+
+		NWSUpdaterService.instance.getSubscriberService().createSubcription(newLoc);
 
 		return newLoc;
 	}
@@ -460,7 +527,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			updated.setAlerts(getAlertsForLocation(location));
 		}
 
-		SnsSubscriberService.updateSubcription(updated);
+		NWSUpdaterService.instance.getSubscriberService().updateSubcription(updated);
 		
 		return updated;
 	}
@@ -471,7 +538,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 		Connection conn = NWSUpdaterDB.getConnection();
 		PreparedStatement stmt = null;
 
-		SnsSubscriberService.deleteFilter(AwsSnsService.instance.getTopicSubscriber(location.getOwnerID(), location.getId()));
+		TopicSubscriber topicSub = AwsSnsService.instance.getTopicSubscriber(location.getOwnerID(), location.getId());
+		NWSUpdaterService.instance.getSubscriberService().deleteFilter(topicSub);
 		
 		try {
 			stmt = conn.prepareStatement(deleteLocationAlerts);
