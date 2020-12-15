@@ -36,7 +36,6 @@ public class NWSUpdaterService {
 		sessionManager.start();
 
 		alertService = new WeatherAlertService();
-		subscriberService = new SnsSubscriberService();
 	}
 
 	public SessionManager getSessionManager() {

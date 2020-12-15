@@ -21,4 +21,9 @@
             com.aca.nwsupdater.service.sns.SnsUserAlert
         </listener-class>
     </listener>
+    <listener>
+        <listener-class>
+            com.aca.nwsupdater.service.sns.SnsSubscriberService
+        </listener-class>
+    </listener>
 </web-app>

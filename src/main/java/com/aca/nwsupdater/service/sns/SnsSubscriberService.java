@@ -1,9 +1,12 @@
 package com.aca.nwsupdater.service.sns;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import com.aca.nwsupdater.model.sns.TopicSubscriber;
 import com.aca.nwsupdater.model.webapp.Alert;
@@ -11,55 +14,74 @@ import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
 import com.aca.nwsupdater.service.NWSUpdaterService;
 
-public class SnsSubscriberService implements Runnable{
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+public class SnsSubscriberService implements Runnable, ServletContextListener {
 	public static SnsSubscriberService instance;
 
-	private Queue<SubscriberServiceTask> taskQueue = new LinkedList<>();
+	private BlockingQueue<SubscriberServiceTask> taskQueue = new ArrayBlockingQueue<SubscriberServiceTask>(256);
 	private Thread taskThread;
 
-	public SnsSubscriberService() {
+	@Override
+	public void contextInitialized(ServletContextEvent servletContextEvent) {
+		NWSUpdaterService.instance.setSubscriberService(this);
 		taskThread = new Thread(this);
 		taskThread.start();
 	}
 
 	@Override
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+		taskThread.stop();
+	}
+
+	@Override
 	public void run() {
+		System.out.println("Task thread started");
 		while(true) {
-			if (taskQueue.size() > 0) {
-				try {
-					taskQueue.poll().execute();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			try {
+				taskQueue.take().execute();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
 	
 	public void createSubcription(Location newLocation) {
-		SubscriberServiceTask task = () -> {
-			create(newLocation);
-		};
+		System.out.println("Adding create to task");
+		SubscriberServiceTask task = () -> create(newLocation);
 
-		taskQueue.add(task);
+		try {
+			taskQueue.put(task);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void deleteFilter(TopicSubscriber topicSubscriber) {
-		SubscriberServiceTask task = () -> {
-			delete(topicSubscriber);
-		};
+		System.out.println("Adding delete to task.");
+		SubscriberServiceTask task = () -> delete(topicSubscriber);
 
-		taskQueue.add(task);
+		try {
+			taskQueue.put(task);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void updateSubcription(Location location) {
-		SubscriberServiceTask task = () -> {
-			update(location);
-		};
+		System.out.println("Adding update to task");
+		SubscriberServiceTask task = () -> update(location);
 
-		taskQueue.add(task);
+		try {
+			taskQueue.put(task);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void create(Location loc){
+		System.out.println("Executing create task...");
 		String subscriptionArn = "";
 		User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
 		TopicSubscriber topicSubscriber = new TopicSubscriber();
@@ -98,6 +120,8 @@ public class SnsSubscriberService implements Runnable{
 	}
 	
 	private void delete(TopicSubscriber topicSub) {
+		System.out.println("Executing delete task...");
+
 		SnsUtils.unsubscribe(topicSub.getPhoneArn());
 
 		if(topicSub.getEmailArn().replaceAll("[^\\p{IsAlphabetic}]", "").toLowerCase().equals("pendingconfirmation")) {
@@ -108,6 +132,8 @@ public class SnsSubscriberService implements Runnable{
 	}
 	
 	private void update(Location loc) {
+		System.out.println("Executing update task...");
+
 		TopicSubscriber topicSubscriber = AwsSnsService.instance.getTopicSubscriber(loc.getOwnerID(), loc.getId());
 		User user = NWSUpdaterService.instance.getDao().getUser(loc.getOwnerID());
 
