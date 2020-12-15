@@ -25,6 +25,7 @@ public class NWSUpdaterService {
 	private NWSUpdaterDAO dao;
 	private Validator validator;
 	private WeatherAlertService alertService;
+	private SnsSubscriberService subscriberService;
 
 	private AlertProperties simulationAlert = null;
 
@@ -35,6 +36,7 @@ public class NWSUpdaterService {
 		sessionManager.start();
 
 		alertService = new WeatherAlertService();
+		subscriberService = new SnsSubscriberService();
 	}
 
 	public SessionManager getSessionManager() {
@@ -55,6 +57,14 @@ public class NWSUpdaterService {
 
 	public void setSimulationAlert(AlertProperties simulationAlert) {
 		this.simulationAlert = simulationAlert;
+	}
+
+	public SnsSubscriberService getSubscriberService() {
+		return subscriberService;
+	}
+
+	public void setSubscriberService(SnsSubscriberService subscriberService) {
+		this.subscriberService = subscriberService;
 	}
 
 	public HomePageModel homePage(String auth) {

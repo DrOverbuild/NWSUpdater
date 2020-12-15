@@ -1,9 +1,11 @@
 package com.aca.nwsupdater.dao;
 
 import com.aca.nwsupdater.model.sns.DistinctLocations;
+import com.aca.nwsupdater.model.sns.TopicSubscriber;
 import com.aca.nwsupdater.model.webapp.Alert;
 import com.aca.nwsupdater.model.webapp.Location;
 import com.aca.nwsupdater.model.webapp.User;
+import com.aca.nwsupdater.service.NWSUpdaterService;
 import com.aca.nwsupdater.service.sns.AwsSnsService;
 import com.aca.nwsupdater.service.sns.SnsSubscriberService;
 import com.aca.nwsupdater.service.sns.SnsSubscription;
@@ -442,8 +444,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			}
 			
 		}
-		
-		SnsSubscriberService.createSubcription(newLoc);
+
+		NWSUpdaterService.instance.getSubscriberService().createSubcription(newLoc);
 
 		return newLoc;
 	}
@@ -524,7 +526,7 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 			updated.setAlerts(getAlertsForLocation(location));
 		}
 
-		SnsSubscriberService.updateSubcription(updated);
+		NWSUpdaterService.instance.getSubscriberService().updateSubcription(updated);
 		
 		return updated;
 	}
@@ -535,7 +537,8 @@ public class NWSUpdaterDAOImpl implements NWSUpdaterDAO{
 		Connection conn = NWSUpdaterDB.getConnection();
 		PreparedStatement stmt = null;
 
-		SnsSubscriberService.deleteFilter(AwsSnsService.instance.getTopicSubscriber(location.getOwnerID(), location.getId()));
+		TopicSubscriber topicSub = AwsSnsService.instance.getTopicSubscriber(location.getOwnerID(), location.getId());
+		NWSUpdaterService.instance.getSubscriberService().deleteFilter(topicSub);
 		
 		try {
 			stmt = conn.prepareStatement(deleteLocationAlerts);
