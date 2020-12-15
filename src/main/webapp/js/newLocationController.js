@@ -119,7 +119,7 @@
 				center: coords,
 				zoom: 11,
 				bearing: 0,
-				speed:1,
+				speed:2,
 				curve: 1,
 				easing: function (t) {
 					return t;
