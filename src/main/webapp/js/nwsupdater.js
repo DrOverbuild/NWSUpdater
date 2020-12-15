@@ -12,6 +12,9 @@ const APIHOME = "/webapi";
 			.when("/jasperreddin", {
 				templateUrl: "template/jasperreddin.html"
 			})
+			.when("/longtinhang", {
+				templateUrl: "template/longtinhang.html"
+			})
 			.when("/location/:loc_id", {
 				templateUrl: "template/location.html",
 				controller: "editLocationController"
