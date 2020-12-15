@@ -21,8 +21,20 @@
   opacity: 0.3;
   border-radius: 20px 60px;
   background: #fff;
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
 }
- 
+
+.forecast-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.forecast-img {
+    flex-grow: 1;
+}
+
 .forecast-section .short-forecast {
   margin-top: 10px;
   text-transform: uppercase;
@@ -32,8 +44,9 @@
 .forecast-section .forecast-temp {
   font-size: 3em;
   font-weight: bold;
-  margin-top: 10px;
+  margin: 0px;
   color: #1e2432;
+    flex-grow: 1;
 }
  
 .forecast-section .forecast sup {
@@ -55,4 +68,5 @@
   	margin-top: 10px;
   	width: 50px;
   	height: 50px;
+    border-radius: 5px;
 }

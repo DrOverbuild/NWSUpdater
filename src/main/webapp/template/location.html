@@ -31,21 +31,24 @@
                     </div>
 					<div class="forecast-section row">
 						<div class="col-lg-1"></div>
-						<div class="col-lg-3 mr-5" ng-repeat="forecast in forecastPeriods">
-							<div class="forecast">
-								<h2 class="weekday mt-3">
-									<span>{{forecast.name}}</span><sup>USA</sup>
-								</h2>
-								<div class="flex-container">
-									<div class="forecast-temp">
-										<img class="forecast-icon" src={{forecast.icon}}
-											alt="test">
-										<p class="float-right mr-4">{{forecast.temperature}}<sup>&#176{{forecast.temperatureUnit}}</sup></p>
-									</div>
-								</div>
-								<div class="short-forecast">{{forecast.shortForecast}}</div>
-							</div>
-						</div>
+                        <div class="col-lg-10 row">
+                            <div class="col-lg-4" ng-repeat="forecast in forecastPeriods">
+                                <div class="forecast">
+                                    <h2 class="weekday mt-3">
+                                        <span>{{forecast.name}}</span><sup>USA</sup>
+                                    </h2>
+                                    <div class="forecast-center text-center">
+                                        <div class="forecast-img">
+                                            <img class="forecast-icon" src={{forecast.icon}}
+                                                 alt="test">
+                                        </div>
+                                        <p class="forecast-temp">
+                                            {{forecast.temperature}}<sup>&#176{{forecast.temperatureUnit}}</sup></p>
+                                    </div>
+                                    <div class="short-forecast text-right">{{forecast.shortForecast}}</div>
+                                </div>
+                            </div>
+                        </div>
 						<div class="col-lg-1"></div>
 					</div>
 					<div class="row form-group">
